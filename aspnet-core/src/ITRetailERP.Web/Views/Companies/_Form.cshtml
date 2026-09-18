@@ -1,0 +1,93 @@
+@model Company
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="NameEn" class="form-label">Company Name (English)</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="NameAr" class="form-label">اسم الشركة (العربية)</label>
+        <input asp-for="NameAr" class="form-control" dir="rtl" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="AddressEn" class="form-label">Address (English)</label>
+        <textarea asp-for="AddressEn" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="AddressAr" class="form-label">العنوان (العربية)</label>
+        <textarea asp-for="AddressAr" class="form-control" rows="3" dir="rtl"></textarea>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Telephone" class="form-label">Telephone</label>
+        <input asp-for="Telephone" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Mobile" class="form-label">Mobile</label>
+        <input asp-for="Mobile" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Website" class="form-label">Website</label>
+        <input asp-for="Website" class="form-control" />
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="TaxNumber" class="form-label">VAT / Tax Number</label>
+        <input asp-for="TaxNumber" class="form-control" />
+    </div>
+    <div class="col-md-6">
+        <label asp-for="CommercialRegistrationNumber" class="form-label">Commercial Registration Number</label>
+        <input asp-for="CommercialRegistrationNumber" class="form-control" />
+    </div>
+
+    <div class="col-12">
+        <label class="form-label">Company Logo</label>
+        <input type="file" name="logoFile" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+        <div class="form-text">JPG, PNG or WebP. Maximum size 2 MB.</div>
+        <span asp-validation-for="LogoPath" class="text-danger"></span>
+        @if (!string.IsNullOrWhiteSpace(Model.LogoPath))
+        {
+            <img src="@Model.LogoPath" alt="Company logo" class="mt-2 border rounded" style="max-height: 80px;" />
+        }
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="BankDetails" class="form-label">Bank Details</label>
+        <textarea asp-for="BankDetails" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="SocialMedia" class="form-label">Social Media</label>
+        <textarea asp-for="SocialMedia" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="InvoiceHeader" class="form-label">Invoice Header</label>
+        <textarea asp-for="InvoiceHeader" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="InvoiceFooter" class="form-label">Invoice Footer</label>
+        <textarea asp-for="InvoiceFooter" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="TermsAndConditions" class="form-label">Terms & Conditions</label>
+        <textarea asp-for="TermsAndConditions" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="col-12">
+        <div class="form-check">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label">Active</label>
+        </div>
+    </div>
+</div>
