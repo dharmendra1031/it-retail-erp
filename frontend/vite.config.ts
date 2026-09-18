@@ -9,9 +9,9 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       proxy: {
-        "/api": { target, changeOrigin: true, secure: false },
-        "/media": { target, changeOrigin: true, secure: false },
-        "/uploads": { target, changeOrigin: true, secure: false },
+        "/api": { target, secure: false },
+        "/media": { target, secure: false },
+        "/uploads": { target, secure: false },
       },
     },
   };
