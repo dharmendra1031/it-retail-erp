@@ -37,13 +37,9 @@ public sealed class CompaniesApiController(
     [ValidateAntiForgeryToken]
     public async Task<ActionResult<CompanyResponse>> Create([FromForm] CompanyRequest request)
     {
-        var logoError = logoStorage.Validate(request.Logo);
-        if (logoError is not null)
+        if (!ValidateLogo(request.Logo))
         {
-            return ValidationProblem(new Dictionary<string, string[]>
-            {
-                [nameof(request.Logo)] = [logoError],
-            });
+            return ValidationProblem(ModelState);
         }
 
         var company = new Company();
@@ -73,13 +69,9 @@ public sealed class CompaniesApiController(
             return NotFound();
         }
 
-        var logoError = logoStorage.Validate(request.Logo);
-        if (logoError is not null)
+        if (!ValidateLogo(request.Logo))
         {
-            return ValidationProblem(new Dictionary<string, string[]>
-            {
-                [nameof(request.Logo)] = [logoError],
-            });
+            return ValidationProblem(ModelState);
         }
 
         Apply(company, request);
@@ -117,6 +109,18 @@ public sealed class CompaniesApiController(
         logoStorage.Delete(logoPath);
 
         return NoContent();
+    }
+
+    private bool ValidateLogo(IFormFile? logo)
+    {
+        var error = logoStorage.Validate(logo);
+        if (error is null)
+        {
+            return true;
+        }
+
+        ModelState.AddModelError(nameof(CompanyRequest.Logo), error);
+        return false;
     }
 
     private static void Apply(Company company, CompanyRequest request)
