@@ -60,11 +60,14 @@ class CompanyForm(forms.ModelForm):
         if not logo:
             return logo
 
+        content_type = getattr(logo, "content_type", None)
+        if not content_type:
+            return logo
+
         if logo.size > 2 * 1024 * 1024:
             raise forms.ValidationError("Logo must be smaller than 2 MB.")
 
-        content_type = getattr(logo, "content_type", None)
-        if content_type and content_type not in {"image/jpeg", "image/png", "image/webp"}:
+        if content_type not in {"image/jpeg", "image/png", "image/webp"}:
             raise forms.ValidationError("Logo must be JPG, PNG or WebP.")
 
         return logo

@@ -26,13 +26,14 @@ class CompanyUpdateView(UpdateView):
     success_url = reverse_lazy("companies:list")
 
     def form_valid(self, form):
-        previous_logo = self.object.logo
+        previous_name = self.object.logo.name if self.object.logo else ""
+        storage = self.object.logo.storage if previous_name else None
+
         response = super().form_valid(form)
 
-        if "logo" in form.changed_data and previous_logo:
-            current_name = self.object.logo.name if self.object.logo else ""
-            if previous_logo.name != current_name:
-                previous_logo.storage.delete(previous_logo.name)
+        current_name = self.object.logo.name if self.object.logo else ""
+        if "logo" in form.changed_data and previous_name and previous_name != current_name:
+            storage.delete(previous_name)
 
         return response
 
@@ -42,10 +43,12 @@ class CompanyDeleteView(DeleteView):
     success_url = reverse_lazy("companies:list")
 
     def form_valid(self, form):
-        logo = self.object.logo
+        logo_name = self.object.logo.name if self.object.logo else ""
+        storage = self.object.logo.storage if logo_name else None
+
         response = super().form_valid(form)
 
-        if logo:
-            logo.storage.delete(logo.name)
+        if logo_name:
+            storage.delete(logo_name)
 
         return response
