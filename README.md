@@ -2,27 +2,21 @@
 
 Computer hardware, software and IT retail management system for Kuwait.
 
-## Backend stack
+This repository contains two implementations of the same ERP business requirements:
 
-- Python 3.12+
-- Django 5.2 LTS
-- Django REST Framework
-- Microsoft SQL Server 2019
-- mssql-django + pyodbc
+- `aspnet-core/` — ASP.NET Core MVC, Entity Framework Core, ASP.NET Core Identity, SQL Server
+- `django/` — Python Django, SQL Server
 
-## Setup
+Both implementations follow the same business flow and SRS. Development work is done on the `development` branch and promoted to `main` after review.
 
-```bash
-python -m venv .venv
-pip install -r requirements.txt
-cp .env.example .env  # Windows: copy .env.example .env
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
-```
+## Core business flow
 
-API health check:
+Supplier → Purchase → Inventory → Sales / Service → Customer → Payment → Profit / Reports
 
-```text
-GET /api/health/
-```
+Quotation flow:
+
+Customer → Quotation → Approval → Sales Invoice → Payment → Stock Update → Customer Ledger
+
+## Database
+
+Microsoft SQL Server 2019 is the initial production database.
