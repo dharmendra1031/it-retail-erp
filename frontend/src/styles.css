@@ -1,0 +1,284 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #17202a;
+  background: #f5f7fa;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.loading,
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.login-card,
+.panel {
+  background: #fff;
+  border: 1px solid #e3e8ef;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(31, 45, 61, 0.06);
+}
+
+.login-card {
+  width: min(420px, calc(100vw - 32px));
+  padding: 28px;
+}
+
+.login-card h1 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.login-card p {
+  color: #687386;
+  margin: 0 0 24px;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #cfd7e3;
+  border-radius: 7px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+textarea {
+  min-height: 86px;
+  resize: vertical;
+}
+
+.login-card label {
+  margin-bottom: 16px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox input {
+  width: auto;
+}
+
+button {
+  border: 0;
+  border-radius: 7px;
+  padding: 9px 14px;
+  background: #175cd3;
+  color: #fff;
+}
+
+button.secondary {
+  background: #eef2f7;
+  color: #27364a;
+}
+
+button.danger {
+  background: #b42318;
+}
+
+.alert {
+  margin-bottom: 16px;
+  border: 1px solid #f3b8b5;
+  border-radius: 7px;
+  padding: 10px 12px;
+  background: #fff2f1;
+  color: #912018;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 230px 1fr;
+}
+
+.sidebar {
+  padding: 22px 16px;
+  background: #17202a;
+  color: #fff;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.nav-section {
+  display: block;
+  margin: 0 8px 8px;
+  color: #9aa7b7;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  display: block;
+  border-radius: 7px;
+  padding: 10px 12px;
+  color: #dfe6ef;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background: #253447;
+  color: #fff;
+}
+
+.main-area {
+  min-width: 0;
+}
+
+.topbar {
+  height: 64px;
+  padding: 0 28px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border-bottom: 1px solid #e3e8ef;
+}
+
+.content {
+  padding: 28px;
+}
+
+.page-heading {
+  margin-bottom: 20px;
+}
+
+.page-heading h1,
+.panel-heading h2 {
+  margin: 0;
+}
+
+.page-heading p {
+  margin: 6px 0 0;
+  color: #687386;
+}
+
+.panel {
+  padding: 20px;
+  margin-bottom: 22px;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.panel-heading h2 {
+  font-size: 18px;
+}
+
+.company-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search {
+  max-width: 280px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e8edf3;
+  text-align: left;
+  white-space: nowrap;
+}
+
+th {
+  background: #f8fafc;
+  font-size: 13px;
+  color: #556274;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.empty {
+  padding: 28px;
+  text-align: center;
+  color: #687386;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .company-form {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+}

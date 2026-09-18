@@ -2,12 +2,17 @@
 
 Computer hardware, software and IT retail management system for Kuwait.
 
-This repository contains two implementations of the same ERP business requirements:
+## Architecture
 
-- `aspnet-core/` — ASP.NET Core MVC, Entity Framework Core, ASP.NET Core Identity, SQL Server
-- `django/` — Python Django, SQL Server
+The ERP has one shared React frontend and two interchangeable backend implementations:
 
-Both implementations follow the same business flow and SRS. Development work is done on the `development` branch and promoted to `main` after review.
+- `frontend/` — React + TypeScript + Vite
+- `aspnet-core/` — ASP.NET Core API + Entity Framework Core + Identity + SQL Server
+- `django/` — Django REST Framework API + Django auth + SQL Server
+
+Both backends expose the same API contract so the React application can switch between them without UI changes.
+
+Development work is done on the `development` branch and promoted to `main` after review.
 
 ## Core business flow
 
@@ -23,4 +28,8 @@ Microsoft SQL Server 2019 is the initial production database.
 
 ## Identifier convention
 
-Application entities use numeric auto-incrementing primary keys. UUID/GUID public identifiers are not used. ASP.NET Core uses `long` / SQL Server `BIGINT IDENTITY`, and Django uses `BigAutoField`.
+Application entities use numeric auto-incrementing primary keys. UUID/GUID identifiers are not used. ASP.NET Core uses `long` / SQL Server `BIGINT IDENTITY`, and Django uses `BigAutoField`.
+
+## API convention
+
+Frontend requests use relative `/api` URLs. During development, Vite proxies requests to the selected backend. Authentication uses secure session cookies with CSRF protection.

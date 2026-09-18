@@ -1,24 +1,23 @@
-# Django implementation
+# Django backend
 
-Python Django implementation of IT Retail ERP.
+Django API implementation of IT Retail ERP.
 
 ## Stack
 
 - Python 3.12+
 - Django 5.2 LTS
+- Django REST Framework
 - Microsoft SQL Server 2019
 - mssql-django
 - pyodbc
 
 ## Setup
 
-```bash
-python -m venv .venv
-pip install -r requirements.txt
-cp .env.example .env
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
-```
+1. Create a virtual environment.
+2. Install `requirements.txt`.
+3. Copy `.env.example` to `.env`.
+4. Run `python manage.py migrate`.
+5. Create the first user with `python manage.py createsuperuser`.
+6. Run `python manage.py runserver`.
 
-On Windows, use `copy .env.example .env` instead of `cp`.
+The React frontend communicates through the `/api` contract.

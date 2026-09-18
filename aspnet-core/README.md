@@ -1,20 +1,20 @@
-# ASP.NET Core implementation
+# ASP.NET Core backend
 
-ASP.NET Core MVC implementation of IT Retail ERP.
+ASP.NET Core API implementation of IT Retail ERP.
 
 ## Stack
 
 - .NET 10
-- ASP.NET Core MVC
+- ASP.NET Core Controllers
 - Entity Framework Core
 - ASP.NET Core Identity
 - Microsoft SQL Server 2019
 
 ## Run locally
 
-```bash
-dotnet restore src/ITRetailERP.Web/ITRetailERP.Web.csproj
-dotnet run --project src/ITRetailERP.Web/ITRetailERP.Web.csproj
-```
+1. Configure `ConnectionStrings:DefaultConnection`.
+2. Apply EF Core migrations.
+3. Optionally set `ERP_ADMIN_EMAIL`, `ERP_ADMIN_PASSWORD`, and `ERP_ADMIN_NAME` to bootstrap the first user.
+4. Run `dotnet run --project src/ITRetailERP.Web/ITRetailERP.Web.csproj`.
 
-Configure `ConnectionStrings:DefaultConnection` through appsettings, user-secrets, environment variables, or deployment configuration.
+The React frontend communicates through the `/api` contract.
