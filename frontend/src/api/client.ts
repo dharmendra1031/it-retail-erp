@@ -1,6 +1,6 @@
 let csrfToken = "";
 
-async function getCsrfToken() {
+export async function refreshCsrfToken() {
   const response = await fetch("/api/auth/csrf", { credentials: "same-origin" });
 
   if (!response.ok) {
@@ -17,7 +17,7 @@ export async function apiRequest<T>(
   requiresCsrf = false,
 ): Promise<T> {
   if (requiresCsrf && !csrfToken) {
-    await getCsrfToken();
+    await refreshCsrfToken();
   }
 
   const headers = new Headers(options.headers);

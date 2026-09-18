@@ -14,8 +14,11 @@ export default function App() {
   }, []);
 
   async function handleLogout() {
-    await logout();
-    setUser(null);
+    try {
+      await logout();
+    } finally {
+      setUser(null);
+    }
   }
 
   if (user === undefined) {

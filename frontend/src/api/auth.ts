@@ -1,4 +1,4 @@
-import { apiRequest, jsonBody } from "./client";
+import { apiRequest, jsonBody, refreshCsrfToken } from "./client";
 
 export interface CurrentUser {
   id: number;
@@ -11,7 +11,7 @@ export async function getCurrentUser() {
 }
 
 export async function login(email: string, password: string, rememberMe: boolean) {
-  return apiRequest<CurrentUser>(
+  const user = await apiRequest<CurrentUser>(
     "/api/auth/login",
     {
       method: "POST",
@@ -19,6 +19,9 @@ export async function login(email: string, password: string, rememberMe: boolean
     },
     true,
   );
+
+  await refreshCsrfToken();
+  return user;
 }
 
 export async function logout() {
