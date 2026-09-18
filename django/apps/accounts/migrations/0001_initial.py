@@ -1,5 +1,3 @@
-import uuid
-
 import django.contrib.auth.models
 import django.contrib.auth.validators
 import django.utils.timezone
@@ -18,7 +16,6 @@ class Migration(migrations.Migration):
             name="AccessPermission",
             fields=[
                 ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
-                ("public_id", models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("code", models.CharField(max_length=100, unique=True)),
@@ -29,7 +26,6 @@ class Migration(migrations.Migration):
             name="Role",
             fields=[
                 ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
-                ("public_id", models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("name", models.CharField(max_length=100, unique=True)),

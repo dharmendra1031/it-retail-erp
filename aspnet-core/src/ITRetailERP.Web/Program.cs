@@ -12,7 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services
-    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    .AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.Password.RequiredLength = 8;

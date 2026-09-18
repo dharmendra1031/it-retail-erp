@@ -20,3 +20,7 @@ Customer → Quotation → Approval → Sales Invoice → Payment → Stock Upda
 ## Database
 
 Microsoft SQL Server 2019 is the initial production database.
+
+## Identifier convention
+
+Application entities use numeric auto-incrementing primary keys. UUID/GUID public identifiers are not used. ASP.NET Core uses `long` / SQL Server `BIGINT IDENTITY`, and Django uses `BigAutoField`.

@@ -23,8 +23,11 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("ITRetailERP.Web.Models.ApplicationUser", b =>
         {
-            b.Property<string>("Id")
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("bigint");
+
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
             b.Property<int>("AccessFailedCount")
                 .HasColumnType("int");
@@ -175,10 +178,13 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("Companies");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
         {
-            b.Property<string>("Id")
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("bigint");
+
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
             b.Property<string>("ConcurrencyStamp")
                 .IsConcurrencyToken()
@@ -202,7 +208,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetRoles");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
         {
             b.Property<int>("Id")
                 .ValueGeneratedOnAdd()
@@ -216,9 +222,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.Property<string>("ClaimValue")
                 .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("RoleId")
-                .IsRequired()
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("RoleId")
+                .HasColumnType("bigint");
 
             b.HasKey("Id");
 
@@ -227,7 +232,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetRoleClaims");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
         {
             b.Property<int>("Id")
                 .ValueGeneratedOnAdd()
@@ -241,9 +246,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.Property<string>("ClaimValue")
                 .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("UserId")
-                .IsRequired()
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("UserId")
+                .HasColumnType("bigint");
 
             b.HasKey("Id");
 
@@ -252,7 +256,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetUserClaims");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
         {
             b.Property<string>("LoginProvider")
                 .HasColumnType("nvarchar(450)");
@@ -263,9 +267,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.Property<string>("ProviderDisplayName")
                 .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("UserId")
-                .IsRequired()
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("UserId")
+                .HasColumnType("bigint");
 
             b.HasKey("LoginProvider", "ProviderKey");
 
@@ -274,13 +277,13 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetUserLogins");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
         {
-            b.Property<string>("UserId")
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("UserId")
+                .HasColumnType("bigint");
 
-            b.Property<string>("RoleId")
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("RoleId")
+                .HasColumnType("bigint");
 
             b.HasKey("UserId", "RoleId");
 
@@ -289,10 +292,10 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetUserRoles");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
         {
-            b.Property<string>("UserId")
-                .HasColumnType("nvarchar(450)");
+            b.Property<long>("UserId")
+                .HasColumnType("bigint");
 
             b.Property<string>("LoginProvider")
                 .HasColumnType("nvarchar(450)");
@@ -308,16 +311,16 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetUserTokens");
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
         {
-            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", null)
                 .WithMany()
                 .HasForeignKey("RoleId")
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
         {
             b.HasOne("ITRetailERP.Web.Models.ApplicationUser", null)
                 .WithMany()
@@ -326,7 +329,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 .IsRequired();
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
         {
             b.HasOne("ITRetailERP.Web.Models.ApplicationUser", null)
                 .WithMany()
@@ -335,9 +338,9 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 .IsRequired();
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
         {
-            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", null)
                 .WithMany()
                 .HasForeignKey("RoleId")
                 .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +353,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 .IsRequired();
         });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
         {
             b.HasOne("ITRetailERP.Web.Models.ApplicationUser", null)
                 .WithMany()
