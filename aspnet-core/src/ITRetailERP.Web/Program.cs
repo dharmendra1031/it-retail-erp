@@ -6,6 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var envFile = Path.GetFullPath(
+    Path.Combine(builder.Environment.ContentRootPath, "..", "..", ".env"));
+
+if (File.Exists(envFile))
+{
+    DotNetEnv.Env.NoClobber().Load(envFile);
+    builder.Configuration.AddEnvironmentVariables();
+}
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
 
