@@ -26,3 +26,20 @@ Every hourly run must inspect relevant actual ASP.NET EF models/migrations, Djan
 **Confirmed in source:** core Company/User/Role IDs are numeric auto-increment; Company bilingual fields and tax/registration indexes exist. **Not verified:** SQL Server migrations execution, existing database contents, DB performance/concurrency, and deployed table correctness.
 
 **Changes in this review:** documentation only. No schema or migration modified because data-safe migration tests and existing data checks are unavailable; the open findings must be revisited at their owning implementation gates.
+
+## Review 002 — 2026-09-30, ERP-0003, baseline `e2755b3f2c9316e10ddf8b150c67c75ff8c66124`
+
+**Scope and source:** SRS-to-code comparison of all 68 source headings; re-read EF Company/Identity models and initial migration, Django Company/Account models and migrations, Company API/serializer and file writers, ASP.NET startup, DRF URL routing, React root/API client and the complete non-truncated repository tree. Documentation-only step; no SQL connection or migration executed.
+
+| Finding | Status and evidence | Safe remediation owner |
+|---|---|---|
+| DB-001 — normalized email index is non-unique | Still open; EF initial migration creates `EmailIndex` without `unique: true` while Django custom User email is unique. | WP04/WP08: inspect production duplicates/collation; safe filtered unique migration and concurrency tests. |
+| DB-002 — Identity claims use INT IDs | Still an open policy decision; EF `AspNetUserClaims.Id` and `AspNetRoleClaims.Id` are INT IDENTITY, though ERP business IDs and User/Role PKs are BIGINT. | WP04: confirm policy for framework support tables before migration. |
+| DB-003 — no financial/stock schema | Open prerequisite; only Identity/Company tables exist in the EF and Django application migrations. | WP18/WP21–WP37: define DECIMAL precision, FK graph, constraints, serial/document uniqueness, costing and atomic rollback before posting. |
+| DB-004 — auth framework schemas differ | Tracked, not inherently a defect; ASP.NET Identity and Django auth are different frameworks. | WP02/WP05–WP08: require identical business/API behavior rather than identical internal table names. |
+| DB-005 — Company logo file overwrite precedes durable DB update | Confirmed code defect risk: ASP.NET `CompanyLogoStorage.SaveAsync` opens `company-{id}{ext}` with `FileMode.Create` before saving the new path; Django `CompanySerializer._save_logo` deletes existing file first. Failed DB save can lose original media and create/update may leave orphan record/file. | WP10: unique staged path, safe promotion/reference, on-commit cleanup, failure injection and regression tests before schema/file changes. |
+| DB-006 — Company API query lacks explicit pagination | Confirmed source-level scalability gap: EF Companies list uses unbounded `ToListAsync`; DRF `CompanyViewSet` uses a queryset without explicit page policy. | WP10/WP48: matching paginated contract, stable indexed ordering and React paging; validate large dataset. |
+
+**Schema cross-check:** current ERP user/role/company PKs remain numeric BIGINT/BigAutoField; EF Company bilingual columns are NVARCHAR; Django Company fields and migration exist. Existing Company tax and registration indexes exist but business uniqueness rules need approval. **Not verified:** live DB collation/duplicates, EF/DRF migration execution, schema diff on deployed DB, decimal calculations, stock/ledger transaction safety and SQL Server concurrency.
+
+**Change decision:** ERP-0003 creates requirements/bug traceability and updates this review. No production schema alteration, migration, payment, or file overwrite is performed without a safe test DB and failure/regression tests. Fixes are assigned to their implementation packages; this mapping step does not assert those defects are resolved.

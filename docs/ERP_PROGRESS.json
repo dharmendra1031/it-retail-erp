@@ -7,13 +7,14 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0003",
+  "nextStepId": "ERP-0004",
   "completedStepIds": [
     "ERP-0001",
-    "ERP-0002"
+    "ERP-0002",
+    "ERP-0003"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "c35b46803ec7bf0cec2dd9e29a0ee402d3677f98",
+  "lastVerifiedCommit": "e2755b3f2c9316e10ddf8b150c67c75ff8c66124",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -68,8 +69,43 @@
         "migrationApplied": false
       },
       "notes": "Verified source-level ASP.NET, Django and React code inventory, recorded missing modules and made database review mandatory each run; advance to ERP-0003 requirements-vs-code gap check."
+    },
+    {
+      "stepId": "ERP-0003",
+      "status": "complete",
+      "reviewedRepoCommit": "e2755b3f2c9316e10ddf8b150c67c75ff8c66124",
+      "srsModifiedAt": "2026-09-09T13:09:35.807Z",
+      "evidence": [
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_0003_VERIFICATION.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "documentation-to-code gap comparison",
+        "srsHeadings": 68,
+        "checksPassed": 16,
+        "checksTotal": 16,
+        "runtimeBuild": "not run (mapping-only step)",
+        "databaseMigration": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Matched each SRS heading to real source evidence and specific missing behavior; linked defects to owning work packages. No runtime feature is claimed complete; advance to ERP-0004 happy-path acceptance specification."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
-  "codeInventoryFile": "docs/ERP_CODE_INVENTORY.md"
+  "codeInventoryFile": "docs/ERP_CODE_INVENTORY.md",
+  "requirementsGapFile": "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
 }

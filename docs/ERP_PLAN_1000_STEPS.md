@@ -29,7 +29,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 
 - [x] **ERP-0001** (01/20) Extract SRS baseline and delivery boundaries acceptance details from SRS §§1, 2, 55, 65, 66, 67, 68; record assumptions and exclusions.
 - [x] **ERP-0002** (02/20) Inspect ASP.NET feature/code inventory, Django feature/code inventory and React feature/screen inventory; record actual files and current behavior.
-- [ ] **ERP-0003** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
+- [x] **ERP-0003** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [ ] **ERP-0004** (04/20) Specify the happy-path acceptance: Trace one SRS requirement to its implementation and test.
 - [ ] **ERP-0005** (05/20) Specify the negative/authorization case: Flag a requirement with no owner or missing evidence.
 - [ ] **ERP-0006** (06/20) Design data, configuration and numeric BIGINT IDs for Versioned requirement-to-implementation map, scope decisions and 13 acceptance cases; record N/A with evidence if schema unchanged.
