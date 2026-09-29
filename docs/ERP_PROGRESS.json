@@ -7,14 +7,15 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0004",
+  "nextStepId": "ERP-0005",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
-    "ERP-0003"
+    "ERP-0003",
+    "ERP-0004"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "e2755b3f2c9316e10ddf8b150c67c75ff8c66124",
+  "lastVerifiedCommit": "1f980fef746512c950098cc2a2378cfbd11a5ac0",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -103,9 +104,44 @@
         "schemaChanged": false
       },
       "notes": "Matched each SRS heading to real source evidence and specific missing behavior; linked defects to owning work packages. No runtime feature is claimed complete; advance to ERP-0004 happy-path acceptance specification."
+    },
+    {
+      "stepId": "ERP-0004",
+      "status": "complete",
+      "reviewedRepoCommit": "1f980fef746512c950098cc2a2378cfbd11a5ac0",
+      "srsModifiedAt": "2026-09-09T13:09:35.807Z",
+      "evidence": [
+        "docs/ERP_0004_ACCEPTANCE.md",
+        "docs/ERP_0004_VERIFICATION.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "Company Master source-to-test happy-path specification",
+        "checksPassed": 16,
+        "checksTotal": 16,
+        "applicationTests": "not run",
+        "databaseMigration": "not run",
+        "reactE2e": "not run",
+        "acceptanceTest": "HP-01 specified, not executed"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Reviewed previously committed Company Master happy-path trace against actual source and migration definitions. Document specification complete; test execution and DB-005 safe logo fix remain pending. Next ERP-0005."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
   "codeInventoryFile": "docs/ERP_CODE_INVENTORY.md",
-  "requirementsGapFile": "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+  "requirementsGapFile": "docs/ERP_REQUIREMENTS_GAP_MATRIX.md",
+  "acceptanceSpecFile": "docs/ERP_0004_ACCEPTANCE.md"
 }

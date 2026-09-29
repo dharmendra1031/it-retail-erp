@@ -43,3 +43,15 @@ Every hourly run must inspect relevant actual ASP.NET EF models/migrations, Djan
 **Schema cross-check:** current ERP user/role/company PKs remain numeric BIGINT/BigAutoField; EF Company bilingual columns are NVARCHAR; Django Company fields and migration exist. Existing Company tax and registration indexes exist but business uniqueness rules need approval. **Not verified:** live DB collation/duplicates, EF/DRF migration execution, schema diff on deployed DB, decimal calculations, stock/ledger transaction safety and SQL Server concurrency.
 
 **Change decision:** ERP-0003 creates requirements/bug traceability and updates this review. No production schema alteration, migration, payment, or file overwrite is performed without a safe test DB and failure/regression tests. Fixes are assigned to their implementation packages; this mapping step does not assert those defects are resolved.
+
+## Review 003 — 2026-09-30, ERP-0004, reviewed HEAD `1f980fef746512c950098cc2a2378cfbd11a5ac0`
+
+**Inspection:** Re-read ASP.NET `Company.cs` and initial EF `20260918070000_InitialCreate.cs`; Django `companies/models.py` and `companies/migrations/0001_initial.py`. Reviewed [ERP-0004 happy-path acceptance](ERP_0004_ACCEPTANCE.md) and previous database findings.
+
+- **IDs and Unicode:** `Companies.Id` remains `BIGINT IDENTITY` in ASP.NET and `BigAutoField` in Django; .NET `NameEn/NameAr` use `NVARCHAR(200)`. English/Arabic round-trip is specified in `HP-01` but not yet tested against a live SQL Server database.
+- **Relationships and indexes:** Existing Company tax/registration indexes and Identity foreign keys were previously checked; `DB-001` (unique email), `DB-002` (Identity claim IDs) and `DB-004` (framework schema differences) remain open or decision-gated. No new FK is required for this documentation-only step.
+- **Stock/finance:** `DB-003` remains open: stock/payable ledger tables do not exist, and DECIMAL precision, referential constraints and atomic posting must be reviewed before implementing purchase/sale.
+- **Company file consistency:** `DB-005` is still open; `HP-01` explicitly excludes a logo to avoid claiming file/DB atomicity. `DB-006` unpaginated Company lists remain a separate performance acceptance gate.
+- **Migration safety:** No models, SQL schema or migration changed here. SQL Server connection, migration forward/rollback and runtime concurrency tests **not run**; production data was not touched.
+
+**Outcome:** Existing DB-001–DB-006 retained and test owners preserved. No schema fix is falsely reported complete.
