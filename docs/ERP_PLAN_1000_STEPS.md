@@ -28,7 +28,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 **Happy-path proof:** Trace one SRS requirement to its implementation and test. **Negative proof:** Flag a requirement with no owner or missing evidence.
 
 - [x] **ERP-0001** (01/20) Extract SRS baseline and delivery boundaries acceptance details from SRS §§1, 2, 55, 65, 66, 67, 68; record assumptions and exclusions.
-- [ ] **ERP-0002** (02/20) Inspect ASP.NET feature/code inventory, Django feature/code inventory and React feature/screen inventory; record actual files and current behavior.
+- [x] **ERP-0002** (02/20) Inspect ASP.NET feature/code inventory, Django feature/code inventory and React feature/screen inventory; record actual files and current behavior.
 - [ ] **ERP-0003** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [ ] **ERP-0004** (04/20) Specify the happy-path acceptance: Trace one SRS requirement to its implementation and test.
 - [ ] **ERP-0005** (05/20) Specify the negative/authorization case: Flag a requirement with no owner or missing evidence.

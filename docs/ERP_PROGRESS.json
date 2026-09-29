@@ -7,12 +7,13 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0002",
+  "nextStepId": "ERP-0003",
   "completedStepIds": [
-    "ERP-0001"
+    "ERP-0001",
+    "ERP-0002"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "42127710bb9b3ebff2f46304959a318a065b87a0",
+  "lastVerifiedCommit": "c35b46803ec7bf0cec2dd9e29a0ee402d3677f98",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -37,6 +38,38 @@
         "applicationTests": "not run (documentation-only step)"
       },
       "notes": "Mapped 7 SRS workflows, 13 acceptance cases, 18 developer notes, 4 source phases and 18 management questions; scope and open decisions recorded. ERP-0002 remains pending."
+    },
+    {
+      "stepId": "ERP-0002",
+      "status": "complete",
+      "reviewedRepoCommit": "c35b46803ec7bf0cec2dd9e29a0ee402d3677f98",
+      "evidence": [
+        "docs/ERP_CODE_INVENTORY.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_EXECUTION_PROTOCOL.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "source inventory and static database review",
+        "checksPassed": 9,
+        "checksTotal": 9,
+        "runtimeBuild": "not run, documentary inventory step",
+        "databaseMigration": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004"
+        ],
+        "migrationApplied": false
+      },
+      "notes": "Verified source-level ASP.NET, Django and React code inventory, recorded missing modules and made database review mandatory each run; advance to ERP-0003 requirements-vs-code gap check."
     }
-  ]
+  ],
+  "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
+  "codeInventoryFile": "docs/ERP_CODE_INVENTORY.md"
 }
