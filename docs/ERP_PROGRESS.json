@@ -7,14 +7,36 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0001",
-  "completedStepIds": [],
+  "nextStepId": "ERP-0002",
+  "completedStepIds": [
+    "ERP-0001"
+  ],
   "blockedStep": null,
-  "lastVerifiedCommit": "9e799d915008840d377d7c948d13da78486a9073",
+  "lastVerifiedCommit": "42127710bb9b3ebff2f46304959a318a065b87a0",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
     "Latest local .env integration build and full SQL/Django/React test matrix still need execution."
   ],
-  "history": []
+  "history": [
+    {
+      "stepId": "ERP-0001",
+      "status": "complete",
+      "reviewedRepoCommit": "42127710bb9b3ebff2f46304959a318a065b87a0",
+      "srsModifiedAt": "2026-09-09T13:09:35.807Z",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "documentation extraction",
+        "checksPassed": 20,
+        "checksTotal": 20,
+        "runtimeBuild": "not run (documentation-only step)",
+        "applicationTests": "not run (documentation-only step)"
+      },
+      "notes": "Mapped 7 SRS workflows, 13 acceptance cases, 18 developer notes, 4 source phases and 18 management questions; scope and open decisions recorded. ERP-0002 remains pending."
+    }
+  ]
 }
