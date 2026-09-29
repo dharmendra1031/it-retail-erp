@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "branch": "development",
+  "plan": "docs/ERP_PLAN_1000_STEPS.md",
+  "protocol": "docs/ERP_EXECUTION_PROTOCOL.md",
+  "srsUrl": "https://docs.google.com/document/d/1Gb_pMJAN14UY0scLJjGBGiuRZdlXOWJARB1aLkzIobc/edit?usp=sharing",
+  "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
+  "workPackages": 50,
+  "totalSteps": 1000,
+  "nextStepId": "ERP-0001",
+  "completedStepIds": [],
+  "blockedStep": null,
+  "lastVerifiedCommit": "9e799d915008840d377d7c948d13da78486a9073",
+  "baselineNotes": [
+    "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
+    "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
+    "Latest local .env integration build and full SQL/Django/React test matrix still need execution."
+  ],
+  "history": []
+}
