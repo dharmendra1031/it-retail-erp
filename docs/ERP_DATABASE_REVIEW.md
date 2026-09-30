@@ -130,3 +130,7 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 ## Review 010 — 2026-09-30, ERP-0011
 
 Reviewed ASP.NET/Django auth and Company API contracts plus React API consumers. No Package-01 traceability runtime endpoint/schema exists or is needed. Numeric IDs and Unicode Company fields unchanged. DB-001–DB-006 remain open; notably validation payload parity is unverified, Company list remains unpaginated and logo persistence semantics remain non-atomic. No money/stock schema or transaction/audit pass. No migration/data change. Runtime API/E2E tests not run.
+
+## Review 011 — 2026-09-30, ERP-0012
+
+Reviewed ASP.NET auth/Company controllers and CompanyLogoStorage. Package-01 traceability has no runtime business operation or idempotency persistence; no schema change is appropriate. Numeric IDs/Unicode unchanged. DB-001–DB-006 remain open; DB-005 is reconfirmed because Company DB and filesystem logo writes are separate. No stock/financial transaction or audit pass. No build/test/migration/E2E executed.
