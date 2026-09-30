@@ -35,7 +35,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0006** (06/20) Design data, configuration and numeric BIGINT IDs for Versioned requirement-to-implementation map, scope decisions and 13 acceptance cases; record N/A with evidence if schema unchanged.
 - [x] **ERP-0007** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Every requirement has owner, evidence and explicit in/out-of-scope disposition.
 - [x] **ERP-0008** (08/20) Implement or repair ASP.NET entities/configuration/contracts for ASP.NET feature/code inventory.
-- [ ] **ERP-0009** (09/20) Implement or repair Django models/serializers/configuration for Django feature/code inventory.
+- [x] **ERP-0009** (09/20) Implement or repair Django models/serializers/configuration for Django feature/code inventory.
 - [ ] **ERP-0010** (10/20) Create/review SQL Server migrations and indexes for SRS baseline and delivery boundaries; test upgrade/rollback or document why not applicable.
 - [ ] **ERP-0011** (11/20) Document identical ASP.NET/Django /api paths, request shapes, responses, validation and error codes for Versioned requirement-to-implementation map, scope decisions and 13 acceptance cases.
 - [ ] **ERP-0012** (12/20) Implement or repair ASP.NET business operations and idempotency for SRS baseline and delivery boundaries.
