@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0010",
+  "nextStepId": "ERP-0011",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -17,10 +17,11 @@
     "ERP-0006",
     "ERP-0007",
     "ERP-0008",
-    "ERP-0009"
+    "ERP-0009",
+    "ERP-0010"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "2f2a228d1bd5d8947460d61ca7ce3031b0c75cfa",
+  "lastVerifiedCommit": "f2e95a518af3b30eebcf32ade6bb0bd45a737dd9",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -292,6 +293,34 @@
         "schemaChanged": false
       },
       "notes": "Reviewed Django SQL Server settings, BigAutoField User/Role/Permission/Company models, migrations, Company serializer/viewset and auth API. No traceability runtime model warranted; existing logo atomicity, pagination and authorization gaps remain open."
+    },
+    {
+      "stepId": "ERP-0010",
+      "status": "complete",
+      "reviewedRepoCommit": "9c1b8d5d2bf46b357f8ac8828f97cf2f2ff38845",
+      "evidence": [
+        "docs/ERP_0010_MIGRATION_REVIEW.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "SQL Server migration/index static review",
+        "schemaDecision": "N/A for Package-01 traceability",
+        "migrationExecution": "not run",
+        "rollback": "not run",
+        "schemaDiff": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Reviewed EF and Django initial migrations/indexes. No Package-01 runtime migration warranted; DB-001 unique-email fix deferred until safe existing-data/collation and concurrency checks are available."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
