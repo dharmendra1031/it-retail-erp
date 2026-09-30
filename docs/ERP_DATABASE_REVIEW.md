@@ -55,3 +55,13 @@ Every hourly run must inspect relevant actual ASP.NET EF models/migrations, Djan
 - **Migration safety:** No models, SQL schema or migration changed here. SQL Server connection, migration forward/rollback and runtime concurrency tests **not run**; production data was not touched.
 
 **Outcome:** Existing DB-001–DB-006 retained and test owners preserved. No schema fix is falsely reported complete.
+
+## Review 004 — 2026-09-30, ERP-0005
+
+Inspected Company authorization in ASP.NET and Django plus the existing requirement-gap matrix. This step changes no database schema.
+
+- Company/User/Role application IDs remain numeric; no UUID/public ID was added.
+- Company mutation endpoints currently require authentication but do not enforce ERP action permissions. ERP-0005 specifies the required authenticated 403 denial and no-data-change check; implementation and runtime proof remain pending.
+- DB-001 through DB-006 remain open. No live SQL Server migration, concurrency, rollback, stock, ledger or production-data operation was performed.
+
+**Outcome:** database design unchanged; action-level permission enforcement and audit remain prerequisites before AT-12 can pass.
