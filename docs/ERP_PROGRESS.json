@@ -7,17 +7,18 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0007",
+  "nextStepId": "ERP-0008",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
     "ERP-0003",
     "ERP-0004",
     "ERP-0005",
-    "ERP-0006"
+    "ERP-0006",
+    "ERP-0007"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "93ff0521b3de9cc2ed51c7815fa9de47945ac67e",
+  "lastVerifiedCommit": "37c5cee6854117c21793e33fc72810921abc303f",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -198,6 +199,35 @@
         "schemaChanged": false
       },
       "notes": "Kept requirement/acceptance traceability in version-controlled docs rather than duplicating it in runtime SQL tables. Persisted ERP entities retain numeric BIGINT/BigAutoField policy."
+    },
+    {
+      "stepId": "ERP-0007",
+      "status": "complete",
+      "reviewedRepoCommit": "fd6565471ec6a40ff0e2b18d6f04d8ccf056f8a6",
+      "evidence": [
+        "docs/ERP_0007_CONSTRAINTS.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "traceability constraints/status/Unicode/decimal/rollback design",
+        "runtimeBuild": "not run",
+        "databaseMigration": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Defined explicit traceability statuses, evidence/owner constraints, UTF-8/Unicode handling, future fixed-precision money rule and forward-correction rollback. No runtime schema belongs to Package-01 traceability metadata."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
