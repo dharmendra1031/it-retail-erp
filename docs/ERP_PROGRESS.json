@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0013",
+  "nextStepId": "ERP-0014",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -20,10 +20,11 @@
     "ERP-0009",
     "ERP-0010",
     "ERP-0011",
-    "ERP-0012"
+    "ERP-0012",
+    "ERP-0013"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "a8179a02fcde36a7b7708a80fde6fff15b8479b8",
+  "lastVerifiedCommit": "0bad2a3f4326666d74508b90c710df228dfe95ac",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -358,6 +359,30 @@
       ],
       "verification": {
         "kind": "ASP.NET operation/idempotency source review",
+        "implementation": "N/A for Package-01 metadata",
+        "runtimeTests": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      }
+    },
+    {
+      "stepId": "ERP-0013",
+      "status": "complete",
+      "evidence": [
+        "docs/ERP_0013_DJANGO_OPERATIONS.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "Django parity/transaction/idempotency source review",
         "implementation": "N/A for Package-01 metadata",
         "runtimeTests": "not run"
       },
