@@ -115,3 +115,14 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 - **Safety:** no schema/migration/data change and no production operation.
 
 **Tests actually run:** source/configuration inspection only. Django checks/tests, SQL migration/readback and E2E were not executed; no runtime pass is claimed.
+
+## Review 009 — 2026-09-30, ERP-0010
+
+**Inspected:** EF initial migration/snapshot and Django accounts/companies initial migrations.
+
+- Package-01 traceability has no runtime table; no new SQL Server migration/index is warranted.
+- ASP.NET Company/User/Role application PKs are BIGINT/long; Django User/Role/AccessPermission/Company use BigAutoField. Identity claim support IDs remain INT (DB-002).
+- Company bilingual EF columns are NVARCHAR. Company tax/registration indexes exist in both implementations. No money/stock schema exists; DB-003 remains open.
+- DB-001 remains material: ASP.NET NormalizedEmail index is non-unique while Django User.email is unique. No unique migration is created without existing-data/collation checks and regression tests.
+- DB-004–DB-006 remain open. No stock/financial atomicity or audit-integrity pass is asserted.
+- No live SQL Server migration, rollback, schema diff, duplicate scan or concurrency test was available/executed. Production data untouched.
