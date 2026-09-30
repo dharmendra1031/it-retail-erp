@@ -65,3 +65,15 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 - DB-001 through DB-006 remain open. No live SQL Server migration, concurrency, rollback, stock, ledger or production-data operation was performed.
 
 **Outcome:** database design unchanged; action-level permission enforcement and audit remain prerequisites before AT-12 can pass.
+
+## Review 005 — 2026-09-30, ERP-0006
+
+**Inspected:** EF `ApplicationDbContext` and initial SQL Server migration; Django core/accounts/Company models; current Package 01 tracker/configuration documents.
+
+- **Design decision:** requirement map, scope decisions and AT-01–AT-13 are version-controlled engineering metadata, not runtime ERP records. No EF/Django entity or SQL Server migration is warranted; `docs/ERP_0006_DATA_DESIGN.md` is the canonical design evidence.
+- **IDs:** persisted ERP application IDs remain numeric auto-increment. ASP.NET Company/User/Role keys are BIGINT/long and Django business migrations use BigAutoField. No UUID/GUID/public ID added. Framework claim INT IDs remain DB-002 rather than being changed unsafely here.
+- **Integrity/parity:** no new FK, unique constraint or index is required because no runtime table is introduced. DB-001 and DB-004 remain open. Existing Company indexes are unchanged.
+- **Unicode/money/transactions:** no new text or monetary columns. DB-003 remains open; stock/financial DECIMAL precision, posting atomicity, reconciliation and immutable audit are not implemented or signed off.
+- **Safety:** no migration, production SQL, data overwrite or destructive operation. DB-005/DB-006 remain open Company defects owned by later implementation gates.
+
+**Runtime limitation:** SQL Server migration/readback, application builds and E2E were not run because ERP-0006 is a documentation-only N/A schema design decision; none are reported as passing.
