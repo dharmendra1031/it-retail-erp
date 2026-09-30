@@ -138,3 +138,7 @@ Reviewed ASP.NET auth/Company controllers and CompanyLogoStorage. Package-01 tra
 ## Review 012 — 2026-09-30, ERP-0013
 
 Reviewed Django auth/Company operations and serializer media writes. Package-01 metadata has no runtime transaction/idempotency persistence. BigAutoField/Unicode design unchanged. DB-005 media/DB failure atomicity reconfirmed; DB-001–DB-006 remain open. No stock/financial/audit pass, migration, data change or runtime test.
+
+## Review 013 — 2026-09-30, ERP-0014 BLOCKED
+
+Server-side permission/audit gate cannot pass: ASP.NET Company uses authentication-only authorization and Django CompanyViewSet uses IsAuthenticated only. Django Role/AccessPermission foundations exist, but endpoint enforcement, branch scope and immutable audit persistence/parity are absent. No schema change is made because an isolated Package-01 permission/audit table would conflict with the later shared authorization architecture. Numeric IDs/Unicode unchanged; DB-001–DB-006 remain open. No runtime denial/audit test was executed, so AT-12 remains pending.
