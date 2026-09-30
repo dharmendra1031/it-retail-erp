@@ -33,7 +33,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0004** (04/20) Specify the happy-path acceptance: Trace one SRS requirement to its implementation and test.
 - [x] **ERP-0005** (05/20) Specify the negative/authorization case: Flag a requirement with no owner or missing evidence.
 - [x] **ERP-0006** (06/20) Design data, configuration and numeric BIGINT IDs for Versioned requirement-to-implementation map, scope decisions and 13 acceptance cases; record N/A with evidence if schema unchanged.
-- [ ] **ERP-0007** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Every requirement has owner, evidence and explicit in/out-of-scope disposition.
+- [x] **ERP-0007** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Every requirement has owner, evidence and explicit in/out-of-scope disposition.
 - [ ] **ERP-0008** (08/20) Implement or repair ASP.NET entities/configuration/contracts for ASP.NET feature/code inventory.
 - [ ] **ERP-0009** (09/20) Implement or repair Django models/serializers/configuration for Django feature/code inventory.
 - [ ] **ERP-0010** (10/20) Create/review SQL Server migrations and indexes for SRS baseline and delivery boundaries; test upgrade/rollback or document why not applicable.
