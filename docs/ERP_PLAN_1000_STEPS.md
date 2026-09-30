@@ -39,7 +39,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0010** (10/20) Create/review SQL Server migrations and indexes for SRS baseline and delivery boundaries; test upgrade/rollback or document why not applicable.
 - [x] **ERP-0011** (11/20) Document identical ASP.NET/Django /api paths, request shapes, responses, validation and error codes for Versioned requirement-to-implementation map, scope decisions and 13 acceptance cases.
 - [x] **ERP-0012** (12/20) Implement or repair ASP.NET business operations and idempotency for SRS baseline and delivery boundaries.
-- [ ] **ERP-0013** (13/20) Implement or repair Django parity, transaction boundaries and idempotency for SRS baseline and delivery boundaries.
+- [x] **ERP-0013** (13/20) Implement or repair Django parity, transaction boundaries and idempotency for SRS baseline and delivery boundaries.
 - [ ] **ERP-0014** (14/20) Enforce role/branch/action permissions and record audit events for SRS baseline and delivery boundaries; prove server-side denial.
 - [ ] **ERP-0015** (15/20) Implement or repair React API integration, screens and user feedback for React feature/screen inventory.
 - [ ] **ERP-0016** (16/20) Verify English/Arabic Unicode, RTL, date/currency formatting, accessibility and responsive behavior for SRS baseline and delivery boundaries.
