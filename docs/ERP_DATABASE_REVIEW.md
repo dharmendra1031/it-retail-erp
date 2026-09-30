@@ -77,3 +77,15 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 - **Safety:** no migration, production SQL, data overwrite or destructive operation. DB-005/DB-006 remain open Company defects owned by later implementation gates.
 
 **Runtime limitation:** SQL Server migration/readback, application builds and E2E were not run because ERP-0006 is a documentation-only N/A schema design decision; none are reported as passing.
+
+## Review 006 — 2026-09-30, ERP-0007
+
+**Inspected:** Company EF model/configuration, current SQL Server migration, Django Company model and React Company form, plus Package 01 traceability configuration.
+
+- **Constraints/status:** ERP-0007 introduces no runtime table. Traceability constraints and allowed statuses are defined in `ERP_0007_CONSTRAINTS.md`; DB constraints are therefore N/A for this metadata step.
+- **IDs/FKs/indexes:** persisted ERP IDs remain numeric BIGINT/BigAutoField. No FK/index/unique change. Existing Company tax/registration indexes remain non-unique; uniqueness is not invented without business approval. DB-001/DB-002 remain open.
+- **Unicode:** ASP.NET Company migration uses NVARCHAR for bilingual text and React Arabic inputs are RTL; Django strings are Unicode-capable. No live SQL Server Arabic round-trip was executed, so runtime Unicode acceptance remains unverified.
+- **Decimals/transactions/audit:** no Package-01 money/stock field exists. DB-003 remains open; future posted money requires explicit fixed precision and atomic posting. No stock/ledger/audit-integrity pass is asserted.
+- **Parity/rollback:** DB-004–DB-006 remain open. No migration was created; rollback for this step is a forward documentation correction through Git history, not a destructive DB operation.
+
+**Tests actually run:** source/document inspection only. Application build, SQL migration, concurrency and E2E not run and not required to establish this no-schema constraint definition.
