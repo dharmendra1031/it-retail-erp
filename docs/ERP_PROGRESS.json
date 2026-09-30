@@ -7,16 +7,17 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0006",
+  "nextStepId": "ERP-0007",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
     "ERP-0003",
     "ERP-0004",
-    "ERP-0005"
+    "ERP-0005",
+    "ERP-0006"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "0d59e67fe136f590e685f73f586e2bc6ba5925ca",
+  "lastVerifiedCommit": "93ff0521b3de9cc2ed51c7815fa9de47945ac67e",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -167,6 +168,36 @@
         "schemaChanged": false
       },
       "notes": "Company APIs currently enforce authentication only. Specified restricted authenticated user 403/no-mutation parity case; AT-12 remains pending implementation."
+    },
+    {
+      "stepId": "ERP-0006",
+      "status": "complete",
+      "reviewedRepoCommit": "d795659f69e2c04fb2cc49bc6868837704426ed0",
+      "evidence": [
+        "docs/ERP_0006_DATA_DESIGN.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "traceability data/configuration design",
+        "schemaDecision": "N/A - version-controlled engineering metadata",
+        "runtimeBuild": "not run",
+        "databaseMigration": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Kept requirement/acceptance traceability in version-controlled docs rather than duplicating it in runtime SQL tables. Persisted ERP entities retain numeric BIGINT/BigAutoField policy."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
