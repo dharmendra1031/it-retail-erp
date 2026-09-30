@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0011",
+  "nextStepId": "ERP-0012",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -18,10 +18,11 @@
     "ERP-0007",
     "ERP-0008",
     "ERP-0009",
-    "ERP-0010"
+    "ERP-0010",
+    "ERP-0011"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "f2e95a518af3b30eebcf32ade6bb0bd45a737dd9",
+  "lastVerifiedCommit": "9390394490ded3099f4bb6cd258c4707ceec17cb",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -321,6 +322,31 @@
         "schemaChanged": false
       },
       "notes": "Reviewed EF and Django initial migrations/indexes. No Package-01 runtime migration warranted; DB-001 unique-email fix deferred until safe existing-data/collation and concurrency checks are available."
+    },
+    {
+      "stepId": "ERP-0011",
+      "status": "complete",
+      "evidence": [
+        "docs/ERP_0011_API_CONTRACT.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "static ASP.NET/Django API contract comparison",
+        "runtimeParity": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Documented current shared auth/Company routes and shapes and explicitly recorded validation, CSRF, permission, pagination and media-semantic parity gaps."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
