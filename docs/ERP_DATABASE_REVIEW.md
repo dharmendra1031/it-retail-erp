@@ -89,3 +89,16 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 - **Parity/rollback:** DB-004–DB-006 remain open. No migration was created; rollback for this step is a forward documentation correction through Git history, not a destructive DB operation.
 
 **Tests actually run:** source/document inspection only. Application build, SQL migration, concurrency and E2E not run and not required to establish this no-schema constraint definition.
+
+## Review 007 — 2026-09-30, ERP-0008
+
+**Inspected:** ASP.NET ApplicationUser, Company, ApplicationDbContext, LoginRequest, CompanyRequest/Response, auth/company controllers and project dependencies.
+
+- **Schema decision:** Package-01 traceability remains Git-versioned metadata per ERP-0006; no EF entity/API contract/table is appropriate. ERP-0008 records N/A instead of introducing duplicate runtime state.
+- **IDs/relationships:** reviewed ASP.NET User/Role/Company application keys use long/BIGINT policy. No new relationship. DB-002 framework claim INT IDs remain unchanged and explicitly open.
+- **Constraints/indexes:** existing Company tax/registration indexes unchanged. DB-001 normalized-email uniqueness remains open; no identity migration attempted without duplicate/collation checks.
+- **Unicode/decimal:** Company bilingual schema remains Unicode-capable by existing NVARCHAR migration. No money field added; DB-003 remains open.
+- **Atomicity/audit/parity:** no stock/financial operation introduced. DB-004–DB-006 and granular authorization/audit gaps remain open and are not fixed by this inventory-contract step.
+- **Migration safety:** no schema/migration/data change; production untouched.
+
+**Tests actually run:** source/configuration inspection only. No dotnet build/test, SQL migration or E2E was executed; this step does not claim existing runtime features newly pass.
