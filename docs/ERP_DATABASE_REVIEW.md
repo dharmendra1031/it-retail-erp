@@ -102,3 +102,16 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 - **Migration safety:** no schema/migration/data change; production untouched.
 
 **Tests actually run:** source/configuration inspection only. No dotnet build/test, SQL migration or E2E was executed; this step does not claim existing runtime features newly pass.
+
+## Review 008 — 2026-09-30, ERP-0009
+
+**Inspected:** Django settings, core/accounts/companies models and migrations, accounts API, Company serializer/viewset and API routing.
+
+- **Schema decision:** Package-01 traceability remains Git metadata. No Django traceability model/serializer/migration is appropriate; adding one would create backend and persistence-source divergence.
+- **IDs/FKs:** DEFAULT_AUTO_FIELD is BigAutoField; reviewed User, Role, AccessPermission and Company migrations use BigAutoField. Role-permission/user-role M2M relationships exist. No UUID/GUID introduced.
+- **Indexes/uniqueness:** AccessPermission.code, Role.name, User.username/email are unique in Django; Company tax/registration fields are indexed, not unique. ASP.NET Identity normalized-email difference remains DB-001/DB-004; no cross-backend uniqueness policy is invented here.
+- **Unicode/decimal:** Django strings are Unicode-capable and Company has English/Arabic fields; live SQL Server Arabic round-trip not run. No money/stock field; DB-003 remains open.
+- **Atomicity/audit:** Company serializer performs DB and logo-storage operations separately; DB-005 remains open. CompanyViewSet has IsAuthenticated only and no granular permission/audit proof. DB-006 unbounded listing remains open.
+- **Safety:** no schema/migration/data change and no production operation.
+
+**Tests actually run:** source/configuration inspection only. Django checks/tests, SQL migration/readback and E2E were not executed; no runtime pass is claimed.
