@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0008",
+  "nextStepId": "ERP-0009",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -15,10 +15,11 @@
     "ERP-0004",
     "ERP-0005",
     "ERP-0006",
-    "ERP-0007"
+    "ERP-0007",
+    "ERP-0008"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "37c5cee6854117c21793e33fc72810921abc303f",
+  "lastVerifiedCommit": "6f6258648faa879aa099eb50bf9c389403179d6c",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -228,6 +229,37 @@
         "schemaChanged": false
       },
       "notes": "Defined explicit traceability statuses, evidence/owner constraints, UTF-8/Unicode handling, future fixed-precision money rule and forward-correction rollback. No runtime schema belongs to Package-01 traceability metadata."
+    },
+    {
+      "stepId": "ERP-0008",
+      "status": "complete",
+      "reviewedRepoCommit": "07344224f0358285d9ebaeb816ae2924c766b29a",
+      "evidence": [
+        "docs/ERP_0008_ASPNET_REVIEW.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "ASP.NET entity/configuration/contract source review",
+        "implementation": "N/A - Package-01 traceability is version-controlled metadata",
+        "runtimeBuild": "not run",
+        "applicationTests": "not run",
+        "databaseMigration": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Reviewed actual ASP.NET User/Company entities, DbContext, auth/company contracts/controllers. No traceability runtime entity is warranted; avoided dead duplicate persistence and left later-package defects open."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
