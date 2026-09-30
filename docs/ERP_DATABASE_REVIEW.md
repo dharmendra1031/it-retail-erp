@@ -126,3 +126,7 @@ Inspected Company authorization in ASP.NET and Django plus the existing requirem
 - DB-001 remains material: ASP.NET NormalizedEmail index is non-unique while Django User.email is unique. No unique migration is created without existing-data/collation checks and regression tests.
 - DB-004–DB-006 remain open. No stock/financial atomicity or audit-integrity pass is asserted.
 - No live SQL Server migration, rollback, schema diff, duplicate scan or concurrency test was available/executed. Production data untouched.
+
+## Review 010 — 2026-09-30, ERP-0011
+
+Reviewed ASP.NET/Django auth and Company API contracts plus React API consumers. No Package-01 traceability runtime endpoint/schema exists or is needed. Numeric IDs and Unicode Company fields unchanged. DB-001–DB-006 remain open; notably validation payload parity is unverified, Company list remains unpaginated and logo persistence semantics remain non-atomic. No money/stock schema or transaction/audit pass. No migration/data change. Runtime API/E2E tests not run.
