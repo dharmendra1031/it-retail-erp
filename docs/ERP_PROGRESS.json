@@ -7,15 +7,16 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0005",
+  "nextStepId": "ERP-0006",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
     "ERP-0003",
-    "ERP-0004"
+    "ERP-0004",
+    "ERP-0005"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "1f980fef746512c950098cc2a2378cfbd11a5ac0",
+  "lastVerifiedCommit": "0d59e67fe136f590e685f73f586e2bc6ba5925ca",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -138,6 +139,34 @@
         "schemaChanged": false
       },
       "notes": "Reviewed previously committed Company Master happy-path trace against actual source and migration definitions. Document specification complete; test execution and DB-005 safe logo fix remain pending. Next ERP-0005."
+    },
+    {
+      "stepId": "ERP-0005",
+      "status": "complete",
+      "evidence": [
+        "docs/ERP_0005_NEGATIVE_ACCEPTANCE.md",
+        "docs/ERP_0005_VERIFICATION.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "negative authorization specification",
+        "checksPassed": 16,
+        "checksTotal": 16,
+        "runtimeTests": "not run",
+        "databaseMigration": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Company APIs currently enforce authentication only. Specified restricted authenticated user 403/no-mutation parity case; AT-12 remains pending implementation."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
