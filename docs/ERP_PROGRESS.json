@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0009",
+  "nextStepId": "ERP-0010",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -16,10 +16,11 @@
     "ERP-0005",
     "ERP-0006",
     "ERP-0007",
-    "ERP-0008"
+    "ERP-0008",
+    "ERP-0009"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "6f6258648faa879aa099eb50bf9c389403179d6c",
+  "lastVerifiedCommit": "2f2a228d1bd5d8947460d61ca7ce3031b0c75cfa",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -260,6 +261,37 @@
         "schemaChanged": false
       },
       "notes": "Reviewed actual ASP.NET User/Company entities, DbContext, auth/company contracts/controllers. No traceability runtime entity is warranted; avoided dead duplicate persistence and left later-package defects open."
+    },
+    {
+      "stepId": "ERP-0009",
+      "status": "complete",
+      "reviewedRepoCommit": "01fea9b21326396810caeacde9ccf17b763420a1",
+      "evidence": [
+        "docs/ERP_0009_DJANGO_REVIEW.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_PROGRESS.json"
+      ],
+      "verification": {
+        "kind": "Django model/serializer/configuration source review",
+        "implementation": "N/A - Package-01 traceability is version-controlled metadata",
+        "runtimeChecks": "not run",
+        "applicationTests": "not run",
+        "databaseMigration": "not run",
+        "e2e": "not run"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Reviewed Django SQL Server settings, BigAutoField User/Role/Permission/Company models, migrations, Company serializer/viewset and auth API. No traceability runtime model warranted; existing logo atomicity, pagination and authorization gaps remain open."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
