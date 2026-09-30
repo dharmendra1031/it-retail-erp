@@ -23,7 +23,22 @@
     "ERP-0012",
     "ERP-0013"
   ],
-  "blockedStep": null,
+  "blockedStep": {
+    "stepId": "ERP-0014",
+    "reason": "Shared role/branch/action authorization and immutable audit foundation are not implemented in both backends; current Company APIs enforce authentication only.",
+    "evidence": [
+      "docs/ERP_0014_BLOCKER.md",
+      "docs/ERP_0005_NEGATIVE_ACCEPTANCE.md",
+      "docs/ERP_DATABASE_REVIEW.md"
+    ],
+    "requiredToUnblock": [
+      "shared permission codes and user/role assignment",
+      "branch scope model/enforcement",
+      "immutable audit persistence",
+      "ASP.NET and Django Company action-policy parity",
+      "executed 403/no-mutation/audit integration test"
+    ]
+  },
   "lastVerifiedCommit": "0bad2a3f4326666d74508b90c710df228dfe95ac",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
@@ -397,6 +412,19 @@
         ],
         "schemaChanged": false
       }
+    },
+    {
+      "stepId": "ERP-0014",
+      "status": "blocked",
+      "evidence": [
+        "docs/ERP_0014_BLOCKER.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "serverSideDenial": "not implemented/not run",
+        "audit": "not implemented/not run"
+      },
+      "notes": "Retained ERP-0014 as nextStepId; protocol forbids skipping blocked step."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
