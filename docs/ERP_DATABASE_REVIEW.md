@@ -134,3 +134,7 @@ Reviewed ASP.NET/Django auth and Company API contracts plus React API consumers.
 ## Review 011 — 2026-09-30, ERP-0012
 
 Reviewed ASP.NET auth/Company controllers and CompanyLogoStorage. Package-01 traceability has no runtime business operation or idempotency persistence; no schema change is appropriate. Numeric IDs/Unicode unchanged. DB-001–DB-006 remain open; DB-005 is reconfirmed because Company DB and filesystem logo writes are separate. No stock/financial transaction or audit pass. No build/test/migration/E2E executed.
+
+## Review 012 — 2026-09-30, ERP-0013
+
+Reviewed Django auth/Company operations and serializer media writes. Package-01 metadata has no runtime transaction/idempotency persistence. BigAutoField/Unicode design unchanged. DB-005 media/DB failure atomicity reconfirmed; DB-001–DB-006 remain open. No stock/financial/audit pass, migration, data change or runtime test.
