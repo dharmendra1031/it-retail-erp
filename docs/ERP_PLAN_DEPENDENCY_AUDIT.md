@@ -58,3 +58,14 @@ WP23 Warranty explicitly depended on WP30 Sales, a later package. WP23 now owns 
 **Result: 20/20 dependency-plan checks passed.**
 
 No application code, SQL schema, production data, authorization behavior or audit persistence was changed by this sequencing correction.
+
+
+## Residual implicit-dependency correction — 2026-10-04
+
+A second pass found three **wording-level implicit dependencies** that were not caught by the first explicit dependency graph check:
+
+- **PLAN-DEP-009:** WP21 negative proof referred to “selling beyond stock” before Sales WP30. It now validates stock-ledger-native duplicate posting and negative-stock rules.
+- **PLAN-DEP-010:** WP22 serial happy/negative tests required sale/second-sale before Sales WP30. WP22 now owns intake, stock location, reservation and locking; sold/returned provenance is WP30/WP34/WP49.
+- **PLAN-DEP-011:** WP23 header had been staged correctly, but ERP-0444/0445/0446/0447/0451/0457/0458/0459 still used old sold-invoice wording. Those steps now match the staged warranty foundation and later Sales integration.
+
+**Residual checks:** 15/15 passed. Step count and IDs remain unchanged; no runtime behavior or schema is claimed fixed.

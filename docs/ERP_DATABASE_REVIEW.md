@@ -154,3 +154,13 @@ Dependency review confirmed WP01 owns no runtime permission/audit schema. No ear
 - No SQL migration, runtime denial test, E2E test or production data operation was performed.
 
 **Schema changed:** no. **Production data touched:** no.
+
+
+## Review 015 — 2026-10-04, plan residual dependency consistency
+
+No database schema change. Rechecked WP21–WP23 sequencing against future Product/Stock/Sales/Warranty ownership.
+
+- WP21 remains the append-only stock ledger owner; its negative acceptance is now ledger-native and no longer depends on future Sales.
+- WP22 serial schema may own unique serial identity, stock location and reservation before Sales; sale/return foreign-key integration is explicitly staged to WP30/WP34.
+- WP23 warranty schema may own policy/date/status/serial-ready data before Sales; sold-customer/source-invoice activation is staged to WP30 and final E2E to WP49.
+- DB-001–DB-006 remain open. No migration, FK, index, production data, build, SQL or E2E test was run in this plan-text correction.
