@@ -142,3 +142,15 @@ Reviewed Django auth/Company operations and serializer media writes. Package-01 
 ## Review 013 — 2026-09-30, ERP-0014 BLOCKED
 
 Server-side permission/audit gate cannot pass: ASP.NET Company uses authentication-only authorization and Django CompanyViewSet uses IsAuthenticated only. Django Role/AccessPermission foundations exist, but endpoint enforcement, branch scope and immutable audit persistence/parity are absent. No schema change is made because an isolated Package-01 permission/audit table would conflict with the later shared authorization architecture. Numeric IDs/Unicode unchanged; DB-001–DB-006 remain open. No runtime denial/audit test was executed, so AT-12 remains pending.
+
+## Review 014 — 2026-10-04, ERP-0014 sequencing correction
+
+Dependency review confirmed WP01 owns no runtime permission/audit schema. No early permission, branch or audit table/migration is created to satisfy generic wording.
+
+- DB-001–DB-006 remain open.
+- Numeric ID, Unicode, FK/index, money and stock/ledger policies remain unchanged.
+- Authorization/branch persistence belongs to WP06–WP09; audit hardening/persistence is finalized in WP46.
+- WP23's forward dependency on WP30 was corrected at plan level; warranty sale/invoice linkage remains a later integration, not an early schema fiction.
+- No SQL migration, runtime denial test, E2E test or production data operation was performed.
+
+**Schema changed:** no. **Production data touched:** no.

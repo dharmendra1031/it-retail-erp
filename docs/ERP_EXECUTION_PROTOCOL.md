@@ -10,6 +10,7 @@
 2. Select the first incomplete step by numeric ID. If a prior step is blocked, resume it; do not skip.
 3. Open the exact existing ASP.NET, Django, React, SQL migration, contract and test files relevant to that step. Evidence for an existing implementation must come from real code, not README/commit messages.
 4. Compare code with this step's SRS reference, deliverable, dependencies, happy/negative case and invariants. Record missing functionality and bugs before editing.
+**Dependency gate:** Before declaring a blocker, resolve ownership. If a needed capability is owned by a later work package, record its contract/acceptance and downstream owner and defer runtime implementation. Do not create duplicate placeholder architecture and do not block the current step solely because a future-owned capability is missing. Block only when the missing capability belongs to the current package or an already-due dependency.
 5. **On every run, review database design:** inspect relevant EF/Django entities and migrations, numeric IDs, FK/index/unique constraints, Unicode, DECIMAL precision, schema parity, transaction atomicity, audit and upgrade/rollback safety. Update `ERP_DATABASE_REVIEW.md` with findings and exact test evidence. Fix verified defects using safe migrations and tests when possible; otherwise retain an explicit blocker.
 6. Implement the smallest idiomatic change that satisfies the step on both backend implementations and the shared UI when applicable. Keep SQL Server and numeric BIGINT IDs; preserve state transitions, Unicode, decimals and API parity.
 7. Audit for duplicated/dead code, missing validation, authorization bypass, CSRF, unsafe file handling, idempotency, transaction/stock/ledger errors, migration drift, incorrect monetary rounding and regression risks. Fix defects before moving on.
@@ -25,5 +26,5 @@
 - Reject false green results, fabricated commits, guessed repository paths, skipped permission checks or bypassed tests.
 - Respect production safety: no destructive DB operation, restore, deployment, payment processing, branch merge or external integration without necessary authorization and safe environment.
 - Prefer narrow tested commits; keep ASP.NET and Django behavior and shared React request/response contracts aligned.
-- When blocked by missing access, secrets, business policy, environment or failing tests, keep the same step open and report exact remedial action. No work on later steps until resolved.
+- When blocked by missing access, secrets, business policy, environment, failing tests, or a missing capability owned by the current/already-due package, keep the same step open and report exact remedial action. A later-package dependency must be recorded and deferred, not treated as a blocker by itself.
 - This file defines **what to do when the hourly task runs**. The scheduler and GitHub permissions determine whether unattended execution can act; verify actual completed commits in the repository.

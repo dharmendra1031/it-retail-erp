@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0014",
+  "nextStepId": "ERP-0015",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -21,25 +21,11 @@
     "ERP-0010",
     "ERP-0011",
     "ERP-0012",
-    "ERP-0013"
+    "ERP-0013",
+    "ERP-0014"
   ],
-  "blockedStep": {
-    "stepId": "ERP-0014",
-    "reason": "Shared role/branch/action authorization and immutable audit foundation are not implemented in both backends; current Company APIs enforce authentication only.",
-    "evidence": [
-      "docs/ERP_0014_BLOCKER.md",
-      "docs/ERP_0005_NEGATIVE_ACCEPTANCE.md",
-      "docs/ERP_DATABASE_REVIEW.md"
-    ],
-    "requiredToUnblock": [
-      "shared permission codes and user/role assignment",
-      "branch scope model/enforcement",
-      "immutable audit persistence",
-      "ASP.NET and Django Company action-policy parity",
-      "executed 403/no-mutation/audit integration test"
-    ]
-  },
-  "lastVerifiedCommit": "0bad2a3f4326666d74508b90c710df228dfe95ac",
+  "blockedStep": null,
+  "lastVerifiedCommit": "8e79e082ec9245ae63d30e8091b66b1435202945",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -425,10 +411,45 @@
         "audit": "not implemented/not run"
       },
       "notes": "Retained ERP-0014 as nextStepId; protocol forbids skipping blocked step."
+    },
+    {
+      "stepId": "ERP-0014",
+      "status": "complete-after-plan-sequencing-correction",
+      "reviewedRepoCommit": "8e79e082ec9245ae63d30e8091b66b1435202945",
+      "evidence": [
+        "docs/ERP_PLAN_DEPENDENCY_AUDIT.md",
+        "docs/ERP_0014_SCOPE_RESOLUTION.md",
+        "docs/ERP_0014_BLOCKER.md",
+        "docs/ERP_0005_NEGATIVE_ACCEPTANCE.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "docs/ERP_EXECUTION_PROTOCOL.md"
+      ],
+      "verification": {
+        "kind": "dependency ownership and acceptance trace",
+        "checksPassed": 20,
+        "checksTotal": 20,
+        "runtimeAuthorization": "not implemented/not run",
+        "auditRuntime": "not implemented/not run",
+        "at12": "pending"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "Resolved premature dependency wording and WP23 forward dependency. WP01 records authorization/audit contract and downstream owners; actual RBAC/branch/audit implementation remains WP06–WP09/WP46. Advanced to ERP-0015 without claiming AT-12 passed."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
   "codeInventoryFile": "docs/ERP_CODE_INVENTORY.md",
   "requirementsGapFile": "docs/ERP_REQUIREMENTS_GAP_MATRIX.md",
-  "acceptanceSpecFile": "docs/ERP_0004_ACCEPTANCE.md"
+  "acceptanceSpecFile": "docs/ERP_0004_ACCEPTANCE.md",
+  "dependencyAuditFile": "docs/ERP_PLAN_DEPENDENCY_AUDIT.md"
 }
