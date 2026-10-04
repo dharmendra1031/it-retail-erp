@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0015",
+  "nextStepId": "ERP-0016",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -22,10 +22,11 @@
     "ERP-0011",
     "ERP-0012",
     "ERP-0013",
-    "ERP-0014"
+    "ERP-0014",
+    "ERP-0015"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "8e79e082ec9245ae63d30e8091b66b1435202945",
+  "lastVerifiedCommit": "1086de3293d8f335a266b9fbfa0cd9677433967c",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -445,6 +446,38 @@
         "schemaChanged": false
       },
       "notes": "Resolved premature dependency wording and WP23 forward dependency. WP01 records authorization/audit contract and downstream owners; actual RBAC/branch/audit implementation remains WP06–WP09/WP46. Advanced to ERP-0015 without claiming AT-12 passed."
+    },
+    {
+      "stepId": "ERP-0015",
+      "status": "complete",
+      "completionMode": "frontend source inventory and downstream ownership",
+      "reviewedRepoCommit": "1086de3293d8f335a266b9fbfa0cd9677433967c",
+      "evidence": [
+        "docs/ERP_0015_REACT_SCOPE.md",
+        "docs/ERP_0015_VERIFICATION.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md"
+      ],
+      "verification": {
+        "kind": "static React ownership review",
+        "checksPassed": 14,
+        "checksTotal": 14,
+        "npmBuild": "not run",
+        "e2e": "not run",
+        "sourceChanged": false
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      },
+      "notes": "WP01 owns no React runtime feature. Verified current Auth/Company integration and mapped downstream frontend ownership; no placeholder UI added. Next ERP-0016."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

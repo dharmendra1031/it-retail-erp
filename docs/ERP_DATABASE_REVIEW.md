@@ -164,3 +164,13 @@ No database schema change. Rechecked WP21–WP23 sequencing against future Produ
 - WP22 serial schema may own unique serial identity, stock location and reservation before Sales; sale/return foreign-key integration is explicitly staged to WP30/WP34.
 - WP23 warranty schema may own policy/date/status/serial-ready data before Sales; sold-customer/source-invoice activation is staged to WP30 and final E2E to WP49.
 - DB-001–DB-006 remain open. No migration, FK, index, production data, build, SQL or E2E test was run in this plan-text correction.
+
+
+## Review 016 — 2026-10-04, ERP-0015 React ownership review
+
+ERP-0015 owns no database entity or migration. Reviewed current React API usage against existing Company/Auth schema and previous DB findings.
+
+- No schema/FK/index/ID/DECIMAL change.
+- DB-001–DB-006 remain open.
+- DB-006 is relevant to current Company UI because React loads the full Company collection and filters locally; the actual pagination/schema/query fix remains WP10/WP48.
+- No SQL migration, DB read/write, build, browser E2E or production operation was executed.
