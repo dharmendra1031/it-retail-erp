@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0016",
+  "nextStepId": "ERP-0017",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -23,10 +23,11 @@
     "ERP-0012",
     "ERP-0013",
     "ERP-0014",
-    "ERP-0015"
+    "ERP-0015",
+    "ERP-0016"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "1086de3293d8f335a266b9fbfa0cd9677433967c",
+  "lastVerifiedCommit": "5d58533b807d5eed557d2376a77ab12e2fd9caff",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -478,6 +479,41 @@
         "schemaChanged": false
       },
       "notes": "WP01 owns no React runtime feature. Verified current Auth/Company integration and mapped downstream frontend ownership; no placeholder UI added. Next ERP-0016."
+    },
+    {
+      "stepId": "ERP-0016",
+      "status": "complete",
+      "completionMode": "dependency-aware bilingual/UX source verification",
+      "reviewedRepoCommit": "4ad84ef415b48fdf0c7e8c2c8a60b3b1c80a53ca",
+      "evidence": [
+        "docs/ERP_0016_BILINGUAL_UX.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_DEPENDENCY_AUDIT.md"
+      ],
+      "verification": {
+        "unicodeSource": "verified",
+        "rtlCurrentSurface": "verified",
+        "responsiveSource": "verified",
+        "sqlArabicRoundTrip": "not run",
+        "browserAccessibility": "not run",
+        "e2e": "not run"
+      },
+      "deferredOwners": {
+        "localizationRtl": "WP11",
+        "printing": "WP44",
+        "fullAcceptance": "WP49"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      }
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
