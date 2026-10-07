@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0017",
+  "nextStepId": "ERP-0018",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -24,10 +24,11 @@
     "ERP-0013",
     "ERP-0014",
     "ERP-0015",
-    "ERP-0016"
+    "ERP-0016",
+    "ERP-0017"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "5d58533b807d5eed557d2376a77ab12e2fd9caff",
+  "lastVerifiedCommit": "d1a83adb9f362d1f5af5fb951df408d4e4f058d9",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -502,6 +503,39 @@
         "localizationRtl": "WP11",
         "printing": "WP44",
         "fullAcceptance": "WP49"
+      },
+      "databaseReview": {
+        "open": [
+          "DB-001",
+          "DB-002",
+          "DB-003",
+          "DB-004",
+          "DB-005",
+          "DB-006"
+        ],
+        "schemaChanged": false
+      }
+    },
+    {
+      "stepId": "ERP-0017",
+      "status": "complete",
+      "completionMode": "dependency-aware ASP.NET test specification gate",
+      "reviewedRepoCommit": "15f9aff05b4f7f576727b3dc51579c00f14341ea",
+      "evidence": [
+        "docs/ERP_0017_ASPNET_TEST_GATE.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_DEPENDENCY_AUDIT.md"
+      ],
+      "verification": {
+        "aspnetTestProject": "absent",
+        "dotnetTest": "not run",
+        "testsPassed": false
+      },
+      "deferredOwners": {
+        "testHarness": "WP03",
+        "apiParity": "WP02/WP49",
+        "permissions": "WP06-WP09/WP49",
+        "companyRuntimeDefects": "WP10/WP48"
       },
       "databaseReview": {
         "open": [
