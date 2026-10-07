@@ -187,3 +187,15 @@ ERP-0015 owns no database entity or migration. Reviewed current React API usage 
 - **Safety:** no migration, production SQL or data mutation.
 
 **Outcome:** ERP-0016 can complete as a dependency-aware source verification/acceptance-contract gate; WP11 owns full localization/RTL, WP44 printing, WP49 final E2E.
+
+## Review 017 — 2026-10-07, ERP-0017
+
+**Inspected:** ASP.NET repository/test inventory plus CompanyRequest/LoginRequest validation contracts. No `aspnet-core/tests` project exists at current HEAD.
+
+- No DB schema change belongs to WP01 test traceability; numeric BIGINT IDs, existing FK/index/delete behavior and NVARCHAR Company fields remain unchanged.
+- DB-001/DB-002 remain open. DB-003 financial DECIMAL/stock transaction/reconciliation/concurrency work remains future-owned. DB-004–DB-006 remain open.
+- Arabic SQL round-trip, logo failure atomicity, pagination, authorization and audit runtime tests are explicitly retained for their owning packages.
+- WP03 owns reusable dev/test infrastructure. No one-off WP01 test harness or test-only schema is introduced.
+- No `dotnet test`, SQL migration or runtime DB test was executed; none is claimed passed. Production data untouched.
+
+**Outcome:** ERP-0017 satisfies its dependency-aware test-specification gate; executable ASP.NET tests remain pending the WP03 harness and relevant feature owners.
