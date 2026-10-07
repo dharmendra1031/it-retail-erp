@@ -174,3 +174,16 @@ ERP-0015 owns no database entity or migration. Reviewed current React API usage 
 - DB-001–DB-006 remain open.
 - DB-006 is relevant to current Company UI because React loads the full Company collection and filters locally; the actual pagination/schema/query fix remains WP10/WP48.
 - No SQL migration, DB read/write, build, browser E2E or production operation was executed.
+
+## Review 016 — 2026-10-07, ERP-0016
+
+**Inspected:** current Company React form/styles/API shape, ASP.NET Company model/initial SQL Server migration, Django Company model/serializer, SRS bilingual requirements and dependency ownership audit.
+
+- **IDs/FKs/indexes:** no schema change. Company remains numeric BIGINT IDENTITY/BigAutoField; existing indexes/relationships unchanged. DB-001/DB-002 remain open.
+- **Unicode/Arabic:** ASP.NET migration uses NVARCHAR for Company bilingual fields; Django/React carry separate English/Arabic values and React Arabic inputs use RTL direction. Live SQL Server Arabic round-trip was not executed, so runtime Unicode acceptance remains pending.
+- **Money/date:** WP01 owns no monetary/date runtime surface. DECIMAL/rounding remains DB-003 for financial owners; KWD/date localization is a downstream WP11/transaction integration test, not a reason to add placeholder columns/formatters here.
+- **Parity/transactions:** no transaction, stock/ledger or concurrency behavior changed. DB-004–DB-006 remain open. No audit persistence is introduced; WP46 remains the audit/security owner.
+- **Responsive/accessibility:** source CSS has a <=900px responsive layout and horizontal table overflow. Browser/device/keyboard/accessibility tests were not executed.
+- **Safety:** no migration, production SQL or data mutation.
+
+**Outcome:** ERP-0016 can complete as a dependency-aware source verification/acceptance-contract gate; WP11 owns full localization/RTL, WP44 printing, WP49 final E2E.
