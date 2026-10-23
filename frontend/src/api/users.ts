@@ -8,6 +8,7 @@ export interface ErpUser {
   mobile: string;
   isActive: boolean;
   roleIds: number[];
+  branchId: number | null;
 }
 
 export interface UserValues {

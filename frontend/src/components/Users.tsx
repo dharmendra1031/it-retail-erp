@@ -2,11 +2,12 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { getRoles, Role } from "../api/roles";
 import { ErpUser, getUsers, saveUser, resetUserPassword, UserValues } from "../api/users";
 import { advanceOnEnter } from "../forms/keyboard";
+import { Branch, getBranches } from "../api/organization";
 import { useLanguage } from "../i18n";
 
 const empty: UserValues = {
   username: "", fullName: "", email: "", mobile: "", password: "",
-  isActive: true, roleIds: [],
+  isActive: true, roleIds: [], branchId: null,
 };
 
 export function Users() {
@@ -14,6 +15,7 @@ export function Users() {
   const usernameInput = useRef<HTMLInputElement>(null);
   const [users, setUsers] = useState<ErpUser[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
   const [values, setValues] = useState<UserValues>(empty);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -21,9 +23,10 @@ export function Users() {
 
   async function load() {
     try {
-      const [accounts, availableRoles] = await Promise.all([getUsers(), getRoles()]);
+      const [accounts, availableRoles, availableBranches] = await Promise.all([getUsers(), getRoles(), getBranches()]);
       setUsers(accounts);
       setRoles(availableRoles);
+      setBranches(availableBranches);
     } catch {
       setError(t("unableLoadUsers"));
     }
@@ -45,7 +48,7 @@ export function Users() {
     setEditingId(user.id);
     setValues({
       username: user.username, fullName: user.fullName, email: user.email,
-      mobile: user.mobile, isActive: user.isActive, roleIds: user.roleIds,
+      mobile: user.mobile, isActive: user.isActive, roleIds: user.roleIds, branchId: user.branchId,
       password: "",
     });
     usernameInput.current?.focus();
@@ -115,6 +118,13 @@ export function Users() {
             <input type="password" autoComplete="new-password"
               required={editingId === null} value={values.password ?? ""}
               onChange={(event) => change("password", event.target.value)} />
+          </label>
+          <label>{t("branchMaster")}
+            <select value={values.branchId ?? ""}
+              onChange={(event) => change("branchId", event.target.value ? Number(event.target.value) : null)}>
+              <option value="">{t("selectBranch")}</option>
+              {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.nameEn}</option>)}
+            </select>
           </label>
           <fieldset className="full-width">
             <legend>{t("roles")}</legend>

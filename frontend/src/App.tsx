@@ -5,8 +5,9 @@ import { Companies } from "./components/Companies";
 import { Login } from "./components/Login";
 import { Roles } from "./components/Roles";
 import { Users } from "./components/Users";
+import { Organization } from "./components/Organization";
 
-export type Page = "companies" | "roles" | "users";
+export type Page = "companies" | "roles" | "users" | "organization";
 
 export default function App() {
   const [user, setUser] = useState<CurrentUser | null | undefined>(undefined);
@@ -48,7 +49,7 @@ export default function App() {
 
   return (
     <AppShell user={user} page={activePage} onPageChange={setPage} onLogout={handleLogout}>
-      {activePage === "roles" ? <Roles /> : activePage === "users" ? <Users /> : <Companies canManage={user.isAdmin} />}
+      {activePage === "roles" ? <Roles /> : activePage === "users" ? <Users /> : activePage === "organization" ? <Organization /> : <Companies canManage={user.isAdmin} />}
     </AppShell>
   );
 }

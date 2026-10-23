@@ -243,3 +243,27 @@ test("admin creates and deactivates an employee from keyboard-friendly User Mast
   await page.getByRole("button", { name: "Save User" }).click();
   await expect(row).toContainText("Inactive");
 });
+
+
+test("admin creates a branch and warehouse for a company", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByLabel("Company Name (English)").fill("Organization Test Company");
+  await page.getByRole("button", { name: "Save Company" }).click();
+  await page.getByRole("button", { name: "Branches & Warehouses" }).click();
+  await expect(page.getByRole("heading", { name: "Branches & Warehouses" })).toBeVisible();
+  const forms = page.locator(".company-form");
+  await forms.first().getByLabel("Company").selectOption({ label: "Organization Test Company" });
+  await forms.first().getByLabel("Code").fill("HQ");
+  await forms.first().getByLabel("Company Name (English)").fill("Head Office");
+  await forms.first().getByRole("button", { name: "Save Branch" }).click();
+
+  await forms.nth(1).getByLabel("Branch").selectOption({ label: "Head Office" });
+  await forms.nth(1).getByLabel("Code").fill("MAIN");
+  await forms.nth(1).getByLabel("Company Name (English)").fill("Main Store");
+  await forms.nth(1).getByRole("button", { name: "Save Warehouse" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "Main Store" })).toBeVisible();
+});
