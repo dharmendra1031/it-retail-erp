@@ -4,7 +4,6 @@ using ITRetailERP.Web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ITRetailERP.Web.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITRetailERP.Web.Controllers.Api;
