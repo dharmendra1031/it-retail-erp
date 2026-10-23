@@ -255,3 +255,68 @@ class AccountSchemaTests(TransactionTestCase):
         self.assertTrue(admin.roles.filter(name="Admin").exists())
         self.assertTrue(admin.check_password("StrongTestPassword123!"))
         self.assertEqual(User.objects.filter(email=admin.email).count(), 1)
+
+
+class PermissionPolicyTests(TestCase):
+    def setUp(self):
+        from .models import AccessPermission
+        from .permissions import catalog
+
+        self.admin = User.objects.create_superuser(
+            username="policy-admin", email="policy-admin@example.com", password="TestPass123!"
+        )
+        self.employee = User.objects.create_user(
+            username="policy-employee", email="policy-employee@example.com", password="TestPass123!"
+        )
+        for permission in catalog():
+            AccessPermission.objects.get_or_create(**permission)
+        self.role = Role.objects.create(name="Sales")
+        self.employee.roles.add(self.role)
+        self.client = APIClient()
+
+    def test_permission_catalog_is_admin_only(self):
+        self.client.force_authenticate(user=self.employee)
+        self.assertEqual(self.client.get("/api/permissions").status_code, 403)
+        self.client.force_authenticate(user=self.admin)
+        result = self.client.get("/api/permissions")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn("sales.post", [row["code"] for row in result.data])
+        self.assertIn("sales.reverse", [row["code"] for row in result.data])
+
+    def test_role_permission_assignment_is_atomic_and_admin_only(self):
+        self.client.force_authenticate(user=self.employee)
+        self.assertEqual(
+            self.client.put(f"/api/roles/{self.role.pk}/permissions", {"permissions": ["companies.add"]}, format="json").status_code,
+            403,
+        )
+        self.client.force_authenticate(user=self.admin)
+        url = f"/api/roles/{self.role.pk}/permissions"
+        result = self.client.put(url, {"permissions": ["companies.add", "sales.view"]}, format="json")
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.data["permissions"], ["companies.add", "sales.view"])
+        self.assertEqual(self.client.get(url).data["permissions"], ["companies.add", "sales.view"])
+        self.assertEqual(
+            self.client.put(url, {"permissions": ["sales.post", "unknown.action"]}, format="json").status_code, 400
+        )
+        self.assertEqual(self.client.get(url).data["permissions"], ["companies.add", "sales.view"])
+
+    def test_role_action_does_not_grant_every_company_operation(self):
+        self.client.force_authenticate(user=self.employee)
+        created = self.client.post("/api/companies", {"nameEn": "Sales Office"}, format="multipart")
+        self.assertEqual(created.status_code, 403)
+        self.role.permissions.add(
+            self.role.permissions.model.objects.get(code="companies.add")
+        )
+        created = self.client.post("/api/companies", {"nameEn": "Sales Office"}, format="multipart")
+        self.assertEqual(created.status_code, 201)
+        self.assertEqual(
+            self.client.delete(f"/api/companies/{created.data['id']}").status_code, 403
+        )
+
+    def test_admin_role_permissions_are_immutable(self):
+        admin_role = Role.objects.get(name="Admin")
+        self.client.force_authenticate(user=self.admin)
+        self.assertEqual(
+            self.client.put(f"/api/roles/{admin_role.pk}/permissions",
+                            {"permissions": ["sales.reverse"]}, format="json").status_code, 400
+        )

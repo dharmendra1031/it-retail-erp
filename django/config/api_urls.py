@@ -3,6 +3,7 @@ from rest_framework.routers import SimpleRouter
 
 from apps.accounts.api import csrf, me, sign_in, sign_out
 from apps.accounts.roles_api import RoleViewSet
+from apps.accounts.permissions_api import PermissionCatalogApi
 from apps.companies.api import CompanyViewSet
 
 router = SimpleRouter(trailing_slash=False)
@@ -14,5 +15,6 @@ urlpatterns = [
     path("auth/me", me, name="api-me"),
     path("auth/login", sign_in, name="api-login"),
     path("auth/logout", sign_out, name="api-logout"),
+    path("permissions", PermissionCatalogApi.as_view(), name="api-permissions"),
     *router.urls,
 ]

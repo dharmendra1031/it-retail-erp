@@ -2,6 +2,7 @@ using ITRetailERP.Web.Data;
 using ITRetailERP.Web.Models;
 using ITRetailERP.Web.Services;
 using ITRetailERP.Web.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,15 @@ builder.Services.AddAntiforgery(options =>
 builder.Services.AddScoped<CompanyLogoStorage>();
 builder.Services.AddScoped<DocumentNumberService>();
 builder.Services.AddScoped<ApiCsrfFilter>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    foreach (var code in PermissionCatalog.Codes)
+    {
+        options.AddPolicy(code, policy => policy.RequireAuthenticatedUser()
+            .AddRequirements(new PermissionRequirement(code)));
+    }
+});
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {

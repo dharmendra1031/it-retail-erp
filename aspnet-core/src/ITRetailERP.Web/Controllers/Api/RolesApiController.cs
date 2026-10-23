@@ -1,5 +1,6 @@
 using ITRetailERP.Web.Contracts;
 using ITRetailERP.Web.Data;
+using ITRetailERP.Web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -84,6 +85,58 @@ public sealed class RolesApiController(
         return result.Succeeded
             ? Ok(new RoleResponse(role.Id, name))
             : BadRequest(new { detail = "Invalid request." });
+    }
+
+    [HttpGet("{id:long}/permissions")]
+    public async Task<IActionResult> GetPermissions(long id)
+    {
+        var role = await roleManager.FindByIdAsync(id.ToString());
+        if (role is null)
+        {
+            return NotFound();
+        }
+
+        var permissions = await db.RoleClaims.AsNoTracking()
+            .Where(claim => claim.RoleId == id && claim.ClaimType == "erp.permission")
+            .Select(claim => claim.ClaimValue!)
+            .OrderBy(code => code)
+            .ToListAsync();
+        return Ok(new { permissions });
+    }
+
+    [HttpPut("{id:long}/permissions")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetPermissions(long id, RolePermissionsRequest request)
+    {
+        var role = await roleManager.FindByIdAsync(id.ToString());
+        if (role is null)
+        {
+            return NotFound();
+        }
+        if (string.Equals(role.Name, "Admin", StringComparison.OrdinalIgnoreCase))
+        {
+            return BadRequest(new { detail = "Admin role cannot be changed." });
+        }
+
+        var codes = request.Permissions;
+        if (codes is null || codes.Any(code => !PermissionCatalog.Codes.Contains(code)))
+        {
+            return BadRequest(new { detail = "Invalid request." });
+        }
+
+        var unique = codes.Distinct(StringComparer.Ordinal).OrderBy(code => code).ToArray();
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        await db.RoleClaims.Where(claim => claim.RoleId == id && claim.ClaimType == "erp.permission")
+            .ExecuteDeleteAsync();
+        db.RoleClaims.AddRange(unique.Select(code => new IdentityRoleClaim<long>
+        {
+            RoleId = id,
+            ClaimType = "erp.permission",
+            ClaimValue = code,
+        }));
+        await db.SaveChangesAsync();
+        await transaction.CommitAsync();
+        return Ok(new { permissions = unique });
     }
 
     [HttpDelete("{id:long}")]

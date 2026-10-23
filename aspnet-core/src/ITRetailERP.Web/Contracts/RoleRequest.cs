@@ -9,3 +9,9 @@ public sealed class RoleRequest
 }
 
 public sealed record RoleResponse(long Id, string Name);
+
+public sealed class RolePermissionsRequest
+{
+    [Required]
+    public string[] Permissions { get; set; } = [];
+}

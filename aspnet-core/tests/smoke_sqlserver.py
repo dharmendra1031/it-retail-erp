@@ -135,10 +135,26 @@ def check_api():
     )
     assert status == 400 and invalid_company == {"detail": "Invalid request."}, "Whitespace company name must be rejected"
 
+    status, catalog = request(client, "/api/permissions")
+    assert status == 200 and any(item["code"] == "sales.reverse" for item in catalog), "Permission catalog missing"
+
     status, role = request(client, "/api/roles", "POST", {"name": "SQL Cashier"}, csrf)
     assert status == 201 and isinstance(role["id"], int), "Role creation failed"
     status, duplicate = request(client, "/api/roles", "POST", {"name": "sql cashier"}, csrf)
     assert status == 400 and duplicate == {"detail": "Role name already exists."}, "Duplicate Role name must be rejected"
+
+    status, assigned = request(
+        client, f"/api/roles/{role['id']}/permissions", "PUT",
+        {"permissions": ["companies.add", "sales.view"]}, csrf,
+    )
+    assert status == 200 and assigned["permissions"] == ["companies.add", "sales.view"], "Role permissions not saved"
+    status, denied = request(
+        client, f"/api/roles/{role['id']}/permissions", "PUT",
+        {"permissions": ["sales.post", "invalid.action"]}, csrf,
+    )
+    assert status == 400 and denied == {"detail": "Invalid request."}, "Unknown privilege accepted"
+    status, saved = request(client, f"/api/roles/{role['id']}/permissions")
+    assert status == 200 and saved["permissions"] == ["companies.add", "sales.view"], "Invalid update changed grants"
 
     status, changed = request(
         client, f"/api/roles/{role['id']}", "PUT", {"name": "SQL Sales"}, csrf

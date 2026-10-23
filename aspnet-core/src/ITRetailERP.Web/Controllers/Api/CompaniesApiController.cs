@@ -35,7 +35,7 @@ public sealed class CompaniesApiController(
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "companies.add")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<ActionResult<CompanyResponse>> Create([FromForm] CompanyRequest request)
     {
@@ -62,7 +62,7 @@ public sealed class CompaniesApiController(
     }
 
     [HttpPut("{id:long}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "companies.edit")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<ActionResult<CompanyResponse>> Update(long id, [FromForm] CompanyRequest request)
     {
@@ -97,7 +97,7 @@ public sealed class CompaniesApiController(
     }
 
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "companies.delete")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Delete(long id)
     {
