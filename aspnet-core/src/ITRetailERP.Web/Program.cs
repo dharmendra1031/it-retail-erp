@@ -51,6 +51,7 @@ builder.Services.AddAntiforgery(options =>
 });
 
 builder.Services.AddScoped<CompanyLogoStorage>();
+builder.Services.AddScoped<DocumentNumberService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

@@ -9,10 +9,14 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>(options)
 {
     public DbSet<Company> Companies => Set<Company>();
+    public DbSet<DocumentSequence> DocumentSequences => Set<DocumentSequence>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<DocumentSequence>(entity =>
+            entity.HasIndex(x => new { x.Series, x.FiscalYear, x.BranchId }).IsUnique());
 
         builder.Entity<Company>(entity =>
         {

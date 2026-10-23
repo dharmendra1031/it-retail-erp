@@ -92,6 +92,35 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.ToTable("AspNetUsers");
         });
 
+        modelBuilder.Entity("ITRetailERP.Web.Models.DocumentSequence", b =>
+        {
+            b.Property<long>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("bigint");
+
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+            b.Property<long>("BranchId")
+                .HasColumnType("bigint");
+
+            b.Property<int>("FiscalYear")
+                .HasColumnType("int");
+
+            b.Property<long>("LastNumber")
+                .HasColumnType("bigint");
+
+            b.Property<string>("Series")
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnType("nvarchar(20)");
+
+            b.HasKey("Id");
+
+            b.HasIndex("Series", "FiscalYear", "BranchId").IsUnique();
+
+            b.ToTable("DocumentSequences");
+        });
+
         modelBuilder.Entity("ITRetailERP.Web.Models.Company", b =>
         {
             b.Property<long>("Id")
