@@ -336,8 +336,23 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByLabel("Contact Person").fill("Ali");
   await page.getByLabel("Opening Balance").fill("15.250");
   await page.getByLabel("Payment Terms (days)").fill("30");
+  const customerForm = page.locator("form.company-form");
+  const invalidFields = await customerForm.evaluate((form: HTMLFormElement) =>
+    Array.from(form.elements).filter((element): element is HTMLInputElement =>
+      element instanceof HTMLInputElement && !element.checkValidity(),
+    ).map(element => ({ name: element.name, value: element.value,
+      reason: element.validationMessage })),
+  );
+  expect(invalidFields, "Customer form has invalid fields").toEqual([]);
+  const customerRequest = page.waitForResponse(response =>
+    response.url().endsWith("/api/customers") && response.request().method() === "POST",
+  );
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: "Credit Partner" })).toContainText("عميل تجريبي");
+  const customerResponse = await customerRequest;
+  expect(customerResponse.status(),
+    `Customer payload: ${customerResponse.request().postData()} | Response: ${await customerResponse.text()}`,
+  ).toBe(201);
+  await expect(page.getByRole("row").filter({ hasText: `C-${suffix}` })).toContainText("عميل تجريبي");
 
   await page.getByRole("button", { name: "Supplier Master" }).click();
   await expect(page.getByRole("heading", { name: "Supplier Master" })).toBeVisible();
