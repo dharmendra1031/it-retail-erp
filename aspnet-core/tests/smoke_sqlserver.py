@@ -52,6 +52,12 @@ def check_schema():
     )
     with pyodbc.connect(connection) as db:
         cursor = db.cursor()
+        cursor.execute(
+            "SELECT is_unique FROM sys.indexes "
+            "WHERE object_id=OBJECT_ID('AspNetUsers') AND name='EmailIndex'"
+        )
+        row = cursor.fetchone()
+        assert row is not None and row[0] == 1, "NormalizedEmail index must be unique"
         for table in ("AspNetUsers", "AspNetRoles", "Companies"):
             cursor.execute(
                 "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS "

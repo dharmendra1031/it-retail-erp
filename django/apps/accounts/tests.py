@@ -171,3 +171,13 @@ class AuthenticationTests(TestCase):
         self.assertEqual(self.client.post("/api/auth/login", {
             "email": self.user.email, "password": "TestPass123!", "rememberMe": "false"
         }, format="json").status_code, 400)
+
+
+class EmailIntegrityTests(TestCase):
+    def test_user_email_unique_at_database_level(self):
+        from django.db import IntegrityError, transaction
+
+        User.objects.create_user(username="unique1", email="unique@example.com", password="TestPass123!")
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                User.objects.create_user(username="unique2", email="unique@example.com", password="TestPass123!")

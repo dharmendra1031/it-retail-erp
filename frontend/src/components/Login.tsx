@@ -37,7 +37,7 @@ export function Login({ onLogin }: Props) {
         <p>{t("signIn")}</p>
         <label>
           {t("language")}
-          <select aria-label="Language" value={language} onChange={(event) => setLanguage(event.target.value as "en" | "ar")}>
+          <select aria-label={t("language")} value={language} onChange={(event) => setLanguage(event.target.value as "en" | "ar")}>
             <option value="en">English</option>
             <option value="ar">العربية</option>
           </select>
