@@ -120,7 +120,8 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
     }
 
     private static bool Valid(SupplierRequest request) =>
-        PartnerValidation.IsValid(request) && PartnerValidation.Amount(request.OpeningBalance);
+        PartnerValidation.IsValid(request) && PartnerValidation.Amount(request.OpeningBalance)
+        && PartnerValidation.Amount(request.CreditLimit);
 
     private static void Apply(Supplier model, SupplierRequest request)
     {
@@ -130,10 +131,14 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
         model.AddressEn = request.AddressEn.Trim();
         model.AddressAr = request.AddressAr.Trim();
         model.Mobile = request.Mobile.Trim();
+        model.ContactPerson = request.ContactPerson.Trim();
+        model.Telephone = request.Telephone.Trim();
+        model.Remarks = request.Remarks.Trim();
         model.Email = request.Email?.Trim() ?? "";
         model.TaxNumber = request.TaxNumber.Trim();
         model.PaymentTermsDays = request.PaymentTermsDays;
         model.OpeningBalance = request.OpeningBalance;
+        model.CreditLimit = request.CreditLimit;
         model.IsActive = request.IsActive;
     }
 
@@ -141,5 +146,6 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
         supplier.Id, supplier.Code, supplier.NameEn, supplier.NameAr, supplier.AddressEn,
         supplier.AddressAr, supplier.Mobile, supplier.Email, supplier.TaxNumber,
         supplier.PaymentTermsDays, PartnerValidation.Money(supplier.OpeningBalance),
-        supplier.IsActive);
+        supplier.IsActive, supplier.ContactPerson, supplier.Telephone, supplier.Remarks,
+        PartnerValidation.Money(supplier.CreditLimit));
 }

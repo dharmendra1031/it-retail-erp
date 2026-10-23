@@ -122,7 +122,9 @@ public sealed class CustomersApiController(ApplicationDbContext db) : Controller
     private static bool Valid(CustomerRequest request) =>
         PartnerValidation.IsValid(request) &&
         PartnerValidation.Amount(request.CreditLimit) &&
-        request.CustomerType is "retail" or "wholesale" or "corporate";
+        PartnerValidation.Amount(request.OpeningBalance) &&
+        request.CustomerType is "retail" or "wholesale" or "corporate"
+            or "cash" or "credit" or "individual" or "company" or "government" or "other";
 
     private static void Apply(Customer model, CustomerRequest request)
     {
@@ -132,7 +134,14 @@ public sealed class CustomersApiController(ApplicationDbContext db) : Controller
         model.AddressEn = request.AddressEn.Trim();
         model.AddressAr = request.AddressAr.Trim();
         model.Mobile = request.Mobile.Trim();
+        model.ContactPerson = request.ContactPerson.Trim();
+        model.Telephone = request.Telephone.Trim();
+        model.Remarks = request.Remarks.Trim();
         model.CivilId = request.CivilId.Trim();
+        model.CompanyName = request.CompanyName.Trim();
+        model.Email = request.Email.Trim();
+        model.TaxNumber = request.TaxNumber.Trim();
+        model.OpeningBalance = request.OpeningBalance;
         model.CustomerType = request.CustomerType;
         model.PaymentTermsDays = request.PaymentTermsDays;
         model.CreditLimit = request.CreditLimit;
@@ -144,5 +153,7 @@ public sealed class CustomersApiController(ApplicationDbContext db) : Controller
         customer.AddressAr, customer.Mobile,
         User.IsInRole("Admin") ? customer.CivilId : null,
         customer.CustomerType, customer.PaymentTermsDays,
-        PartnerValidation.Money(customer.CreditLimit), customer.IsActive);
+        PartnerValidation.Money(customer.CreditLimit), customer.IsActive,
+        customer.ContactPerson, customer.Telephone, customer.Remarks, customer.CompanyName,
+        customer.Email, customer.TaxNumber, PartnerValidation.Money(customer.OpeningBalance));
 }

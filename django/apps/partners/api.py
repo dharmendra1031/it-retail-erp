@@ -27,6 +27,9 @@ class PartnerSerializer(serializers.ModelSerializer):
     addressAr = serializers.CharField(source="address_ar", max_length=500, required=False, allow_blank=True)
     paymentTermsDays = serializers.IntegerField(source="payment_terms_days", min_value=0, max_value=365)
     isActive = serializers.BooleanField(source="is_active", required=False)
+    contactPerson = serializers.CharField(source="contact_person", max_length=150, required=False, allow_blank=True)
+    telephone = serializers.CharField(source="telephone", max_length=30, required=False, allow_blank=True)
+    remarks = serializers.CharField(source="remarks", max_length=1000, required=False, allow_blank=True)
 
     def validate_code(self, value):
         code = value.strip().upper()
@@ -46,6 +49,10 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 class CustomerSerializer(PartnerSerializer):
     civilId = serializers.CharField(source="civil_id", max_length=30, required=False, allow_blank=True)
+    companyName = serializers.CharField(source="company_name", max_length=200, required=False, allow_blank=True)
+    email = serializers.CharField(source="email", max_length=200, required=False, allow_blank=True)
+    taxNumber = serializers.CharField(source="tax_number", max_length=100, required=False, allow_blank=True)
+    openingBalance = serializers.DecimalField(source="opening_balance", max_digits=18, decimal_places=3, min_value=0, required=False)
     customerType = serializers.ChoiceField(source="customer_type", choices=[
         key for key, _ in Customer.TYPES
     ])
@@ -54,7 +61,9 @@ class CustomerSerializer(PartnerSerializer):
     class Meta:
         model = Customer
         fields = ("id", "code", "nameEn", "nameAr", "addressEn", "addressAr",
-                  "mobile", "civilId", "customerType", "paymentTermsDays", "creditLimit", "isActive")
+                  "mobile", "civilId", "customerType", "paymentTermsDays", "creditLimit", "isActive",
+                  "contactPerson", "telephone", "remarks", "companyName", "email",
+                  "taxNumber", "openingBalance")
         read_only_fields = ("id",)
 
     def to_representation(self, instance):
@@ -70,11 +79,15 @@ class SupplierSerializer(PartnerSerializer):
     openingBalance = serializers.DecimalField(
         source="opening_balance", max_digits=18, decimal_places=3, min_value=0
     )
+    creditLimit = serializers.DecimalField(
+        source="credit_limit", max_digits=18, decimal_places=3, min_value=0, required=False
+    )
 
     class Meta:
         model = Supplier
         fields = ("id", "code", "nameEn", "nameAr", "addressEn", "addressAr",
-                  "mobile", "email", "taxNumber", "paymentTermsDays", "openingBalance", "isActive")
+                  "mobile", "email", "taxNumber", "paymentTermsDays", "openingBalance", "isActive",
+                  "contactPerson", "telephone", "remarks", "creditLimit")
         read_only_fields = ("id",)
 
 

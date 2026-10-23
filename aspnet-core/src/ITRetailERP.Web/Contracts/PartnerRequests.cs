@@ -13,6 +13,9 @@ public class PartnerRequest
     [MaxLength(500)] public string AddressEn { get; set; } = "";
     [MaxLength(500)] public string AddressAr { get; set; } = "";
     [MaxLength(30)] public string Mobile { get; set; } = "";
+    [MaxLength(150)] public string ContactPerson { get; set; } = "";
+    [MaxLength(30)] public string Telephone { get; set; } = "";
+    [MaxLength(1000)] public string Remarks { get; set; } = "";
     public int PaymentTermsDays { get; set; }
     public bool IsActive { get; set; } = true;
 }
@@ -20,6 +23,11 @@ public class PartnerRequest
 public sealed class CustomerRequest : PartnerRequest
 {
     [MaxLength(30)] public string CivilId { get; set; } = "";
+    [MaxLength(200)] public string CompanyName { get; set; } = "";
+    [MaxLength(200)] public string Email { get; set; } = "";
+    [MaxLength(100)] public string TaxNumber { get; set; } = "";
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public decimal OpeningBalance { get; set; }
     [Required] public string CustomerType { get; set; } = "retail";
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public decimal CreditLimit { get; set; }
@@ -31,18 +39,23 @@ public sealed class SupplierRequest : PartnerRequest
     [MaxLength(100)] public string TaxNumber { get; set; } = "";
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public decimal OpeningBalance { get; set; }
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public decimal CreditLimit { get; set; }
 }
 
 public sealed record CustomerResponse(
     long Id, string Code, string NameEn, string NameAr, string AddressEn,
     string AddressAr, string Mobile,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? CivilId,
-    string CustomerType, int PaymentTermsDays, string CreditLimit, bool IsActive);
+    string CustomerType, int PaymentTermsDays, string CreditLimit, bool IsActive,
+    string ContactPerson, string Telephone, string Remarks, string CompanyName,
+    string Email, string TaxNumber, string OpeningBalance);
 
 public sealed record SupplierResponse(
     long Id, string Code, string NameEn, string NameAr, string AddressEn,
     string AddressAr, string Mobile, string Email, string TaxNumber,
-    int PaymentTermsDays, string OpeningBalance, bool IsActive);
+    int PaymentTermsDays, string OpeningBalance, bool IsActive,
+    string ContactPerson, string Telephone, string Remarks, string CreditLimit);
 
 public static class PartnerValidation
 {

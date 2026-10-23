@@ -85,6 +85,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         {
             entity.HasIndex(x => x.Code).IsUnique();
             entity.Property(x => x.CreditLimit).HasPrecision(18, 3);
+            entity.Property(x => x.OpeningBalance).HasPrecision(18, 3);
+            entity.Property(x => x.CreditLimit).HasPrecision(18, 3);
         });
 
         builder.Entity<Supplier>(entity =>

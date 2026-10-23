@@ -11,7 +11,14 @@ public sealed class Customer
     [MaxLength(500)] public string AddressEn { get; set; } = "";
     [MaxLength(500)] public string AddressAr { get; set; } = "";
     [MaxLength(30)] public string Mobile { get; set; } = "";
+    [MaxLength(150)] public string ContactPerson { get; set; } = "";
+    [MaxLength(30)] public string Telephone { get; set; } = "";
+    [MaxLength(1000)] public string Remarks { get; set; } = "";
     [MaxLength(30)] public string CivilId { get; set; } = "";
+    [MaxLength(200)] public string CompanyName { get; set; } = "";
+    [MaxLength(200)] public string Email { get; set; } = "";
+    [MaxLength(100)] public string TaxNumber { get; set; } = "";
+    public decimal OpeningBalance { get; set; }
     [Required, MaxLength(20)] public string CustomerType { get; set; } = "retail";
     public int PaymentTermsDays { get; set; }
     public decimal CreditLimit { get; set; }

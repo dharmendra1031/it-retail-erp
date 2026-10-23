@@ -12,6 +12,9 @@ class PartnerBase(TimeStampedModel):
     address_en = models.CharField(max_length=500, blank=True)
     address_ar = models.CharField(max_length=500, blank=True)
     mobile = models.CharField(max_length=30, blank=True)
+    contact_person = models.CharField(max_length=150, blank=True)
+    telephone = models.CharField(max_length=30, blank=True)
+    remarks = models.CharField(max_length=1000, blank=True)
     payment_terms_days = models.PositiveSmallIntegerField(default=0)
     is_active = models.BooleanField(default=True)
 
@@ -20,8 +23,16 @@ class PartnerBase(TimeStampedModel):
 
 
 class Customer(PartnerBase):
-    TYPES = [("retail", "Retail"), ("wholesale", "Wholesale"), ("corporate", "Corporate")]
+    TYPES = [(kind, kind.title()) for kind in (
+        "retail", "wholesale", "corporate", "cash", "credit",
+        "individual", "company", "government", "other",
+    )]
     civil_id = models.CharField(max_length=30, blank=True)
+    company_name = models.CharField(max_length=200, blank=True)
+    email = models.CharField(max_length=200, blank=True)
+    tax_number = models.CharField(max_length=100, blank=True)
+    credit_limit = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
+    opening_balance = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
     customer_type = models.CharField(max_length=20, choices=TYPES, default="retail")
     credit_limit = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
 

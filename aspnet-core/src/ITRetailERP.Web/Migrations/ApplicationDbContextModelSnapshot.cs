@@ -219,6 +219,20 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.Property<DateTime>("UpdatedAtUtc")
                 .HasColumnType("datetime2");
 
+            b.Property<string>("ContactPerson").IsRequired().HasMaxLength(150).HasColumnType("nvarchar(150)");
+
+            b.Property<string>("Telephone").IsRequired().HasMaxLength(30).HasColumnType("nvarchar(30)");
+
+            b.Property<string>("Remarks").IsRequired().HasMaxLength(1000).HasColumnType("nvarchar(1000)");
+
+            b.Property<string>("CompanyName").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+
+            b.Property<string>("Email").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+
+            b.Property<string>("TaxNumber").IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
+
+            b.Property<decimal>("OpeningBalance").HasPrecision(18, 3).HasColumnType("decimal(18,3)");
+
             b.HasKey("Id");
             b.HasIndex("Code").IsUnique();
             b.ToTable("Customers");
@@ -283,6 +297,14 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
             b.Property<DateTime>("UpdatedAtUtc")
                 .HasColumnType("datetime2");
+
+            b.Property<string>("ContactPerson").IsRequired().HasMaxLength(150).HasColumnType("nvarchar(150)");
+
+            b.Property<string>("Telephone").IsRequired().HasMaxLength(30).HasColumnType("nvarchar(30)");
+
+            b.Property<string>("Remarks").IsRequired().HasMaxLength(1000).HasColumnType("nvarchar(1000)");
+
+            b.Property<decimal>("CreditLimit").HasPrecision(18, 3).HasColumnType("decimal(18,3)");
 
             b.HasKey("Id");
             b.HasIndex("Code").IsUnique();
