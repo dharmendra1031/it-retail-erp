@@ -109,3 +109,49 @@ class CompanyAuthorizationTests(TestCase):
         response = self.client.get("/api/companies/999999")
         self.assertEqual(response.status_code, 404)
         self.assertIsNone(response.data)
+
+
+class BranchWarehouseApiTests(TestCase):
+    def setUp(self):
+        from apps.accounts.models import User
+        from .models import Company, Branch, Warehouse
+
+        self.admin = User.objects.create_superuser(
+            username="orgadmin", email="orgadmin@example.test", password="StrongPass123!"
+        )
+        self.company = Company.objects.create(name_en="Test Company")
+        self.branch = Branch.objects.create(company=self.company, code="H1", name_en="HQ")
+        self.second_branch = Branch.objects.create(company=self.company, code="H2", name_en="Shop Two")
+        self.warehouse = Warehouse.objects.create(branch=self.branch, code="MAIN", name_en="Main")
+        self.second_warehouse = Warehouse.objects.create(branch=self.second_branch, code="MAIN", name_en="Other")
+        self.employee = User.objects.create_user(
+            username="branchstaff", email="branchstaff@example.test",
+            password="StrongPass123!", branch=self.branch
+        )
+        self.client = APIClient()
+
+    def test_non_admin_is_scoped_to_assigned_branch_and_warehouses(self):
+        self.client.force_authenticate(user=self.employee)
+        branches = self.client.get("/api/branches")
+        self.assertEqual(branches.status_code, 200)
+        self.assertEqual([item["id"] for item in branches.data], [self.branch.id])
+        self.assertEqual(self.client.get(f"/api/branches/{self.second_branch.id}").status_code, 404)
+        warehouses = self.client.get("/api/warehouses")
+        self.assertEqual([item["id"] for item in warehouses.data], [self.warehouse.id])
+        self.assertEqual(self.client.get(f"/api/warehouses/{self.second_warehouse.id}").status_code, 404)
+        self.assertEqual(self.client.post("/api/branches", {
+            "companyId": self.company.id, "code": "H3", "nameEn": "Another"
+        }, format="json").status_code, 403)
+
+    def test_duplicate_code_and_orphan_fk_are_rejected(self):
+        self.client.force_authenticate(user=self.admin)
+        duplicate = self.client.post("/api/branches", {
+            "companyId": self.company.id, "code": "h1", "nameEn": "Duplicate"
+        }, format="json")
+        self.assertEqual(duplicate.status_code, 400)
+        orphan = self.client.post("/api/warehouses", {
+            "branchId": 999999999, "code": "A", "nameEn": "Orphan"
+        }, format="json")
+        self.assertEqual(orphan.status_code, 400)
+        self.assertEqual(self.client.delete(f"/api/branches/{self.branch.id}").status_code, 409)
+        self.assertEqual(self.client.delete(f"/api/companies/{self.company.id}").status_code, 409)
