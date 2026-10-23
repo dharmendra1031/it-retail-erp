@@ -121,7 +121,8 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
 
     private static bool Valid(SupplierRequest request) =>
         PartnerValidation.IsValid(request) && PartnerValidation.Amount(request.OpeningBalance)
-        && PartnerValidation.Amount(request.CreditLimit);
+        && PartnerValidation.Amount(request.CreditLimit)
+        && PartnerValidation.OptionalEmail(request.Email);
 
     private static void Apply(Supplier model, SupplierRequest request)
     {

@@ -123,6 +123,7 @@ public sealed class CustomersApiController(ApplicationDbContext db) : Controller
         PartnerValidation.IsValid(request) &&
         PartnerValidation.Amount(request.CreditLimit) &&
         PartnerValidation.Amount(request.OpeningBalance) &&
+        PartnerValidation.OptionalEmail(request.Email) &&
         request.CustomerType is "retail" or "wholesale" or "corporate"
             or "cash" or "credit" or "individual" or "company" or "government" or "other";
 

@@ -24,7 +24,7 @@ public sealed class CustomerRequest : PartnerRequest
 {
     [MaxLength(30)] public string CivilId { get; set; } = "";
     [MaxLength(200)] public string CompanyName { get; set; } = "";
-    [EmailAddress, MaxLength(200)] public string? Email { get; set; }
+    [MaxLength(200)] public string? Email { get; set; }
     [MaxLength(100)] public string TaxNumber { get; set; } = "";
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public decimal OpeningBalance { get; set; }
@@ -35,7 +35,7 @@ public sealed class CustomerRequest : PartnerRequest
 
 public sealed class SupplierRequest : PartnerRequest
 {
-    [EmailAddress, MaxLength(200)] public string? Email { get; set; }
+    [MaxLength(200)] public string? Email { get; set; }
     [MaxLength(100)] public string TaxNumber { get; set; } = "";
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public decimal OpeningBalance { get; set; }
@@ -68,6 +68,9 @@ public static class PartnerValidation
     public static bool Amount(decimal value) =>
         value >= 0 && value < 1000000000000000m &&
         decimal.Round(value, 3) == value;
+
+    public static bool OptionalEmail(string? email) =>
+        string.IsNullOrWhiteSpace(email) || new EmailAddressAttribute().IsValid(email);
 
     public static string Money(decimal value) => value.ToString("F3", CultureInfo.InvariantCulture);
 }
