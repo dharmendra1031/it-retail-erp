@@ -1,4 +1,11 @@
+import os
+
 from .settings import *
 
-# Isolated unit-test database. Production and integration tests use SQL Server.
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
+# SQLite is limited to isolated CI/unit and browser tests.
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.getenv("SQLITE_DB_PATH", ":memory:"),
+    }
+}

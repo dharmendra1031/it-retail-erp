@@ -60,3 +60,108 @@ jobs:
           dotnet-version: '10.0.x'
       - name: Build
         run: dotnet build --configuration Release
+
+  sqlserver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings
+      SECRET_KEY: ci-only-sql-integration-key
+      DB_HOST: 127.0.0.1
+      DB_PORT: "1433"
+      DB_USER: sa
+      DB_NAME: erp_integration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install SQL Server ODBC driver
+        run: |
+          source /etc/os-release
+          curl -fsSL "https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb" -o /tmp/msprod.deb
+          sudo dpkg -i /tmp/msprod.deb
+          sudo apt-get update
+          sudo env ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev
+      - name: Install Django dependencies
+        run: python -m pip install -r django/requirements.txt
+      - name: Start disposable SQL Server
+        run: |
+          password="Erp9$(openssl rand -hex 18)!"
+          echo "::add-mask::$password"
+          echo "DB_PASSWORD=$password" >> "$GITHUB_ENV"
+          docker run -d --rm --name erp-test-sql \
+            -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD="$password" \
+            -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
+      - name: Wait for SQL Server
+        run: |
+          python - <<'PY'
+          import os
+          import time
+          import pyodbc
+
+          connection_string = (
+              "DRIVER={ODBC Driver 18 for SQL Server};"
+              "SERVER=127.0.0.1,1433;DATABASE=master;UID=sa;"
+              f"PWD={os.environ['DB_PASSWORD']};Encrypt=yes;TrustServerCertificate=yes;"
+          )
+          for attempt in range(80):
+              try:
+                  with pyodbc.connect(connection_string, timeout=3, autocommit=True) as db:
+                      db.execute("IF DB_ID('erp_integration') IS NULL CREATE DATABASE erp_integration")
+                  print("Disposable SQL Server is ready")
+                  break
+              except pyodbc.Error:
+                  time.sleep(3)
+          else:
+              raise RuntimeError("SQL Server did not become ready")
+          PY
+      - name: Run SQL Server migrations and integration tests
+        working-directory: django
+        run: |
+          python manage.py migrate --noinput
+          python manage.py test apps.accounts apps.companies --verbosity 2
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings_test
+      SECRET_KEY: ci-only-browser-key
+      SQLITE_DB_PATH: ${{ runner.temp }}/erp-browser.sqlite3
+      E2E_ADMIN_EMAIL: admin@example.test
+      E2E_EMPLOYEE_EMAIL: staff@example.test
+      VITE_PROXY_TARGET: http://127.0.0.1:8000
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: |
+          python -m pip install -r django/requirements.txt
+          cd frontend && npm install --no-audit --no-fund
+      - name: Prepare test users and database
+        working-directory: django
+        run: |
+          password="Erp9$(openssl rand -hex 18)!"
+          echo "::add-mask::$password"
+          echo "E2E_PASSWORD=$password" >> "$GITHUB_ENV"
+          export E2E_PASSWORD="$password"
+          python manage.py migrate --noinput
+          python manage.py shell -c '
+          import os
+          from apps.accounts.models import User
+          User.objects.create_superuser(username="browseradmin", email=os.environ["E2E_ADMIN_EMAIL"], password=os.environ["E2E_PASSWORD"])
+          User.objects.create_user(username="browserstaff", email=os.environ["E2E_EMPLOYEE_EMAIL"], password=os.environ["E2E_PASSWORD"])
+          '
+      - name: Install Chromium
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Run browser smoke tests
+        working-directory: frontend
+        run: npm run test:e2e
