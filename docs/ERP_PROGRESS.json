@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0051",
+  "nextStepId": "ERP-0061",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -58,10 +58,20 @@
     "ERP-0047",
     "ERP-0048",
     "ERP-0049",
-    "ERP-0050"
+    "ERP-0050",
+    "ERP-0051",
+    "ERP-0052",
+    "ERP-0053",
+    "ERP-0054",
+    "ERP-0055",
+    "ERP-0056",
+    "ERP-0057",
+    "ERP-0058",
+    "ERP-0059",
+    "ERP-0060"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+  "lastVerifiedCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -1302,6 +1312,190 @@
         "productionDatabase": "not touched; only disposable CI SQL Server",
         "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
       }
+    },
+    {
+      "stepId": "ERP-0051",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "source/contract review with downstream ownership",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "docs/api-contract.md",
+        "django/config/api_urls.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/AuthController.cs",
+        "frontend/src/api/client.ts"
+      ],
+      "verification": {
+        "finding": "Reviewed and documented existing identical auth/Company/Role routes, request formats, success/error shapes and how backend selection is configured. WP03 owns no new runtime API.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0052",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "source/contract review with downstream ownership",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Program.cs",
+        "aspnet-core/src/ITRetailERP.Web/Services/DocumentNumberService.cs",
+        "aspnet-core/tests/ITRetailERP.Tests/DocumentNumberTests.cs"
+      ],
+      "verification": {
+        "finding": "Rechecked ASP.NET Core startup, Identity/antiforgery, EF migrations and number transaction participation. WP03 owns no additional business posting operation; idempotency is deferred to WP24–34.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0053",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "source/contract review with downstream ownership",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "django/config/settings.py",
+        "django/apps/core/numbering.py",
+        "django/apps/core/tests.py"
+      ],
+      "verification": {
+        "finding": "Rechecked Django production config, DRF auth/error handling, SQL transaction scope and migrations. WP03 owns no additional business posting operation.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0054",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "source/contract review with downstream ownership",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "django/apps/companies/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "docs/ERP_PLAN_DEPENDENCY_AUDIT.md"
+      ],
+      "verification": {
+        "finding": "Verified present Admin-only Company writes/Role API. Company/branch scoping and immutable audit remain WP06–09/WP46; no premature tables or role models introduced here.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0055",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "CI-confirmed scoped runtime",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "frontend/src/api/client.ts",
+        "frontend/src/components/Roles.tsx",
+        "frontend/e2e/erp.spec.ts",
+        "frontend/vite.config.ts"
+      ],
+      "verification": {
+        "finding": "React shared API client now shows safe JSON detail messages. Same Vite frontend verified on Django and ASP.NET without source changes.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0056",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "CI-confirmed scoped runtime",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "frontend/src/styles.css",
+        "django/apps/companies/test_sqlserver.py",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Arabic Company CRUD tested against both backends; narrow-screen Role Master navigation tested in Playwright. Full translation, RTL documents, KWD/date display require WP11/WP44.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0057",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "CI-confirmed scoped runtime",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "aspnet-core/tests/ITRetailERP.Tests/DocumentNumberTests.cs",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "ASP.NET Core Release build, missing connection-string startup negative check, 4/4 xUnit SQL tests and 3/3 Playwright ASP browser tests PASS.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0058",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "CI-confirmed scoped runtime",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "django/apps/core/tests.py",
+        "django/apps/core/test_sqlserver.py",
+        "django/config/settings.py"
+      ],
+      "verification": {
+        "finding": "Django missing SECRET_KEY/DB_NAME negative checks, migration model drift, SQLite 28 PASS/5 SQL-only skips and SQL Server 33/33 PASS.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0059",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "CI-confirmed scoped runtime",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Ephemeral SQL Server migration/rollback/concurrency and Role/Company HTTP smoke PASS on both backends; Playwright Django 4/4 and ASP 3/3 PASS. Only current WP03/WP02 surfaces claimed.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0060",
+      "status": "complete",
+      "scope": "WP03 developer environment and CI",
+      "completionMode": "source/contract review with downstream ownership",
+      "reviewedRepoCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+      "evidence": [
+        "docs/ERP_0001_0060_RECHECK.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "finding": "Re-read foundational code, test coverage and open security/performance limitations; updated API docs and audit/tracker. No production secrets or data accessed.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939",
+        "database": "disposable SQL Server 2022; no production operation"
+      },
+      "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

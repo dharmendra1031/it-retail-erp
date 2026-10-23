@@ -219,3 +219,10 @@ Added `core_documentsequence` and `DocumentSequences` tables (Django and ASP.NET
 ## Review 021 — 2026-10-23, ERP-0041–ERP-0050 (WP03)
 
 Environment/CI steps add **no WP03 schema or migration**. Tested existing Django/EF migrations, rollback/reapply of WP02 sequence tables, schema drift checks (`makemigrations --check`, EF `has-pending-model-changes`). SQL Server integration uses generated CI-only SA/admin credentials and disposable databases, not production. Missing environment config negative tests execute. Numeric IDs, FK/index design and Unicode remain unchanged. DB-001–DB-006 remain pending appropriate downstream owner decisions and live-data-safe migrations.
+
+
+## Review 022 — 2026-10-23, ERP-0001–ERP-0060 recheck (WP03 final gate)
+
+Verified current Django models/migrations and ASP.NET EF snapshots: Role/User/Company/DocumentSequence business PKs remain BIGINT autoincrement; sequence composite unique series/fiscal-year/branch index exists on both SQL Server schemas. SQL Server CI run [39915764939](https://github.com/dharmendra1031/it-retail-erp/actions/runs/39915764939): Django SQL 33/33 PASS; .NET xUnit 4/4 PASS including enclosing transaction rollback; both backends' migrations/sequence down-up rehearse cleanly. Current shared UI Arabic Company round-trip and Role CRUD verified on both backends (Playwright Django 4/4, ASP 3/3). Read/validate changed source for white-space Company/Role required field rejection; errors normalized without framework exception dumps. Developer environment missing-secret/DB errors are verified. No production DB touched.
+
+**Open** DB-001 unique normalized email, DB-002 Identity claim INT IDs, DB-003 future financial/stock DECIMAL and FK/transaction schema, DB-004 framework auth schema/API semantics, DB-005 logo/database atomicity, DB-006 Company pagination. Production SQL Server 2019 validation, multi-branch FK/tenant scope, invoice posting atomicity, audit/stock and currency/RTL acceptance remain future-owned. WP03 requires no further schema migration.
