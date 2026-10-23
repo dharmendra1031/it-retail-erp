@@ -33,3 +33,32 @@ Application entities use numeric auto-incrementing primary keys. UUID/GUID ident
 ## API convention
 
 Frontend requests use relative `/api` URLs. During development, Vite proxies requests to the selected backend. Authentication uses secure session cookies with CSRF protection.
+
+
+## Quick start and verification
+
+Required tools: .NET 10 SDK, Python 3.12+, Node.js 22+, SQL Server with ODBC Driver 18, and `dotnet-ef` version 10. Copy the matching `.env.example` for **one selected backend**, then configure local SQL Server (do not commit real credentials). Only run one backend at a time.
+
+```bash
+# Django option (from django/)
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver 127.0.0.1:8000
+```
+
+```bash
+# ASP.NET Core option (from aspnet-core/)
+dotnet tool install --global dotnet-ef --version 10.0.13
+dotnet restore src/ITRetailERP.Web/ITRetailERP.Web.csproj
+dotnet ef database update --project src/ITRetailERP.Web/ITRetailERP.Web.csproj
+dotnet run --project src/ITRetailERP.Web/ITRetailERP.Web.csproj --urls http://localhost:5000
+```
+
+```bash
+# React frontend (from frontend/, in a second terminal)
+npm install
+# Configure VITE_PROXY_TARGET in frontend/.env for the running backend.
+npm run dev
+```
+
+The `development` branch CI verifies Django unit tests, real disposable SQL Server migrations/concurrency, ASP.NET Core build/migrations/API tests, frontend TypeScript build and Playwright browser smoke. Configuration failures are explicit; demo credentials must be changed before deployment.

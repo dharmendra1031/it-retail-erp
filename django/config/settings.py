@@ -11,8 +11,17 @@ def env(name, default=None):
     return os.getenv(name, default)
 
 
-SECRET_KEY = env("SECRET_KEY", "dev-only-secret-key")
+from django.core.exceptions import ImproperlyConfigured
+
 DEBUG = env("DEBUG", "False").lower() == "true"
+SECRET_KEY = env("SECRET_KEY")
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured("SECRET_KEY is required when DEBUG=False.")
+    SECRET_KEY = "local-development-only-secret-key"
+
+if os.getenv("DJANGO_SETTINGS_MODULE", "config.settings") == "config.settings" and not env("DB_NAME"):
+    raise ImproperlyConfigured("DB_NAME is required for SQL Server.")
 ALLOWED_HOSTS = [x.strip() for x in env("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if x.strip()]
 
 INSTALLED_APPS = [

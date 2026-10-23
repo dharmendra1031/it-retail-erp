@@ -33,3 +33,16 @@ dotnet run --urls http://localhost:5000
 ```
 
 The React frontend communicates through the `/api` contract.
+
+
+## Verification
+
+```powershell
+dotnet restore src/ITRetailERP.Web/ITRetailERP.Web.csproj
+dotnet build src/ITRetailERP.Web/ITRetailERP.Web.csproj -c Release
+dotnet ef database update --project src/ITRetailERP.Web
+```
+
+CI uses a disposable SQL Server to run EF migrations, REST authentication/Role/Company smoke tests and `tests/ITRetailERP.Tests` document-sequence integration tests. The tests require `ConnectionStrings__DefaultConnection` for a test-only database. Never point the test runner at production.
+
+For deployment supply the connection string and bootstrap admin credentials through protected server environment variables; don't use the example password.
