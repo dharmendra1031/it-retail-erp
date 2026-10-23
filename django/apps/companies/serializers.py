@@ -1,5 +1,7 @@
 from pathlib import Path
-from uuid import uuid4
+from secrets import token_hex
+from PIL import Image, UnidentifiedImageError
+from django.db import transaction
 
 from django.core.files.storage import default_storage
 from rest_framework import serializers
@@ -65,31 +67,60 @@ class CompanySerializer(serializers.ModelSerializer):
         if extension not in {".jpg", ".jpeg", ".png", ".webp"}:
             raise serializers.ValidationError("Logo must be JPG, PNG or WebP.")
 
+        allowed = {
+            ".jpg": ("image/jpeg", "JPEG"),
+            ".jpeg": ("image/jpeg", "JPEG"),
+            ".png": ("image/png", "PNG"),
+            ".webp": ("image/webp", "WEBP"),
+        }
+        expected_type, expected_format = allowed[extension]
+        if logo.content_type != expected_type:
+            raise serializers.ValidationError("Invalid logo file type.")
+        try:
+            with Image.open(logo) as image:
+                if image.format != expected_format:
+                    raise serializers.ValidationError("Invalid logo file type.")
+                image.verify()
+        except (UnidentifiedImageError, OSError):
+            raise serializers.ValidationError("Invalid logo file type.")
+        finally:
+            logo.seek(0)
         return logo
 
     def create(self, validated_data):
         logo = validated_data.pop("logo", None)
-        company = super().create(validated_data)
-
-        if logo:
-            company.logo.name = self._save_logo(company.id, logo)
-            company.save(update_fields=["logo"])
-
-        return company
+        new_logo = ""
+        try:
+            with transaction.atomic():
+                company = super().create(validated_data)
+                if logo:
+                    new_logo = self._save_logo(company.id, logo)
+                    company.logo.name = new_logo
+                    company.save(update_fields=["logo"])
+            return company
+        except Exception:
+            if new_logo:
+                default_storage.delete(new_logo)
+            raise
 
     def update(self, instance, validated_data):
         logo = validated_data.pop("logo", None)
         previous_logo = instance.logo.name if instance.logo else ""
+        new_logo = ""
+        try:
+            with transaction.atomic():
+                company = super().update(instance, validated_data)
+                if logo:
+                    new_logo = self._save_logo(company.id, logo)
+                    company.logo.name = new_logo
+                    company.save(update_fields=["logo"])
+        except Exception:
+            if new_logo:
+                default_storage.delete(new_logo)
+            raise
 
-        company = super().update(instance, validated_data)
-
-        if logo:
-            company.logo.name = self._save_logo(company.id, logo)
-            company.save(update_fields=["logo"])
-
-            if previous_logo and previous_logo != company.logo.name:
-                default_storage.delete(previous_logo)
-
+        if new_logo and previous_logo and previous_logo != new_logo:
+            default_storage.delete(previous_logo)
         return company
 
     def get_logoUrl(self, obj):
@@ -98,5 +129,5 @@ class CompanySerializer(serializers.ModelSerializer):
     @staticmethod
     def _save_logo(company_id, file):
         extension = Path(file.name).suffix.lower()
-        path = f"company/company-{company_id}-{uuid4().hex}{extension}"
+        path = f"company/company-{company_id}-{token_hex(12)}{extension}"
         return default_storage.save(path, file)
