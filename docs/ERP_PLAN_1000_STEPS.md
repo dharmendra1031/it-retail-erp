@@ -301,7 +301,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 **Dependencies:** packages 01–10. **Invariant:** Arabic survives save/search/print without replacement or truncation.
 **Happy-path proof:** Switch language and render an Arabic quotation correctly. **Negative proof:** Catch mixed-direction and missing-translation defects.
 
-- [ ] **ERP-0201** (01/20) Extract English/Arabic interface and RTL foundation acceptance details from SRS §§3, 4, 40, 41, 62, 65; record assumptions and exclusions.
+- [x] **ERP-0201** (01/20) Extract English/Arabic interface and RTL foundation acceptance details from SRS §§3, 4, 40, 41, 62, 65; record assumptions and exclusions.
 - [ ] **ERP-0202** (02/20) Inspect Localized validation, Unicode persistence and translated document data, Localized serializer errors, Unicode and translated document data and Language switch, RTL-aware UI and accessible responsive navigation; record actual files and current behavior.
 - [ ] **ERP-0203** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [ ] **ERP-0204** (04/20) Specify the happy-path acceptance: Switch language and render an Arabic quotation correctly.

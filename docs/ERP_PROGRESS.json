@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0201",
+  "nextStepId": "ERP-0202",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -208,10 +208,11 @@
     "ERP-0197",
     "ERP-0198",
     "ERP-0199",
-    "ERP-0200"
+    "ERP-0200",
+    "ERP-0201"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+  "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -4526,6 +4527,27 @@
         "productionDatabase": "not accessed"
       },
       "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0201",
+      "status": "complete",
+      "scope": "WP11 English/Arabic, RTL and document-language requirement extraction",
+      "completionMode": "SRS requirement extraction only",
+      "reviewedRepoCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
+      "evidence": [
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "docs/ERP_0201_0300_GAP_AUDIT.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md"
+      ],
+      "verification": {
+        "kind": "SRS §§3,4,40,41,62,65 reviewed; six acceptance groups mapped",
+        "source": "Original SRS via connected Google Drive",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40001241106",
+        "codeCi": "5/5 jobs PASS at cdc323ad",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "WP27 quotation, WP30 invoice, and WP44 report/print owners must separately implement and verify EN/AR/bilingual documents, A4/A5/thermal and printer acceptance. WP11 alone cannot certify full SRS Test 10."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
