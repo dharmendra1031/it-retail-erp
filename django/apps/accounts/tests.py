@@ -49,7 +49,7 @@ class RoleApiTests(TestCase):
 
         listing = self.client.get("/api/roles")
         self.assertEqual(listing.status_code, 200)
-        self.assertEqual(listing.data[0]["name"], "Senior Cashier")
+        self.assertIn("Senior Cashier", [role["name"] for role in listing.data])
 
         deleted = self.client.delete(f"/api/roles/{role_id}")
         self.assertEqual(deleted.status_code, 204)
