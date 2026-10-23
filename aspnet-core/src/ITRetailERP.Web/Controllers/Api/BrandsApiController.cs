@@ -65,6 +65,8 @@ public sealed class BrandsApiController(ApplicationDbContext db) : ControllerBas
     {
         var row = await db.Brands.FindAsync(id);
         if (row is null) return NotFound();
+        if (await db.Products.AnyAsync(x => x.BrandId == id))
+            return Conflict(new { detail = "Record is in use." });
         db.Brands.Remove(row);
         await db.SaveChangesAsync();
         return NoContent();

@@ -70,7 +70,8 @@ public sealed class CategoriesApiController(ApplicationDbContext db) : Controlle
     {
         var category = await db.Categories.FindAsync(id);
         if (category is null) return NotFound();
-        if (await db.Categories.AnyAsync(x => x.ParentId == id))
+        if (await db.Categories.AnyAsync(x => x.ParentId == id)
+            || await db.Products.AnyAsync(x => x.CategoryId == id))
             return Conflict(new { detail = "Record is in use." });
         db.Categories.Remove(category);
         await db.SaveChangesAsync();

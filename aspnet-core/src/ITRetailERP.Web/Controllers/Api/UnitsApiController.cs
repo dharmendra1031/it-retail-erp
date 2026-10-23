@@ -65,6 +65,8 @@ public sealed class UnitsApiController(ApplicationDbContext db) : ControllerBase
     {
         var row = await db.Units.FindAsync(id);
         if (row is null) return NotFound();
+        if (await db.Products.AnyAsync(x => x.UnitId == id))
+            return Conflict(new { detail = "Record is in use." });
         db.Units.Remove(row);
         await db.SaveChangesAsync();
         return NoContent();

@@ -202,6 +202,52 @@ def check_api():
     )
     assert status == 401, "Disabled-user login unexpectedly permitted"
 
+    status, category = request(client, "/api/categories", "POST", {
+        "code": "COMPUTERS", "nameEn": "Computers", "nameAr": "الحواسيب",
+    }, csrf)
+    assert status == 201, f"Category creation failed: {status} {category}"
+    status, subcategory = request(client, "/api/categories", "POST", {
+        "code": "LAPTOPS", "nameEn": "Laptops", "parentId": category["id"],
+    }, csrf)
+    assert status == 201, "Subcategory creation failed"
+    status, cycle = request(client, f"/api/categories/{category['id']}", "PUT", {
+        "code": "COMPUTERS", "nameEn": "Computers", "parentId": subcategory["id"],
+    }, csrf)
+    assert status == 400, "Cyclic category accepted"
+    status, brand = request(client, "/api/brands", "POST", {
+        "code": "DELL", "nameEn": "Dell", "nameAr": "ديل",
+    }, csrf)
+    assert status == 201, f"Brand creation failed: {status} {brand}"
+    status, unit = request(client, "/api/units", "POST", {
+        "code": "PCS", "nameEn": "Pieces", "decimalPlaces": 0,
+    }, csrf)
+    assert status == 201, f"Unit creation failed: {status} {unit}"
+    product = {
+        "sku": "SKU-100", "barcode": "123456789012", "nameEn": "Laptop",
+        "nameAr": "حاسوب محمول", "categoryId": category["id"],
+        "brandId": brand["id"], "unitId": unit["id"],
+        "productType": "stock", "serialTracked": True,
+        "costPrice": "250.000", "basePrice": "320.500",
+        "minPrice": "300.000", "reorderLevel": "5.000000",
+    }
+    status, created_product = request(client, "/api/products", "POST", product, csrf)
+    assert status == 201 and created_product["sku"] == "SKU-100", f"Product creation failed: {status} {created_product}"
+    status, duplicate = request(client, "/api/products", "POST", {
+        **product, "barcode": "987654321000",
+    }, csrf)
+    assert status == 400, "Duplicate SKU accepted"
+    status, invalid_type = request(client, "/api/products", "POST", {
+        **product, "sku": "SERVICE-01", "barcode": "",
+        "productType": "nonstock",
+    }, csrf)
+    assert status == 400, "Non-stock with serial quantity accepted"
+    status, _ = request(client, f"/api/categories/{category['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "Referenced category should be protected"
+    status, _ = request(client, f"/api/brands/{brand['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "Referenced brand should be protected"
+    status, _ = request(client, f"/api/units/{unit['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "Referenced unit should be protected"
+
     customer_data = {
         "code": "C-001", "nameEn": "Credit Shop", "nameAr": "عميل الائتمان",
         "addressAr": "الكويت", "customerType": "corporate",
