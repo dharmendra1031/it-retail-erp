@@ -37,3 +37,35 @@ class Company(TimeStampedModel):
 
     def __str__(self):
         return self.name_en
+
+
+class Branch(TimeStampedModel):
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, related_name="branches")
+    code = models.CharField(max_length=30)
+    name_en = models.CharField(max_length=200)
+    name_ar = models.CharField(max_length=200, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=("company", "code"), name="uq_branch_company_code")
+        ]
+
+    def __str__(self):
+        return self.name_en
+
+
+class Warehouse(TimeStampedModel):
+    branch = models.ForeignKey(Branch, on_delete=models.PROTECT, related_name="warehouses")
+    code = models.CharField(max_length=30)
+    name_en = models.CharField(max_length=200)
+    name_ar = models.CharField(max_length=200, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=("branch", "code"), name="uq_warehouse_branch_code")
+        ]
+
+    def __str__(self):
+        return self.name_en

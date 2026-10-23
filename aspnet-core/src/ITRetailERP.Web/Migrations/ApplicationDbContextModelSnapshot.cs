@@ -29,6 +29,9 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+            b.Property<long?>("BranchId")
+                .HasColumnType("bigint");
+
             b.Property<int>("AccessFailedCount")
                 .HasColumnType("int");
 
@@ -84,6 +87,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
             b.HasKey("Id");
 
+            b.HasIndex("BranchId");
+
             b.HasIndex("NormalizedEmail")
                 .IsUnique()
                 .HasDatabaseName("EmailIndex")
@@ -124,6 +129,34 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.HasIndex("Series", "FiscalYear", "BranchId").IsUnique();
 
             b.ToTable("DocumentSequences");
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.Branch", b =>
+        {
+            b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("bigint");
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+            b.Property<long>("CompanyId").HasColumnType("bigint");
+            b.Property<string>("Code").IsRequired().HasMaxLength(30).HasColumnType("nvarchar(30)");
+            b.Property<string>("NameEn").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+            b.Property<string>("NameAr").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+            b.Property<bool>("IsActive").HasColumnType("bit");
+            b.HasKey("Id");
+            b.HasIndex("CompanyId", "Code").IsUnique();
+            b.ToTable("Branches");
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.Warehouse", b =>
+        {
+            b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("bigint");
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+            b.Property<long>("BranchId").HasColumnType("bigint");
+            b.Property<string>("Code").IsRequired().HasMaxLength(30).HasColumnType("nvarchar(30)");
+            b.Property<string>("NameEn").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+            b.Property<string>("NameAr").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+            b.Property<bool>("IsActive").HasColumnType("bit");
+            b.HasKey("Id");
+            b.HasIndex("BranchId", "Code").IsUnique();
+            b.ToTable("Warehouses");
         });
 
         modelBuilder.Entity("ITRetailERP.Web.Models.Company", b =>
@@ -240,6 +273,32 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 .HasFilter("[NormalizedName] IS NOT NULL");
 
             b.ToTable("AspNetRoles");
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.ApplicationUser", b =>
+        {
+            b.HasOne("ITRetailERP.Web.Models.Branch", null)
+                .WithMany()
+                .HasForeignKey("BranchId")
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.Branch", b =>
+        {
+            b.HasOne("ITRetailERP.Web.Models.Company", null)
+                .WithMany()
+                .HasForeignKey("CompanyId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.Warehouse", b =>
+        {
+            b.HasOne("ITRetailERP.Web.Models.Branch", null)
+                .WithMany()
+                .HasForeignKey("BranchId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
         });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>

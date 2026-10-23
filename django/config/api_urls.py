@@ -6,11 +6,14 @@ from apps.accounts.roles_api import RoleViewSet
 from apps.accounts.permissions_api import PermissionCatalogApi
 from apps.accounts.users_api import UserViewSet
 from apps.companies.api import CompanyViewSet
+from apps.companies.organization_api import BranchViewSet, WarehouseViewSet
 
 router = SimpleRouter(trailing_slash=False)
 router.register("companies", CompanyViewSet, basename="company")
 router.register("roles", RoleViewSet, basename="role")
 router.register("users", UserViewSet, basename="user")
+router.register("branches", BranchViewSet, basename="branch")
+router.register("warehouses", WarehouseViewSet, basename="warehouse")
 
 urlpatterns = [
     path("auth/csrf", csrf, name="api-csrf"),

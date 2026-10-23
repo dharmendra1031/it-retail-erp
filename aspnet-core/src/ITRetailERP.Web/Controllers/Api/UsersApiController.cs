@@ -50,6 +50,7 @@ public sealed class UsersApiController(
             FullName = request.FullName.Trim(),
             PhoneNumber = request.Mobile.Trim(),
             IsActive = request.IsActive,
+            BranchId = request.BranchId,
         };
         var created = await users.CreateAsync(user, request.Password!);
         if (!created.Succeeded) return BadRequest(new { detail = "Invalid request." });
@@ -87,6 +88,7 @@ public sealed class UsersApiController(
         user.FullName = request.FullName.Trim();
         user.PhoneNumber = request.Mobile.Trim();
         user.IsActive = request.IsActive;
+        user.BranchId = request.BranchId;
         if (!(await users.UpdateAsync(user)).Succeeded)
             return BadRequest(new { detail = "Invalid request." });
 
@@ -115,7 +117,9 @@ public sealed class UsersApiController(
         if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Email)
             || request.FullName.Length > 150 || request.Mobile.Length > 30
             || (creating && string.IsNullOrWhiteSpace(request.Password))
-            || request.RoleIds is null || request.RoleIds.Any(x => x <= 0))
+            || request.RoleIds is null || request.RoleIds.Any(x => x <= 0)
+            || (request.BranchId is not null &&
+                !db.Branches.Any(branch => branch.Id == request.BranchId && branch.IsActive)))
             return false;
         return db.Roles.Count(role => request.RoleIds.Contains(role.Id)) ==
             request.RoleIds.Distinct().Count();
@@ -123,5 +127,5 @@ public sealed class UsersApiController(
 
     private static UserResponse ToResponse(ApplicationUser user, IEnumerable<long> roles) =>
         new(user.Id, user.UserName ?? "", user.FullName ?? "", user.Email ?? "",
-            user.PhoneNumber ?? "", user.IsActive, roles.OrderBy(x => x).ToArray());
+            user.PhoneNumber ?? "", user.IsActive, roles.OrderBy(x => x).ToArray(), user.BranchId);
 }

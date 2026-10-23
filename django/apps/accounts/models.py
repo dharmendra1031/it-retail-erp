@@ -29,6 +29,7 @@ class User(AbstractUser):
     locked_until = models.DateTimeField(null=True, blank=True)
     email = models.EmailField(unique=True)
     mobile = models.CharField(max_length=30, blank=True)
+    branch = models.ForeignKey("companies.Branch", null=True, blank=True, on_delete=models.PROTECT)
     roles = models.ManyToManyField(
         Role,
         blank=True,

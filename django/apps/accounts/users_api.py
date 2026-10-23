@@ -19,6 +19,7 @@ def user_response(user):
         "mobile": user.mobile,
         "isActive": user.is_active,
         "roleIds": sorted(user.roles.values_list("id", flat=True)),
+        "branchId": user.branch_id,
     }
 
 
@@ -45,6 +46,7 @@ class UserViewSet(ViewSet):
         mobile = data.get("mobile", "")
         role_ids = data.get("roleIds", [])
         active = data.get("isActive", True)
+        branch_id = data.get("branchId")
         password = data.get("password")
         if (not isinstance(username, str) or not 1 <= len(username.strip()) <= 150
             or not isinstance(email, str) or "@" not in email or len(email) > 254
@@ -54,6 +56,7 @@ class UserViewSet(ViewSet):
                 isinstance(role_id, int) and not isinstance(role_id, bool) and role_id > 0
                 for role_id in role_ids
             )
+            or (branch_id is not None and (not isinstance(branch_id, int) or isinstance(branch_id, bool) or branch_id <= 0))
             or not isinstance(active, bool)
             or (existing is None and not isinstance(password, str))):
             return None
@@ -65,20 +68,24 @@ class UserViewSet(ViewSet):
                 validate_password(password)
             except ValidationError:
                 return None
-        return username.strip(), email.strip().lower(), name.strip(), mobile.strip(), active, role_ids, password
+        if branch_id is not None:
+            from apps.companies.models import Branch
+            if not Branch.objects.filter(pk=branch_id, is_active=True).exists():
+                return None
+        return username.strip(), email.strip().lower(), name.strip(), mobile.strip(), active, role_ids, password, branch_id
 
     def create(self, request):
         values = self._validate(request.data)
         if values is None:
             return Response({"detail": "Invalid request."}, status=400)
-        username, email, name, mobile, active, role_ids, password = values
+        username, email, name, mobile, active, role_ids, password, branch_id = values
         if User.objects.filter(username__iexact=username).exists() or User.objects.filter(email__iexact=email).exists():
             return Response({"detail": "User already exists."}, status=400)
 
         with transaction.atomic():
             user = User.objects.create_user(
                 username=username, email=email, password=password,
-                first_name=name, mobile=mobile, is_active=active,
+                first_name=name, mobile=mobile, is_active=active, branch_id=branch_id,
             )
             user.roles.set(role_ids)
         return Response(user_response(user), status=status.HTTP_201_CREATED)
@@ -91,7 +98,7 @@ class UserViewSet(ViewSet):
         values = self._validate(request.data, existing=user)
         if values is None:
             return Response({"detail": "Invalid request."}, status=400)
-        username, email, name, mobile, active, role_ids, _ = values
+        username, email, name, mobile, active, role_ids, _, branch_id = values
         if (User.objects.exclude(pk=pk).filter(username__iexact=username).exists()
             or User.objects.exclude(pk=pk).filter(email__iexact=email).exists()):
             return Response({"detail": "User already exists."}, status=400)
@@ -103,7 +110,8 @@ class UserViewSet(ViewSet):
         with transaction.atomic():
             user.username, user.email, user.first_name = username, email, name
             user.mobile, user.is_active = mobile, active
-            user.save(update_fields=["username", "email", "first_name", "mobile", "is_active"])
+            user.branch_id = branch_id
+            user.save(update_fields=["username", "email", "first_name", "mobile", "is_active", "branch"])
             user.roles.set(role_ids)
         return Response(user_response(user))
 

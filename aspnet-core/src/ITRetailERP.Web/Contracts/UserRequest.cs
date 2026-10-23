@@ -17,6 +17,7 @@ public sealed class UserRequest
     public string Mobile { get; set; } = string.Empty;
 
     public bool IsActive { get; set; } = true;
+    public long? BranchId { get; set; }
 
     [Required]
     public long[] RoleIds { get; set; } = [];
@@ -32,4 +33,4 @@ public sealed class PasswordRequest
 
 public sealed record UserResponse(
     long Id, string Username, string FullName, string Email,
-    string Mobile, bool IsActive, long[] RoleIds);
+    string Mobile, bool IsActive, long[] RoleIds, long? BranchId);

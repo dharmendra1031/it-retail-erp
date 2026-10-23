@@ -107,6 +107,9 @@ public sealed class CompaniesApiController(
             return NotFound();
         }
 
+        if (await db.Branches.AnyAsync(x => x.CompanyId == id))
+            return Conflict(new { detail = "Company has assigned branches." });
+
         var logoPath = company.LogoPath;
         db.Companies.Remove(company);
         await db.SaveChangesAsync();
