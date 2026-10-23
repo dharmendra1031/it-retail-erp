@@ -288,3 +288,31 @@ test("admin previews bilingual Company identity for printing", async ({ page }) 
   await row.getByRole("button", { name: "Print Identity" }).click();
   await expect(page.getByRole("region", { name: "Print Identity" })).toContainText("شركة للطباعة");
 });
+
+
+test("Arabic permission actions and print date use the selected locale", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Language").selectOption("ar");
+  await page.getByLabel("البريد الإلكتروني").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("كلمة المرور").fill(password);
+  await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+
+  await page.getByRole("button", { name: "إدارة الأدوار" }).click();
+  await page.getByLabel("اسم الدور").fill("Arabic Matrix");
+  await page.getByRole("button", { name: "إضافة دور" }).click();
+  const row = page.getByRole("row").filter({ hasText: "Arabic Matrix" });
+  await row.getByRole("button", { name: "تعديل" }).click();
+  await expect(page.getByRole("checkbox", { name: "المبيعات - عرض" })).toBeVisible();
+  await page.getByRole("button", { name: "إلغاء" }).click();
+  page.once("dialog", dialog => dialog.accept());
+  await row.getByRole("button", { name: "حذف" }).click();
+
+  await page.getByRole("button", { name: "بيانات الشركة" }).click();
+  await page.getByLabel("اسم الشركة (بالإنجليزية)").fill("Locale Preview Company");
+  await page.getByLabel("اسم الشركة").fill("شركة عربية");
+  await page.getByRole("button", { name: "حفظ الشركة" }).click();
+  const company = page.getByRole("row").filter({ hasText: "Locale Preview Company" });
+  await page.evaluate(() => { window.print = () => {}; });
+  await company.getByRole("button", { name: "طباعة بيانات الشركة" }).click();
+  await expect(page.getByRole("region", { name: "طباعة بيانات الشركة" })).toContainText("تاريخ الطباعة");
+});

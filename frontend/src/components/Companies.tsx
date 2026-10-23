@@ -9,6 +9,7 @@ import {
 } from "../api/companies";
 import { CompanyForm } from "./CompanyForm";
 import { languageError, useLanguage } from "../i18n";
+import { formatLocalDate } from "../locale";
 import { CompanyTable } from "./CompanyTable";
 
 const emptyForm: CompanyFormValues = {
@@ -32,7 +33,7 @@ const emptyForm: CompanyFormValues = {
 };
 
 export function Companies({ canManage }: { canManage: boolean }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [form, setForm] = useState<CompanyFormValues>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -194,6 +195,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
           <p>{t("commercialRegistration")}: {printCompany.commercialRegistrationNumber}</p>
           <p>{printCompany.invoiceHeader}</p>
           <p>{printCompany.invoiceFooter}</p>
+          <p>{t("printedOn")}: {formatLocalDate(new Date(), language)}</p>
         </section>
       )}
     </main>

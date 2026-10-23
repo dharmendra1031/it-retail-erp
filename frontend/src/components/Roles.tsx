@@ -2,10 +2,11 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { Role, Permission, createRole, deleteRole, getRoles, updateRole, getPermissionCatalog, getRolePermissions, saveRolePermissions } from "../api/roles";
 import { advanceOnEnter } from "../forms/keyboard";
 import { languageError, useLanguage } from "../i18n";
+import { permissionLabel } from "../locale";
 
 
 export function Roles() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const nameInput = useRef<HTMLInputElement>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [name, setName] = useState("");
@@ -148,7 +149,7 @@ export function Roles() {
                       : current.filter((code) => code !== item.code)
                   )}
                 />
-                {item.name}
+                {permissionLabel(item.code, item.name, language)}
               </label>
             ))}
           </div>
