@@ -26,3 +26,23 @@ export function updateRole(id: number, name: string) {
 export function deleteRole(id: number) {
   return apiRequest<void>(`/api/roles/${id}`, { method: "DELETE" }, true);
 }
+
+export interface Permission {
+  code: string;
+  name: string;
+}
+
+export function getPermissionCatalog() {
+  return apiRequest<Permission[]>("/api/permissions");
+}
+
+export function getRolePermissions(id: number) {
+  return apiRequest<{ permissions: string[] }>(`/api/roles/${id}/permissions`);
+}
+
+export function saveRolePermissions(id: number, permissions: string[]) {
+  return apiRequest<{ permissions: string[] }>(`/api/roles/${id}/permissions`, {
+    method: "PUT",
+    ...jsonBody({ permissions }),
+  }, true);
+}

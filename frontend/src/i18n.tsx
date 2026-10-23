@@ -65,6 +65,10 @@ const english = {
   confirmDeleteRole: "Delete role",
   confirmDeleteCompany: "Delete",
   language: "Language",
+  permissionMatrix: "Permission Matrix",
+  savePermissions: "Save Permissions",
+  permissionsSaved: "Permissions saved.",
+  unableLoadPermissions: "Unable to load permissions.",
 } as const;
 
 const arabic: Record<keyof typeof english, string> = {
@@ -132,6 +136,10 @@ const arabic: Record<keyof typeof english, string> = {
   confirmDeleteRole: "حذف الدور",
   confirmDeleteCompany: "حذف",
   language: "اللغة",
+  permissionMatrix: "مصفوفة الصلاحيات",
+  savePermissions: "حفظ الصلاحيات",
+  permissionsSaved: "تم حفظ الصلاحيات.",
+  unableLoadPermissions: "تعذر تحميل الصلاحيات.",
 };
 
 type Language = "en" | "ar";

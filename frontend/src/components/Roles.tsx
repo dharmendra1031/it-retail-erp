@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Role, createRole, deleteRole, getRoles, updateRole } from "../api/roles";
+import { Role, Permission, createRole, deleteRole, getRoles, updateRole, getPermissionCatalog, getRolePermissions, saveRolePermissions } from "../api/roles";
 import { advanceOnEnter } from "../forms/keyboard";
 import { languageError, useLanguage } from "../i18n";
 
@@ -12,9 +12,14 @@ export function Roles() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [catalog, setCatalog] = useState<Permission[]>([]);
+  const [grants, setGrants] = useState<string[]>([]);
+  const [savingPermissions, setSavingPermissions] = useState(false);
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     void loadRoles();
+    void getPermissionCatalog().then(setCatalog).catch(() => setError(t("unableLoadPermissions")));
   }, []);
 
   async function loadRoles() {
@@ -28,6 +33,35 @@ export function Roles() {
   function reset() {
     setName("");
     setEditingId(null);
+    setGrants([]);
+    setNotice("");
+  }
+
+  async function editRole(role: Role) {
+    setName(role.name);
+    setEditingId(role.id);
+    setError("");
+    setNotice("");
+    try {
+      setGrants((await getRolePermissions(role.id)).permissions);
+      nameInput.current?.focus();
+    } catch {
+      setError(t("unableLoadPermissions"));
+    }
+  }
+
+  async function saveGrants() {
+    if (editingId === null) return;
+    setSavingPermissions(true);
+    setError("");
+    try {
+      setGrants((await saveRolePermissions(editingId, grants)).permissions);
+      setNotice(t("permissionsSaved"));
+    } catch (error) {
+      setError(error instanceof Error ? languageError(error.message, t) : t("unableSaveRole"));
+    } finally {
+      setSavingPermissions(false);
+    }
   }
 
   async function save(event: FormEvent<HTMLFormElement>) {
@@ -72,6 +106,7 @@ export function Roles() {
       </div>
 
       {error && <div className="alert" role="alert">{error}</div>}
+      {notice && <div role="status">{notice}</div>}
 
       <section className="panel">
         <div className="panel-heading">
@@ -98,6 +133,31 @@ export function Roles() {
         </form>
       </section>
 
+      {editingId !== null && (
+        <section className="panel">
+          <h2>{t("permissionMatrix")}</h2>
+          <div className="permission-matrix">
+            {catalog.map((item) => (
+              <label className="checkbox" key={item.code}>
+                <input
+                  type="checkbox"
+                  checked={grants.includes(item.code)}
+                  onChange={(event) => setGrants((current) =>
+                    event.target.checked
+                      ? [...current, item.code]
+                      : current.filter((code) => code !== item.code)
+                  )}
+                />
+                {item.name}
+              </label>
+            ))}
+          </div>
+          <button type="button" disabled={savingPermissions} onClick={() => void saveGrants()}>
+            {savingPermissions ? t("saving") : t("savePermissions")}
+          </button>
+        </section>
+      )}
+
       <section className="panel">
         <div className="panel-heading"><h2>{t("roles")} ({roles.length})</h2></div>
         <div className="table-wrap">
@@ -113,11 +173,7 @@ export function Roles() {
                   <td>
                     {role.name.toLowerCase() !== "admin" && (
                       <div className="actions">
-                        <button className="secondary" type="button" onClick={() => {
-                          setName(role.name);
-                          setEditingId(role.id);
-                          setError("");
-                        }}>{t("edit")}</button>
+                        <button className="secondary" type="button" onClick={() => void editRole(role)}>{t("edit")}</button>
                         <button className="danger" type="button" onClick={() => void remove(role)}>
                           {t("delete")}
                         </button>

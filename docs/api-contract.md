@@ -66,3 +66,8 @@ The shared TypeScript client reads the `detail` field of JSON error responses. R
 `GET /api/auth/csrf` returns `{ "csrfToken": "..." }`; `POST /api/auth/login` accepts `{ "email": "...", "password": "...", "rememberMe": false }` and returns the same current-user payload as `GET /api/auth/me`: numeric `id`, `name`, `email`, `isAdmin`. `POST /api/auth/logout` returns 204. All mutating requests require `X-CSRF-TOKEN`; invalid/missing CSRF returns 403. Bad credentials/locked account and expired sessions return 401. Five wrong passwords lock an existing account for 15 minutes. Idle session lifetime is 30 minutes; remember-me persists the cookie for that duration, without remember-me it is a browser-session cookie. React returns to Login when a previously authenticated API reports 401.
 
 For current API JSON numeric IDs, frontend rejects values outside JavaScript's safe-integer range rather than silently rounding SQL BIGINT. Future monetary endpoints must use decimal storage and exact decimal strings/approved precision; financial and KWD calculations are **not yet part of the current master endpoints**. English/Arabic UI labels and RTL keyboard forms are included on Login, Company and Role; full translated reports remain later work.
+
+
+## Permissions / Role grants (WP06–WP07)
+
+`GET /api/permissions` lists supported action codes. `GET /api/roles/{id}/permissions` and CSRF-protected `PUT /api/roles/{id}/permissions` read/replace grants with `{permissions: string[]}`. Unknown codes yield 400, non-admin requests 403, missing roles 404. Role-grant data is persisted in Django `Role.permissions` M2M and ASP.NET `AspNetRoleClaims` using `erp.permission` claim type; no separate runtime table is required by WP07.

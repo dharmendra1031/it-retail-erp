@@ -188,3 +188,33 @@ test("admin rejects unsafe large numeric IDs from an API", async ({ page }) => {
   await expect(page.getByRole("alert")).toContainText("Unable to load roles.");
   await expect(page.getByRole("row").filter({ hasText: "Unsafe ID" })).toHaveCount(0);
 });
+
+
+test("admin assigns role permission matrix with keyboard-accessible checkboxes", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+  await page.getByRole("button", { name: "Role Master" }).click();
+
+  await page.getByLabel("Role Name").fill("Matrix Sales");
+  await page.getByRole("button", { name: "Add Role" }).click();
+  const row = page.getByRole("row").filter({ hasText: "Matrix Sales" });
+  await expect(row).toBeVisible();
+  await row.getByRole("button", { name: "Edit" }).click();
+
+  const grant = page.getByRole("checkbox", { name: "Sales - View" });
+  await expect(grant).toBeVisible();
+  await grant.focus();
+  await page.keyboard.press("Space");
+  await expect(grant).toBeChecked();
+  await page.getByRole("button", { name: "Save Permissions" }).click();
+  await expect(page.getByRole("status")).toHaveText("Permissions saved.");
+  await page.getByRole("button", { name: "Cancel" }).click();
+  await row.getByRole("button", { name: "Edit" }).click();
+  await expect(grant).toBeChecked();
+
+  page.once("dialog", (dialog) => dialog.accept());
+  await row.getByRole("button", { name: "Delete" }).click();
+  await expect(row).toHaveCount(0);
+});
