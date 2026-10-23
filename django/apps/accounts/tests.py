@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from rest_framework.test import APIClient
 
 from .models import Role, User
@@ -215,7 +215,7 @@ class AdminBootstrapTests(TestCase):
                 call_command("seed_admin", stdout=StringIO())
 
 
-class AccountSchemaTests(TestCase):
+class AccountSchemaTests(TransactionTestCase):
     def test_role_assignment_requires_real_role(self):
         from django.db import IntegrityError, transaction
 
