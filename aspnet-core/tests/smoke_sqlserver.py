@@ -259,6 +259,14 @@ def check_api():
     status, customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 201 and customer["code"] == "C-001" and customer["creditLimit"] == "2500.750", "Customer creation failed"
     assert customer["companyName"] == "Credit Shop LLC" and customer["openingBalance"] == "50.250", "Customer details missing"
+    status, blank_email_customer = request(client, "/api/customers", "POST", {
+        **customer_data, "code": "C-EMPTY-EMAIL", "email": "", "telephone": "",
+    }, csrf)
+    assert status == 201 and blank_email_customer["email"] == "", f"Blank optional Customer email rejected: {status} {blank_email_customer}"
+    status, _ = request(client, "/api/customers", "POST", {
+        **customer_data, "code": "C-BAD-EMAIL", "email": "not-an-email",
+    }, csrf)
+    assert status == 400, "Invalid Customer email was accepted"
     status, customer_updated = request(client, f"/api/customers/{customer['id']}", "PUT", {
         **customer_data, "contactPerson": "Fatima",
         "openingBalance": "60.375", "companyName": "Credit Shop Updated",
@@ -294,6 +302,14 @@ def check_api():
     status, supplier = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 201 and supplier["openingBalance"] == "135.500", f"Supplier opening balance incorrect: {status} {supplier}"
     assert supplier["creditLimit"] == "800.500" and supplier["contactPerson"] == "Omar", "Supplier details missing"
+    status, blank_email_supplier = request(client, "/api/suppliers", "POST", {
+        **supplier_data, "code": "S-EMPTY-EMAIL", "email": "",
+    }, csrf)
+    assert status == 201 and blank_email_supplier["email"] == "", f"Blank optional Supplier email rejected: {status} {blank_email_supplier}"
+    status, _ = request(client, "/api/suppliers", "POST", {
+        **supplier_data, "code": "S-BAD-EMAIL", "email": "not-an-email",
+    }, csrf)
+    assert status == 400, "Invalid Supplier email was accepted"
     status, supplier_updated = request(client, f"/api/suppliers/{supplier['id']}", "PUT", {
         **supplier_data, "contactPerson": "Sara", "creditLimit": "955.125",
     }, csrf)

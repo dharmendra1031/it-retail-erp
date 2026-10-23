@@ -49,6 +49,14 @@ class PartnerApiTests(TestCase):
                 **self.customer, "code": "C-002", **changes
             }, format="json").status_code, 400)
         self.assertEqual(Customer.objects.count(), 1)
+        blank_email = self.client.post("/api/customers", {
+            **self.customer, "code": "C-EMPTY-EMAIL", "email": "",
+        }, format="json")
+        self.assertEqual(blank_email.status_code, 201, blank_email.data)
+        invalid_email = self.client.post("/api/customers", {
+            **self.customer, "code": "C-BAD-EMAIL", "email": "not-an-email",
+        }, format="json")
+        self.assertEqual(invalid_email.status_code, 400)
 
     def test_supplier_balance_and_duplicate(self):
         self.client.force_authenticate(user=self.admin)
@@ -58,6 +66,14 @@ class PartnerApiTests(TestCase):
                          Decimal("135.500"))
         self.assertEqual(response.data["creditLimit"], "800.500")
         self.assertEqual(self.client.post("/api/suppliers", self.supplier, format="json").status_code, 400)
+        blank_email = self.client.post("/api/suppliers", {
+            **self.supplier, "code": "S-EMPTY-EMAIL", "email": "",
+        }, format="json")
+        self.assertEqual(blank_email.status_code, 201, blank_email.data)
+        invalid_email = self.client.post("/api/suppliers", {
+            **self.supplier, "code": "S-BAD-EMAIL", "email": "not-an-email",
+        }, format="json")
+        self.assertEqual(invalid_email.status_code, 400)
 
     def test_customer_optional_details_update_round_trip(self):
         self.client.force_authenticate(user=self.admin)
