@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CurrentUser, getCurrentUser, logout } from "./api/auth";
+import { setUnauthorizedHandler } from "./api/client";
 import { AppShell } from "./components/AppShell";
 import { Companies } from "./components/Companies";
 import { Login } from "./components/Login";
@@ -18,6 +19,14 @@ export default function App() {
     };
     window.addEventListener("erp:session-expired", handleExpiredSession);
     return () => window.removeEventListener("erp:session-expired", handleExpiredSession);
+  }, []);
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setUser(null);
+      setPage("companies");
+    });
+    return () => setUnauthorizedHandler(undefined);
   }, []);
 
   useEffect(() => {

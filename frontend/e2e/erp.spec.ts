@@ -153,3 +153,16 @@ test("admin is returned to login when the session expires", async ({ page }) => 
   await page.getByRole("button", { name: "Role Master" }).click();
   await expect(page.getByRole("button", { name: "Login" })).toBeVisible();
 });
+
+
+test("admin is returned to login when a session expires", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+  await expect(page.getByRole("heading", { name: "Company Master" })).toBeVisible();
+
+  await page.route("**/api/roles", (route) => route.fulfill({ status: 401, body: "" }));
+  await page.getByRole("button", { name: "Role Master" }).click();
+  await expect(page.getByRole("button", { name: "Login" })).toBeVisible();
+});
