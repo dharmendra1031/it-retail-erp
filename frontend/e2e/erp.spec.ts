@@ -86,3 +86,57 @@ test("admin navigation remains available on a narrow screen", async ({ page }) =
   await page.getByRole("button", { name: "Role Master" }).click();
   await expect(page.getByRole("heading", { name: "Role Master" })).toBeVisible();
 });
+
+test("admin can use Enter to navigate Login and Company forms", async ({ page }) => {
+  await page.goto("/");
+  const email = page.getByLabel("Email");
+  const passwordField = page.getByLabel("Password");
+
+  await email.fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await email.press("Enter");
+  await expect(passwordField).toBeFocused();
+
+  await passwordField.fill(password);
+  await passwordField.press("Enter");
+  await expect(page.getByRole("checkbox", { name: "Remember me" })).toBeFocused();
+  await page.getByRole("checkbox", { name: "Remember me" }).press("Enter");
+
+  await expect(page.getByRole("heading", { name: "Company Master" })).toBeVisible();
+  const english = page.getByLabel("Company Name (English)");
+  const arabic = page.getByLabel("اسم الشركة");
+  await english.fill("Keyboard Shop");
+  await english.press("Enter");
+  await expect(arabic).toBeFocused();
+
+  await arabic.fill("متجر لوحة المفاتيح");
+  await arabic.press("Enter");
+  const address = page.getByLabel("Address (English)");
+  await expect(address).toBeFocused();
+  await address.press("Enter");
+  await expect(address).toHaveValue("\n");
+
+  await page.getByRole("button", { name: "Save Company" }).click();
+  const row = page.getByRole("row").filter({ hasText: "Keyboard Shop" });
+  await expect(row).toBeVisible();
+  page.once("dialog", dialog => dialog.accept());
+  await row.getByRole("button", { name: "Delete" }).click();
+  await expect(row).toHaveCount(0);
+});
+
+test("admin can switch to Arabic with RTL navigation", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Language").selectOption("ar");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+
+  await page.getByLabel("البريد الإلكتروني").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("كلمة المرور").fill(password);
+  await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+  await expect(page.getByRole("heading", { name: "بيانات الشركة" })).toBeVisible();
+  await page.getByRole("button", { name: "إدارة الأدوار" }).click();
+  await expect(page.getByRole("heading", { name: "إدارة الأدوار" })).toBeVisible();
+
+  await page.getByLabel("اللغة").selectOption("en");
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByRole("heading", { name: "Role Master" })).toBeVisible();
+});
