@@ -10,7 +10,6 @@ public static class IdentitySeeder
     {
         var email = configuration["ERP_ADMIN_EMAIL"];
         var password = configuration["ERP_ADMIN_PASSWORD"];
-
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
             return;
@@ -22,21 +21,35 @@ public static class IdentitySeeder
             return;
         }
 
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        if (await userManager.FindByEmailAsync(email) is not null)
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole<long>>>();
+        if (!await roleManager.RoleExistsAsync("Admin"))
         {
-            return;
+            var roleResult = await roleManager.CreateAsync(new IdentityRole<long>("Admin"));
+            EnsureSuccess(roleResult);
         }
 
-        var user = new ApplicationUser
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = await userManager.FindByEmailAsync(email);
+        if (user is null)
         {
-            UserName = email,
-            Email = email,
-            EmailConfirmed = true,
-            FullName = configuration["ERP_ADMIN_NAME"] ?? "Administrator",
-        };
+            user = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true,
+                FullName = configuration["ERP_ADMIN_NAME"] ?? "Administrator",
+            };
+            EnsureSuccess(await userManager.CreateAsync(user, password));
+        }
 
-        var result = await userManager.CreateAsync(user, password);
+        if (!await userManager.IsInRoleAsync(user, "Admin"))
+        {
+            EnsureSuccess(await userManager.AddToRoleAsync(user, "Admin"));
+        }
+    }
+
+    private static void EnsureSuccess(IdentityResult result)
+    {
         if (!result.Succeeded)
         {
             throw new InvalidOperationException(

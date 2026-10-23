@@ -2,10 +2,12 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from apps.accounts.api import csrf, me, sign_in, sign_out
+from apps.accounts.roles_api import RoleViewSet
 from apps.companies.api import CompanyViewSet
 
 router = SimpleRouter(trailing_slash=False)
 router.register("companies", CompanyViewSet, basename="company")
+router.register("roles", RoleViewSet, basename="role")
 
 urlpatterns = [
     path("auth/csrf", csrf, name="api-csrf"),

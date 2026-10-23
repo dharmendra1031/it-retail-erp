@@ -27,7 +27,7 @@ public sealed class AuthController(
     public async Task<IActionResult> Me()
     {
         var user = await userManager.GetUserAsync(User);
-        return user is null ? Unauthorized() : Ok(ToResponse(user));
+        return user is null ? Unauthorized() : Ok(ToResponse(user, await userManager.IsInRoleAsync(user, "Admin")));
     }
 
     [HttpPost("login")]
@@ -47,7 +47,9 @@ public sealed class AuthController(
             request.RememberMe,
             lockoutOnFailure: true);
 
-        return result.Succeeded ? Ok(ToResponse(user)) : Unauthorized();
+        return result.Succeeded
+            ? Ok(ToResponse(user, await userManager.IsInRoleAsync(user, "Admin")))
+            : Unauthorized();
     }
 
     [HttpPost("logout")]
@@ -59,10 +61,11 @@ public sealed class AuthController(
         return NoContent();
     }
 
-    private static object ToResponse(ApplicationUser user) => new
+    private static object ToResponse(ApplicationUser user, bool isAdmin) => new
     {
         id = user.Id,
         name = user.FullName ?? user.Email ?? string.Empty,
         email = user.Email ?? string.Empty,
+        isAdmin,
     };
 }
