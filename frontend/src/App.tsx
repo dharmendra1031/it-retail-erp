@@ -3,9 +3,13 @@ import { CurrentUser, getCurrentUser, logout } from "./api/auth";
 import { AppShell } from "./components/AppShell";
 import { Companies } from "./components/Companies";
 import { Login } from "./components/Login";
+import { Roles } from "./components/Roles";
+
+export type Page = "companies" | "roles";
 
 export default function App() {
   const [user, setUser] = useState<CurrentUser | null | undefined>(undefined);
+  const [page, setPage] = useState<Page>("companies");
 
   useEffect(() => {
     getCurrentUser()
@@ -18,6 +22,7 @@ export default function App() {
       await logout();
     } finally {
       setUser(null);
+      setPage("companies");
     }
   }
 
@@ -29,9 +34,11 @@ export default function App() {
     return <Login onLogin={setUser} />;
   }
 
+  const activePage = user.isAdmin ? page : "companies";
+
   return (
-    <AppShell user={user} onLogout={handleLogout}>
-      <Companies />
+    <AppShell user={user} page={activePage} onPageChange={setPage} onLogout={handleLogout}>
+      {activePage === "roles" ? <Roles /> : <Companies />}
     </AppShell>
   );
 }

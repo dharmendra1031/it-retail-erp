@@ -146,6 +146,9 @@ button.danger {
 
 .nav-link {
   display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
   border-radius: 7px;
   padding: 10px 12px;
   color: #dfe6ef;
@@ -222,6 +225,17 @@ button.danger {
   justify-content: flex-end;
 }
 
+.role-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  max-width: 550px;
+}
+
+.role-form label {
+  flex: 1;
+}
+
 .search {
   max-width: 280px;
 }
@@ -276,6 +290,11 @@ th {
 
   .company-form {
     grid-template-columns: 1fr;
+  }
+
+  .role-form {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .full-width {
