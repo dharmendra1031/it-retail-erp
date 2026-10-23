@@ -60,6 +60,7 @@ class RoleApiTests(TestCase):
         self.authenticate_as_admin()
         response = self.client.post("/api/roles", {"name": "manager"}, format="json")
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"detail": "Role name already exists."})
 
     def test_assigned_role_cannot_be_deleted(self):
         role = Role.objects.create(name="Cashier")

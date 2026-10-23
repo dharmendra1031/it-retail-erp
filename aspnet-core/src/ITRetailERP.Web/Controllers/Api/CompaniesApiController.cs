@@ -40,7 +40,7 @@ public sealed class CompaniesApiController(
     {
         if (!ValidateLogo(request.Logo))
         {
-            return ValidationProblem(ModelState);
+            return BadRequest(new { detail = "Invalid request." });
         }
 
         var company = new Company();
@@ -73,7 +73,7 @@ public sealed class CompaniesApiController(
 
         if (!ValidateLogo(request.Logo))
         {
-            return ValidationProblem(ModelState);
+            return BadRequest(new { detail = "Invalid request." });
         }
 
         Apply(company, request);

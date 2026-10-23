@@ -2,6 +2,8 @@ using ITRetailERP.Web.Data;
 using ITRetailERP.Web.Models;
 using ITRetailERP.Web.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +55,11 @@ builder.Services.AddAntiforgery(options =>
 builder.Services.AddScoped<CompanyLogoStorage>();
 builder.Services.AddScoped<DocumentNumberService>();
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = _ =>
+        new BadRequestObjectResult(new { detail = "Invalid request." });
+});
 
 var app = builder.Build();
 

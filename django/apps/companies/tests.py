@@ -95,3 +95,17 @@ class CompanyAuthorizationTests(TestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertTrue(Company.objects.filter(name_en="Authorized Company").exists())
+
+    def test_invalid_payload_uses_shared_error_response(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.post(
+            "/api/companies", {"nameEn": ""}, format="multipart"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"detail": "Invalid request."})
+
+    def test_missing_company_has_no_error_payload(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get("/api/companies/999999")
+        self.assertEqual(response.status_code, 404)
+        self.assertIsNone(response.data)

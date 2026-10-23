@@ -93,8 +93,8 @@ def check_api():
 
     status, role = request(client, "/api/roles", "POST", {"name": "SQL Cashier"}, csrf)
     assert status == 201 and isinstance(role["id"], int), "Role creation failed"
-    status, _ = request(client, "/api/roles", "POST", {"name": "sql cashier"}, csrf)
-    assert status == 400, "Duplicate Role name must be rejected"
+    status, duplicate = request(client, "/api/roles", "POST", {"name": "sql cashier"}, csrf)
+    assert status == 400 and duplicate == {"detail": "Role name already exists."}, "Duplicate Role name must be rejected"
 
     status, changed = request(
         client, f"/api/roles/{role['id']}", "PUT", {"name": "SQL Sales"}, csrf
