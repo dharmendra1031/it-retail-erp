@@ -9,6 +9,9 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>(options)
 {
     public DbSet<Company> Companies => Set<Company>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Brand> Brands => Set<Brand>();
+    public DbSet<Unit> Units => Set<Unit>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Supplier> Suppliers => Set<Supplier>();
     public DbSet<PartnerDocument> PartnerDocuments => Set<PartnerDocument>();
@@ -46,6 +49,20 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         builder.Entity<DocumentSequence>(entity =>
             entity.HasIndex(x => new { x.Series, x.FiscalYear, x.BranchId }).IsUnique());
+
+        builder.Entity<Category>(entity =>
+        {
+            entity.HasOne<Category>().WithMany()
+                .HasForeignKey(x => x.ParentId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(x => new { x.ParentId, x.Code }).IsUnique()
+                .HasFilter("[ParentId] IS NOT NULL");
+            entity.HasIndex(x => x.Code).IsUnique()
+                .HasDatabaseName("IX_Categories_RootCode")
+                .HasFilter("[ParentId] IS NULL");
+        });
+
+        builder.Entity<Brand>(entity => entity.HasIndex(x => x.Code).IsUnique());
+        builder.Entity<Unit>(entity => entity.HasIndex(x => x.Code).IsUnique());
 
         builder.Entity<Customer>(entity =>
         {
