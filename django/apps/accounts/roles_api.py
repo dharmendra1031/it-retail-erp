@@ -7,15 +7,17 @@ from .models import Role
 from .serializers import RoleSerializer
 
 
-class IsSuperuser(BasePermission):
+class IsAdminUser(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user.is_authenticated and request.user.is_superuser)
+        return bool(request.user.is_authenticated and (
+            request.user.is_superuser or request.user.roles.filter(name__iexact="Admin").exists()
+        ))
 
 
 class RoleViewSet(ModelViewSet):
     queryset = Role.objects.all().order_by("name")
     serializer_class = RoleSerializer
-    permission_classes = [IsSuperuser]
+    permission_classes = [IsAdminUser]
     http_method_names = ["get", "post", "put", "delete", "head", "options"]
 
     def update(self, request, *args, **kwargs):

@@ -13,7 +13,7 @@ def _user_response(user):
         "id": user.id,
         "name": user.get_full_name() or user.email,
         "email": user.email,
-        "isAdmin": user.is_superuser,
+        "isAdmin": user.is_superuser or user.roles.filter(name__iexact="Admin").exists(),
     }
 
 

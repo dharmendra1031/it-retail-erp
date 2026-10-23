@@ -21,6 +21,13 @@ class RoleApiTests(TestCase):
         response = self.client.get("/api/roles")
         self.assertIn(response.status_code, (401, 403))
 
+    def test_user_with_admin_role_can_manage_roles(self):
+        admin_role, _ = Role.objects.get_or_create(name="Admin")
+        self.employee.roles.add(admin_role)
+        self.client.force_authenticate(user=self.employee)
+        response = self.client.post("/api/roles", {"name": "Warehouse"}, format="json")
+        self.assertEqual(response.status_code, 201)
+
     def test_employee_cannot_list_roles(self):
         self.client.force_authenticate(user=self.employee)
         response = self.client.get("/api/roles")
