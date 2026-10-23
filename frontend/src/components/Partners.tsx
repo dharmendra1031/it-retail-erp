@@ -169,7 +169,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               </label>
               <label>{t("creditLimit")}
                 <input required inputMode="decimal" value={values.creditLimit}
-                  pattern="[0-9]+(\\.[0-9]{1,3})?"
+                  pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("creditLimit", event.target.value)} />
               </label>
             </>
@@ -185,7 +185,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               </label>
               <label>{t("openingBalance")}
                 <input required inputMode="decimal" value={values.openingBalance}
-                  pattern="[0-9]+(\\.[0-9]{1,3})?"
+                  pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("openingBalance", event.target.value)} />
               </label>
             </>
