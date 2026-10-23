@@ -256,12 +256,12 @@ test("admin creates a branch and warehouse for a company", async ({ page }) => {
   await page.getByRole("button", { name: "Branches & Warehouses" }).click();
   await expect(page.getByRole("heading", { name: "Branches & Warehouses" })).toBeVisible();
   const forms = page.locator(".company-form");
-  await forms.first().getByLabel("Company").selectOption({ label: "Organization Test Company" });
+  await forms.first().getByLabel("Company", { exact: true }).selectOption({ label: "Organization Test Company" });
   await forms.first().getByLabel("Code").fill("HQ");
   await forms.first().getByLabel("Company Name (English)").fill("Head Office");
   await forms.first().getByRole("button", { name: "Save Branch" }).click();
 
-  await forms.nth(1).getByLabel("Branch").selectOption({ label: "Head Office" });
+  await forms.nth(1).getByLabel("Branch", { exact: true }).selectOption({ label: "Head Office" });
   await forms.nth(1).getByLabel("Code").fill("MAIN");
   await forms.nth(1).getByLabel("Company Name (English)").fill("Main Store");
   await forms.nth(1).getByRole("button", { name: "Save Warehouse" }).click();

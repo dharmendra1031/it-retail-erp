@@ -19,6 +19,7 @@ export interface UserValues {
   isActive: boolean;
   roleIds: number[];
   password?: string;
+  branchId: number | null;
 }
 
 export function getUsers() {
