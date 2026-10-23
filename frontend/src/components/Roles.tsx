@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Role, createRole, deleteRole, getRoles, updateRole } from "../api/roles";
 import { advanceOnEnter } from "../forms/keyboard";
 import { languageError, useLanguage } from "../i18n";
@@ -6,6 +6,7 @@ import { languageError, useLanguage } from "../i18n";
 
 export function Roles() {
   const { t } = useLanguage();
+  const nameInput = useRef<HTMLInputElement>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -43,6 +44,7 @@ export function Roles() {
       await loadRoles();
     } catch (error) {
       setError(error instanceof Error ? languageError(error.message, t) : t("unableSaveRole"));
+      nameInput.current?.focus();
     } finally {
       setSaving(false);
     }
@@ -82,6 +84,7 @@ export function Roles() {
           <label>
             {t("roleName")}
             <input
+              ref={nameInput}
               value={name}
               maxLength={100}
               required
