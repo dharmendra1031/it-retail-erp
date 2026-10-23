@@ -15,6 +15,12 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<ApplicationUser>()
+            .HasIndex(x => x.NormalizedEmail)
+            .IsUnique()
+            .HasDatabaseName("EmailIndex")
+            .HasFilter("[NormalizedEmail] IS NOT NULL");
+
         builder.Entity<DocumentSequence>(entity =>
             entity.HasIndex(x => new { x.Series, x.FiscalYear, x.BranchId }).IsUnique());
 
