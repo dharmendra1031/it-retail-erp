@@ -52,7 +52,13 @@ public partial class BranchesWarehouses : Migration
 
         migrationBuilder.AddColumn<long>(name: "BranchId", table: "AspNetUsers", type: "bigint", nullable: true);
         migrationBuilder.CreateIndex("IX_AspNetUsers_BranchId", "AspNetUsers", "BranchId");
-        migrationBuilder.AddForeignKey("FK_AspNetUsers_Branches_BranchId", "AspNetUsers", "BranchId", "Branches", "Id", onDelete: ReferentialAction.Restrict);
+        migrationBuilder.AddForeignKey(
+            name: "FK_AspNetUsers_Branches_BranchId",
+            table: "AspNetUsers",
+            column: "BranchId",
+            principalTable: "Branches",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Restrict);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
