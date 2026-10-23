@@ -8,6 +8,7 @@ interface Props {
   onQueryChange: (value: string) => void;
   onEdit: (company: Company) => void;
   onDelete: (company: Company) => void;
+  onPrint: (company: Company) => void;
 }
 
 export function CompanyTable({
@@ -17,6 +18,7 @@ export function CompanyTable({
   onQueryChange,
   onEdit,
   onDelete,
+  onPrint,
 }: Props) {
   const { t } = useLanguage();
   return (
@@ -41,7 +43,7 @@ export function CompanyTable({
               <th>{t("mobile")}</th>
               <th>{t("taxNo")}</th>
               <th>{t("status")}</th>
-              {canManage && <th>{t("actions")}</th>}
+              <th>{t("actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -53,21 +55,22 @@ export function CompanyTable({
                 <td>{company.mobile}</td>
                 <td>{company.taxNumber}</td>
                 <td>{company.isActive ? t("active") : t("inactive")}</td>
-                {canManage && (
-                  <td className="actions">
+                <td className="actions">
+                  <button className="secondary" type="button" onClick={() => onPrint(company)}>{t("printIdentity")}</button>
+                  {canManage && (
                     <button className="secondary" type="button" onClick={() => onEdit(company)}>
                       Edit
                     </button>
                     <button className="danger" type="button" onClick={() => onDelete(company)}>
                       Delete
                     </button>
-                  </td>
-                )}
+                  )}
+                </td>
               </tr>
             ))}
             {!companies.length && (
               <tr>
-                <td colSpan={canManage ? 7 : 6} className="empty">
+                <td colSpan={7} className="empty">
                   {t("noCompanies")}
                 </td>
               </tr>

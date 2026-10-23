@@ -39,6 +39,8 @@ export function Companies({ canManage }: { canManage: boolean }) {
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [printCompany, setPrintCompany] = useState<Company | null>(null);
+  const [existingLogoUrl, setExistingLogoUrl] = useState("");
 
   useEffect(() => {
     loadCompanies();
@@ -68,6 +70,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
 
   function startEdit(company: Company) {
     setEditingId(company.id);
+    setExistingLogoUrl(company.logoUrl);
     setForm({
       nameEn: company.nameEn,
       nameAr: company.nameAr,
@@ -92,6 +95,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
 
   function resetForm() {
     setEditingId(null);
+    setExistingLogoUrl("");
     setForm(emptyForm);
     setError("");
   }
@@ -129,10 +133,21 @@ export function Companies({ canManage }: { canManage: boolean }) {
     }
   }
 
+  function printIdentity(company: Company) {
+    setPrintCompany(company);
+    requestAnimationFrame(() => window.print());
+  }
+
   function setValue<K extends keyof CompanyFormValues>(
     key: K,
     value: CompanyFormValues[K],
   ) {
+    if (key === "logo" && value instanceof File &&
+        (value.size > 2 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(value.type))) {
+      setError(t("invalidLogo"));
+      return;
+    }
+    setError("");
     setForm((current) => ({ ...current, [key]: value }));
   }
 
@@ -153,6 +168,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
           onChange={setValue}
           onSubmit={saveCompany}
           onCancel={resetForm}
+          existingLogoUrl={existingLogoUrl}
         />
       )}
 
@@ -163,7 +179,21 @@ export function Companies({ canManage }: { canManage: boolean }) {
         onQueryChange={setQuery}
         onEdit={startEdit}
         onDelete={removeCompany}
+        onPrint={printIdentity}
       />
+      {printCompany && (
+        <section className="company-print" aria-label={t("printIdentity")}>
+          <h1>{printCompany.nameEn}</h1>
+          <h2 dir="rtl">{printCompany.nameAr}</h2>
+          <p>{printCompany.addressEn}</p>
+          <p dir="rtl">{printCompany.addressAr}</p>
+          <p>{printCompany.telephone} {printCompany.mobile}</p>
+          <p>{t("taxNumber")}: {printCompany.taxNumber}</p>
+          <p>{t("commercialRegistration")}: {printCompany.commercialRegistrationNumber}</p>
+          <p>{printCompany.invoiceHeader}</p>
+          <p>{printCompany.invoiceFooter}</p>
+        </section>
+      )}
     </main>
   );
 }
