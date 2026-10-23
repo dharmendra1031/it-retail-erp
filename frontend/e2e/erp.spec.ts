@@ -267,3 +267,17 @@ test("admin creates a branch and warehouse for a company", async ({ page }) => {
   await forms.nth(1).getByRole("button", { name: "Save Warehouse" }).click();
   await expect(page.getByRole("row").filter({ hasText: "Main Store" })).toBeVisible();
 });
+
+test("admin previews bilingual Company identity for printing", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+  await page.getByLabel("Company Name (English)").fill("Print Company");
+  await page.getByLabel("اسم الشركة").fill("شركة للطباعة");
+  await page.getByRole("button", { name: "Save Company" }).click();
+  await page.evaluate(() => { window.print = () => {}; });
+  const row = page.getByRole("row").filter({ hasText: "Print Company" });
+  await row.getByRole("button", { name: "Print Identity" }).click();
+  await expect(page.getByRole("region", { name: "Print Identity" })).toContainText("شركة للطباعة");
+});

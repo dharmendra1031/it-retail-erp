@@ -357,3 +357,20 @@ th {
     grid-column: auto;
   }
 }
+
+.company-logo-preview {
+  max-width: 140px;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+.company-print { display: none; }
+
+@media print {
+  .app-shell .sidebar, .app-shell .topbar, .content > :not(.company-print) {
+    display: none !important;
+  }
+  .app-shell { display: block; }
+  .content { padding: 0; }
+  .company-print { display: block; padding: 20px; color: #111; }
+}

@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { CompanyFormValues } from "../api/companies";
 import { advanceOnEnter } from "../forms/keyboard";
 import { useLanguage } from "../i18n";
@@ -14,6 +14,7 @@ interface Props {
   ) => void;
   onSubmit: () => void;
   onCancel: () => void;
+  existingLogoUrl?: string;
 }
 
 interface TextFieldProps {
@@ -73,8 +74,19 @@ export function CompanyForm({
   onChange,
   onSubmit,
   onCancel,
+  existingLogoUrl,
 }: Props) {
   const { t } = useLanguage();
+  const [preview, setPreview] = useState<string | null>(null);
+  useEffect(() => {
+    if (!values.logo) {
+      setPreview(null);
+      return;
+    }
+    const url = URL.createObjectURL(values.logo);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [values.logo]);
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     onSubmit();
@@ -157,6 +169,12 @@ export function CompanyForm({
           />
         </label>
 
+        {(preview || existingLogoUrl) && (
+          <div className="full-width">
+            <img className="company-logo-preview" src={preview || existingLogoUrl}
+              alt={t("companyLogo")} />
+          </div>
+        )}
         <TextArea
           label={t("bankDetails")}
           value={values.bankDetails}
