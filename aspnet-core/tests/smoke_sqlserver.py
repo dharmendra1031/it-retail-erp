@@ -277,6 +277,10 @@ def check_api():
     assert status == 200 and reloaded_customer["companyName"] == "Credit Shop Updated", "Customer update was not persisted"
     status, duplicate_customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 400, "Duplicate customer code accepted"
+    status, bad_email = request(client, "/api/customers", "POST", {
+        **customer_data, "code": "C-BAD-EMAIL", "email": "invalid-email",
+    }, csrf)
+    assert status == 400, "Malformed Customer email accepted"
     status, invalid_credit = request(client, "/api/customers", "POST", {
         **customer_data, "code": "C-002", "creditLimit": "-5.000",
     }, csrf)
@@ -316,6 +320,10 @@ def check_api():
     assert status == 200 and supplier_updated["creditLimit"] == "955.125", f"Supplier update failed: {status} {supplier_updated}"
     status, reloaded_supplier = request(client, f"/api/suppliers/{supplier['id']}")
     assert status == 200 and reloaded_supplier["contactPerson"] == "Sara", "Supplier update was not persisted"
+    status, bad_email = request(client, "/api/suppliers", "POST", {
+        **supplier_data, "code": "S-BAD-EMAIL", "email": "invalid-email",
+    }, csrf)
+    assert status == 400, "Malformed Supplier email accepted"
     status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 400, "Duplicate supplier code accepted"
 
