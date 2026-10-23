@@ -28,10 +28,6 @@ export function Partners({ kind }: { kind: PartnerKind }) {
   const isCustomer = kind === "customers";
 
   useEffect(() => {
-    setValues({ ...blank });
-    setEditingId(null);
-    setDocuments([]);
-    setError("");
     void load();
   }, [kind]);
 
