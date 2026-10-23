@@ -342,3 +342,36 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: "First Supplier" })).toBeVisible();
 });
+
+
+test("admin manages bilingual category hierarchy brand and unit", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Category Master" }).click();
+  await page.getByLabel("Code").fill("COMPUTER-E2E");
+  await page.getByLabel("Company Name (English)").fill("Computers");
+  await page.getByLabel("اسم الشركة").fill("الحواسيب");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "Computers" })).toBeVisible();
+  await page.getByLabel("Code").fill("LAPTOP-E2E");
+  await page.getByLabel("Company Name (English)").fill("Laptops");
+  await page.getByLabel("Parent Category").selectOption({ label: "Computers" });
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "LAPTOP-E2E" })).toContainText("Computers");
+
+  await page.getByRole("button", { name: "Brand Master" }).click();
+  await page.getByLabel("Code").fill("DELL-E2E");
+  await page.getByLabel("Company Name (English)").fill("Dell");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "Dell" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Unit Master" }).click();
+  await page.getByLabel("Code").fill("PCS-E2E");
+  await page.getByLabel("Company Name (English)").fill("Pieces");
+  await page.getByLabel("Decimal Places").fill("0");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "Pieces" })).toBeVisible();
+});
