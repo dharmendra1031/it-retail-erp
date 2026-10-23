@@ -337,11 +337,21 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await expect(page.getByRole("row").filter({ hasText: "Credit Partner" })).toContainText("عميل تجريبي");
 
   await page.getByRole("button", { name: "Supplier Master" }).click();
+  await expect(page.getByRole("heading", { name: "Supplier Master" })).toBeVisible();
   await page.getByLabel("Code").fill(`S-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("First Supplier");
   await page.getByLabel("Opening Balance").fill("135.500");
+
+  const supplierForm = page.locator("form.company-form");
+  expect(await supplierForm.evaluate((form: HTMLFormElement) => form.checkValidity())).toBe(true);
+  const supplierRequest = page.waitForResponse(response =>
+    response.url().endsWith("/api/suppliers") &&
+    response.request().method() === "POST",
+  );
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: "First Supplier" })).toBeVisible();
+  const supplierResponse = await supplierRequest;
+  expect(supplierResponse.status(), await supplierResponse.text()).toBe(201);
+  await expect(page.getByRole("row").filter({ hasText: `S-${suffix}` })).toContainText("First Supplier");
 });
 
 
