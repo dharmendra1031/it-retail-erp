@@ -88,6 +88,12 @@ def check_api():
     else:
         raise RuntimeError("ASP.NET Core API did not start")
 
+    status, _ = request(client, "/api/auth/login", "POST", {
+        "email": os.environ["ERP_ADMIN_EMAIL"],
+        "password": os.environ["ERP_ADMIN_PASSWORD"], "rememberMe": False,
+    })
+    assert status == 400, "Login without CSRF must be rejected"
+
     status, _ = request(client, "/api/roles")
     assert status == 401, f"Anonymous Role API expected 401, got {status}"
 
@@ -113,6 +119,9 @@ def check_api():
     status, tokens = request(client, "/api/auth/csrf")
     assert status == 200
     csrf = tokens["csrfToken"]
+
+    status, _ = request(client, "/api/roles", "POST", {"name": "BlockedWithoutCsrf"})
+    assert status == 400, "Role mutation without CSRF must be rejected"
 
     status, invalid_role = request(client, "/api/roles", "POST", {"name": "  "}, csrf)
     assert status == 400 and invalid_role == {"detail": "Invalid request."}, "Empty role name must be rejected"
@@ -146,7 +155,11 @@ def check_api():
     assert status == 204, "Company delete failed"
     status, _ = request(client, f"/api/roles/{role['id']}", "DELETE", csrf=csrf)
     assert status == 204, "Role delete failed"
-    print("ASP.NET Core SQL Server schema, auth, Role CRUD and Arabic Company CRUD: PASS")
+    status, _ = request(client, "/api/auth/logout", "POST", csrf=csrf)
+    assert status == 204, "Logout failed"
+    status, _ = request(client, "/api/auth/me")
+    assert status == 401, "Logout session must be invalidated"
+    print("ASP.NET Core SQL Server schema, CSRF, session, Role and Arabic Company CRUD: PASS")
 
 
 def main():

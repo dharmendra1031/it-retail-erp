@@ -27,6 +27,16 @@ class SqlServerSchemaTests(TestCase):
                     )
                     self.assertEqual(cursor.fetchone()[0], 1)
 
+    def test_english_and_arabic_columns_use_unicode(self):
+        with connection.cursor() as cursor:
+            for column in ("name_en", "name_ar", "address_en", "address_ar"):
+                with self.subTest(column=column):
+                    cursor.execute(
+                        "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS "
+                        "WHERE TABLE_NAME='companies_company' AND COLUMN_NAME=%s", [column]
+                    )
+                    self.assertEqual(cursor.fetchone()[0].lower(), "nvarchar")
+
     def test_arabic_company_values_round_trip(self):
         company = Company.objects.create(
             name_en="Store", name_ar="شركة التجزئة",

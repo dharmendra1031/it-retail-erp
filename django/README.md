@@ -37,3 +37,8 @@ python manage.py test apps.core apps.accounts apps.companies
 ```
 
 Unit tests in GitHub Actions use `config.settings_test` and a disposable SQLite database; CI separately runs these test modules and SQL Server migrations/integration/concurrency tests against an ephemeral SQL Server 2022 container. Never run destructive test DB commands against production.
+
+
+## Administrator bootstrap and sessions
+
+Run `python manage.py migrate`, then set `ERP_ADMIN_EMAIL` and `ERP_ADMIN_PASSWORD` in your private local environment and run `python manage.py seed_admin` once. Re-running does not reset an existing password. Five failed sign-in attempts lock that account for 15 minutes. The session times out after 30 minutes; "Remember me" makes its cookie persistent for that duration. Production session and CSRF cookies require HTTPS.

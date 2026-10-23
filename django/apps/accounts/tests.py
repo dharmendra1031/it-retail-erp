@@ -213,3 +213,32 @@ class AdminBootstrapTests(TestCase):
         }):
             with self.assertRaises(CommandError):
                 call_command("seed_admin", stdout=StringIO())
+
+
+class AccountSchemaTests(TestCase):
+    def test_role_assignment_requires_real_role(self):
+        from django.db import IntegrityError, transaction
+
+        user = User.objects.create_user(
+            username="orphan-check", email="orphan@example.com", password="TestPass123!"
+        )
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                User.roles.through.objects.create(user_id=user.id, role_id=999999999)
+
+    def test_admin_seed_is_idempotent(self):
+        from django.core.management import call_command
+        from unittest.mock import patch
+
+        with patch.dict("os.environ", {
+            "ERP_ADMIN_EMAIL": "bootstrap@example.com",
+            "ERP_ADMIN_PASSWORD": "StrongTestPassword123!",
+        }):
+            call_command("seed_admin")
+            call_command("seed_admin")
+
+        admin = User.objects.get(email="bootstrap@example.com")
+        self.assertTrue(admin.is_superuser)
+        self.assertTrue(admin.roles.filter(name="Admin").exists())
+        self.assertTrue(admin.check_password("StrongTestPassword123!"))
+        self.assertEqual(User.objects.filter(email=admin.email).count(), 1)
