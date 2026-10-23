@@ -8,6 +8,7 @@ class RoleSerializer(serializers.ModelSerializer):
         model = Role
         fields = ("id", "name")
         read_only_fields = ("id",)
+        extra_kwargs = {"name": {"validators": []}}
 
     def validate_name(self, name):
         name = name.strip()
