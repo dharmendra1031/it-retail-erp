@@ -70,7 +70,7 @@ class RoleApiTests(TestCase):
         self.assertTrue(Role.objects.filter(pk=role.id).exists())
 
     def test_admin_role_cannot_be_changed_or_deleted(self):
-        role = Role.objects.create(name="Admin")
+        role, _ = Role.objects.get_or_create(name="Admin")
         self.authenticate_as_admin()
         self.assertEqual(
             self.client.put(f"/api/roles/{role.id}", {"name": "Other"}, format="json").status_code,
