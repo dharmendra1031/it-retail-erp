@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import { CurrentUser } from "../api/auth";
 import { Page } from "../App";
 import { useLanguage } from "../i18n";
-import { useLanguage } from "../i18n";
 
 interface Props {
   user: CurrentUser;

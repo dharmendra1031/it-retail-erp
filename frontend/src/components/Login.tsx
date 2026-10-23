@@ -1,16 +1,13 @@
 import { FormEvent, useState } from "react";
 import { CurrentUser, login } from "../api/auth";
 import { advanceOnEnter } from "../forms/keyboard";
-import { useLanguage } from "../i18n";
-import { useLanguage } from "../i18n";
-import { handleFormEnter } from "../utils/formKeyboard";
+
 
 interface Props {
   onLogin: (user: CurrentUser) => void;
 }
 
 export function Login({ onLogin }: Props) {
-  const { language, setLanguage, t } = useLanguage();
   const { language, setLanguage, t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,9 +31,9 @@ export function Login({ onLogin }: Props) {
 
   return (
     <main className="login-page">
-      <form className="login-card" onSubmit={handleSubmit} onKeyDown={handleFormEnter}>
+      <form className="login-card" onSubmit={handleSubmit} onKeyDown={advanceOnEnter}>
         <h1>IT Retail ERP</h1>
-        <p>{t("signInPrompt")}</p>
+        <p>{t("signIn")}</p>
         <label>
           {t("language")}
           <select aria-label="Language" value={language} onChange={(event) => setLanguage(event.target.value as "en" | "ar")}>
@@ -75,7 +72,7 @@ export function Login({ onLogin }: Props) {
             checked={rememberMe}
             onChange={(event) => setRememberMe(event.target.checked)}
           />
-          {t("remember")}
+          {t("rememberMe")}
         </label>
 
         <button type="submit" disabled={submitting}>

@@ -1,7 +1,7 @@
 import { KeyboardEvent } from "react";
 
 export function advanceOnEnter(event: KeyboardEvent<HTMLFormElement>) {
-  if (event.key !== "Enter" || event.isComposing || event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
+  if (event.key !== "Enter" || event.nativeEvent.isComposing || event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
     return;
   }
 
@@ -12,7 +12,7 @@ export function advanceOnEnter(event: KeyboardEvent<HTMLFormElement>) {
 
   const form = event.currentTarget;
   const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>("input, textarea, select"))
-    .filter((field) => !field.disabled && !field.readOnly && field.type !== "hidden" && field.getClientRects().length > 0);
+    .filter((field) => !field.disabled && !("readOnly" in field && field.readOnly) && field.type !== "hidden" && field.getClientRects().length > 0);
   const index = fields.indexOf(target);
   if (index < 0) {
     return;

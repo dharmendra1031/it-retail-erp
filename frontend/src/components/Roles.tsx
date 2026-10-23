@@ -2,12 +2,10 @@ import { FormEvent, useEffect, useState } from "react";
 import { Role, createRole, deleteRole, getRoles, updateRole } from "../api/roles";
 import { advanceOnEnter } from "../forms/keyboard";
 import { languageError, useLanguage } from "../i18n";
-import { useLanguage } from "../i18n";
-import { handleFormEnter } from "../utils/formKeyboard";
+
 
 export function Roles() {
   const { t } = useLanguage();
-  const { t, error: translateError } = useLanguage();
   const [roles, setRoles] = useState<Role[]>([]);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -44,7 +42,7 @@ export function Roles() {
       reset();
       await loadRoles();
     } catch (error) {
-      setError(translateError(error, "unableSaveRole"));
+      setError(error instanceof Error ? languageError(error.message, t) : t("unableSaveRole"));
     } finally {
       setSaving(false);
     }
@@ -60,7 +58,7 @@ export function Roles() {
       await deleteRole(role.id);
       await loadRoles();
     } catch (error) {
-      setError(translateError(error, "unableDeleteRole"));
+      setError(error instanceof Error ? languageError(error.message, t) : t("unableDeleteRole"));
     }
   }
 
@@ -80,7 +78,7 @@ export function Roles() {
             <button className="secondary" type="button" onClick={reset}>{t("cancel")}</button>
           )}
         </div>
-        <form className="role-form" onSubmit={save} onKeyDown={handleFormEnter}>
+        <form className="role-form" onSubmit={save} onKeyDown={advanceOnEnter}>
           <label>
             {t("roleName")}
             <input
@@ -88,7 +86,7 @@ export function Roles() {
               maxLength={100}
               required
               onChange={(event) => setName(event.target.value)}
-              placeholder={t("rolePlaceholder")}
+              placeholder={t("roleName")}
             />
           </label>
           <button disabled={saving || !name.trim()} type="submit">

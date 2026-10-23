@@ -1,9 +1,7 @@
 import { FormEvent } from "react";
 import { CompanyFormValues } from "../api/companies";
 import { advanceOnEnter } from "../forms/keyboard";
-import { useLanguage } from "../i18n";
-import { useLanguage } from "../i18n";
-import { handleFormEnter } from "../utils/formKeyboard";
+
 
 interface Props {
   values: CompanyFormValues;
@@ -92,26 +90,26 @@ export function CompanyForm({
         )}
       </div>
 
-      <form className="company-form" onSubmit={handleSubmit} onKeyDown={handleFormEnter}>
+      <form className="company-form" onSubmit={handleSubmit} onKeyDown={advanceOnEnter}>
         <TextField
-          label={t("nameEn")}
+          label={t("companyNameEnglish")}
           value={values.nameEn}
           onChange={(value) => onChange("nameEn", value)}
           required
         />
         <TextField
-          label={t("nameAr")}
+          label={t("companyNameArabic")}
           value={values.nameAr}
           onChange={(value) => onChange("nameAr", value)}
           dir="rtl"
         />
         <TextArea
-          label={t("addressEn")}
+          label={t("addressEnglish")}
           value={values.addressEn}
           onChange={(value) => onChange("addressEn", value)}
         />
         <TextArea
-          label={t("addressAr")}
+          label={t("addressArabic")}
           value={values.addressAr}
           onChange={(value) => onChange("addressAr", value)}
           dir="rtl"
@@ -144,13 +142,13 @@ export function CompanyForm({
           onChange={(value) => onChange("taxNumber", value)}
         />
         <TextField
-          label={t("registration")}
+          label={t("commercialRegistration")}
           value={values.commercialRegistrationNumber}
           onChange={(value) => onChange("commercialRegistrationNumber", value)}
         />
 
         <label className="full-width">
-          {t("logo")}
+          {t("companyLogo")}
           <input
             type="file"
             accept=".jpg,.jpeg,.png,.webp"
@@ -159,12 +157,12 @@ export function CompanyForm({
         </label>
 
         <TextArea
-          label={t("bank")}
+          label={t("bankDetails")}
           value={values.bankDetails}
           onChange={(value) => onChange("bankDetails", value)}
         />
         <TextArea
-          label={t("social")}
+          label={t("socialMedia")}
           value={values.socialMedia}
           onChange={(value) => onChange("socialMedia", value)}
         />

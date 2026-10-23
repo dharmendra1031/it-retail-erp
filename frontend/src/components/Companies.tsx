@@ -34,7 +34,6 @@ const emptyForm: CompanyFormValues = {
 
 export function Companies({ canManage }: { canManage: boolean }) {
   const { t } = useLanguage();
-  const { t, error: translateError } = useLanguage();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [form, setForm] = useState<CompanyFormValues>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -112,7 +111,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
       resetForm();
       await loadCompanies();
     } catch (error) {
-      setError(translateError(error, "unableSaveCompany"));
+      setError(error instanceof Error ? languageError(error.message, t) : t("unableSaveCompany"));
     } finally {
       setSaving(false);
     }
@@ -142,7 +141,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
     <main className="content">
       <div className="page-heading">
         <h1>{t("companyMaster")}</h1>
-        <p>{t("companyDescription")}</p>
+        <p>{t("companiesDescription")}</p>
       </div>
 
       {error && <div className="alert" role="alert">{error}</div>}
