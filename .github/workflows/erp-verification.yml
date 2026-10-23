@@ -77,6 +77,13 @@ jobs:
           dotnet-version: '10.0.x'
       - name: Build
         run: dotnet build --configuration Release
+      - name: Reject missing ASP.NET connection string
+        run: |
+          if env -u ConnectionStrings__DefaultConnection dotnet run --no-build --no-launch-profile --urls http://127.0.0.1:5000 > /tmp/erp-asp-env.log 2>&1; then
+            echo "ASP.NET started without a connection string"
+            exit 1
+          fi
+          grep -Fq "Connection string 'DefaultConnection' was not found" /tmp/erp-asp-env.log
 
   sqlserver:
     runs-on: ubuntu-latest
