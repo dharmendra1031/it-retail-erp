@@ -48,7 +48,7 @@ jobs:
         env:
           SECRET_KEY: ci-only-not-for-production
           DB_NAME: erp_ci
-        run: python manage.py test apps.core apps.accounts apps.companies apps.partners --verbosity 2
+        run: python manage.py test apps.core apps.accounts apps.companies apps.partners apps.catalog --verbosity 2
 
   frontend:
     runs-on: ubuntu-latest
@@ -146,7 +146,7 @@ jobs:
           python manage.py migrate --noinput
           python manage.py migrate core zero --noinput
           python manage.py migrate core --noinput
-          python manage.py test apps.core apps.accounts apps.companies apps.partners --verbosity 2
+          python manage.py test apps.core apps.accounts apps.companies apps.partners apps.catalog --verbosity 2
 
       - uses: actions/setup-dotnet@v4
         with:
