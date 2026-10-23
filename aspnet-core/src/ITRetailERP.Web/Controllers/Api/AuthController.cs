@@ -36,7 +36,7 @@ public sealed class AuthController(
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var user = await userManager.FindByEmailAsync(request.Email.Trim());
-        if (user is null || !user.IsActive)
+        if (user is null)
         {
             return Unauthorized();
         }

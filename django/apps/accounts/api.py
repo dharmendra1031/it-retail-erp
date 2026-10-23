@@ -4,11 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.middleware.csrf import get_token
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_protect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from .authentication import ApiSessionAuthentication
 from .models import User
 
 
@@ -33,10 +33,10 @@ def me(request):
     return Response(_user_response(request.user))
 
 
-@csrf_protect
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def sign_in(request):
+    ApiSessionAuthentication().enforce_csrf(request)
     email = str(request.data.get("email", "")).strip()
     password = str(request.data.get("password", ""))
     remember_me = request.data.get("rememberMe", False)
@@ -75,5 +75,6 @@ def sign_in(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def sign_out(request):
+    ApiSessionAuthentication().enforce_csrf(request)
     logout(request)
     return Response(status=204)
