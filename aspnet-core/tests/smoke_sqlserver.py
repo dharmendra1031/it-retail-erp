@@ -91,6 +91,14 @@ def check_api():
     assert status == 200
     csrf = tokens["csrfToken"]
 
+    status, invalid_role = request(client, "/api/roles", "POST", {"name": "  "}, csrf)
+    assert status == 400 and invalid_role == {"detail": "Invalid request."}, "Empty role name must be rejected"
+
+    status, invalid_company = request(
+        client, "/api/companies", "POST", {"nameEn": "   "}, csrf, multipart=True
+    )
+    assert status == 400 and invalid_company == {"detail": "Invalid request."}, "Whitespace company name must be rejected"
+
     status, role = request(client, "/api/roles", "POST", {"name": "SQL Cashier"}, csrf)
     assert status == 201 and isinstance(role["id"], int), "Role creation failed"
     status, duplicate = request(client, "/api/roles", "POST", {"name": "sql cashier"}, csrf)

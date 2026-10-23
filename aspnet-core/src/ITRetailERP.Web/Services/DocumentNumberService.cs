@@ -16,7 +16,9 @@ public sealed class DocumentNumberService(ApplicationDbContext db)
             throw new ArgumentException("Invalid document number series, fiscal year or branch.");
         }
 
-        await using var transaction = await db.Database.BeginTransactionAsync();
+        await using var transaction = db.Database.CurrentTransaction is null
+            ? await db.Database.BeginTransactionAsync()
+            : null;
         var resource = $"erp:sequence:{series}:{fiscalYear}:{branchId}";
         await db.Database.ExecuteSqlInterpolatedAsync($"""
             DECLARE @result int;
@@ -41,7 +43,10 @@ public sealed class DocumentNumberService(ApplicationDbContext db)
 
         counter.LastNumber++;
         await db.SaveChangesAsync();
-        await transaction.CommitAsync();
+        if (transaction is not null)
+        {
+            await transaction.CommitAsync();
+        }
         return counter.LastNumber;
     }
 }

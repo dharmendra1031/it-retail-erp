@@ -38,7 +38,7 @@ public sealed class CompaniesApiController(
     [ValidateAntiForgeryToken]
     public async Task<ActionResult<CompanyResponse>> Create([FromForm] CompanyRequest request)
     {
-        if (!ValidateLogo(request.Logo))
+        if (string.IsNullOrWhiteSpace(request.NameEn) || !ValidateLogo(request.Logo))
         {
             return BadRequest(new { detail = "Invalid request." });
         }

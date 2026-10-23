@@ -44,6 +44,21 @@ public sealed class DocumentNumberTests
     }
 
     [Fact]
+    public async Task OuterTransactionCanRollBackNumberReservation()
+    {
+        await using var db = OpenDatabase();
+        await using var transaction = await db.Database.BeginTransactionAsync();
+
+        var number = await new DocumentNumberService(db).NextAsync("TEST_ROLLBACK", 2026, 99);
+        Assert.Equal(1, number);
+        await transaction.RollbackAsync();
+
+        db.ChangeTracker.Clear();
+        Assert.False(await db.DocumentSequences.AnyAsync(x =>
+            x.Series == "TEST_ROLLBACK" && x.FiscalYear == 2026 && x.BranchId == 99));
+    }
+
+    [Fact]
     public async Task InvalidSeriesDoesNotAllocate()
     {
         await using var db = OpenDatabase();

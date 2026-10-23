@@ -36,6 +36,11 @@ public sealed class RolesApiController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(RoleRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            return BadRequest(new { detail = "Invalid request." });
+        }
+
         var name = request.Name.Trim();
         if (await roleManager.RoleExistsAsync(name))
         {
@@ -46,7 +51,7 @@ public sealed class RolesApiController(
         var result = await roleManager.CreateAsync(role);
         if (!result.Succeeded)
         {
-            return BadRequest(result.Errors);
+            return BadRequest(new { detail = "Invalid request." });
         }
 
         return CreatedAtAction(nameof(Get), new { id = role.Id }, new RoleResponse(role.Id, name));
@@ -77,7 +82,7 @@ public sealed class RolesApiController(
         var result = await roleManager.UpdateAsync(role);
         return result.Succeeded
             ? Ok(new RoleResponse(role.Id, name))
-            : BadRequest(result.Errors);
+            : BadRequest(new { detail = "Invalid request." });
     }
 
     [HttpDelete("{id:long}")]
