@@ -25,6 +25,8 @@ class Role(TimeStampedModel):
 
 
 class User(AbstractUser):
+    failed_login_attempts = models.PositiveSmallIntegerField(default=0)
+    locked_until = models.DateTimeField(null=True, blank=True)
     email = models.EmailField(unique=True)
     roles = models.ManyToManyField(
         Role,

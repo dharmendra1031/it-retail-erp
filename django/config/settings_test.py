@@ -9,3 +9,8 @@ DATABASES = {
         "NAME": os.getenv("SQLITE_DB_PATH", ":memory:"),
     }
 }
+
+
+# Isolated browser tests use HTTP localhost; production cookies are Secure.
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False

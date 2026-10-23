@@ -92,3 +92,81 @@ class RoleApiTests(TestCase):
     def test_missing_role_returns_404(self):
         self.authenticate_as_admin()
         self.assertEqual(self.client.get("/api/roles/9999").status_code, 404)
+
+
+class AuthenticationTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="cashier", email="cashier@example.com", password="TestPass123!"
+        )
+        self.client = APIClient()
+
+    def test_invalid_password_locks_account_after_five_attempts(self):
+        for _ in range(5):
+            response = self.client.post(
+                "/api/auth/login",
+                {"email": "cashier@example.com", "password": "incorrect"},
+                format="json",
+            )
+            self.assertEqual(response.status_code, 401)
+
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.failed_login_attempts, 5)
+        self.assertIsNotNone(self.user.locked_until)
+        self.assertEqual(
+            self.client.post("/api/auth/login", {
+                "email": self.user.email, "password": "TestPass123!"
+            }, format="json").status_code, 401
+        )
+
+    def test_expired_lock_resets_on_success(self):
+        from datetime import timedelta
+        from django.utils import timezone
+
+        self.user.failed_login_attempts = 5
+        self.user.locked_until = timezone.now() - timedelta(minutes=1)
+        self.user.save(update_fields=["failed_login_attempts", "locked_until"])
+        response = self.client.post("/api/auth/login", {
+            "email": self.user.email, "password": "TestPass123!"
+        }, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.failed_login_attempts, 0)
+        self.assertIsNone(self.user.locked_until)
+
+    def test_anonymous_and_expired_session_cannot_access_company(self):
+        self.assertEqual(self.client.get("/api/companies").status_code, 401)
+        self.client.force_login(self.user)
+        self.assertEqual(self.client.get("/api/companies").status_code, 200)
+        self.client.logout()
+        self.assertEqual(self.client.get("/api/companies").status_code, 401)
+
+    def test_csrf_is_required_for_login_and_logout(self):
+        client = APIClient(enforce_csrf_checks=True)
+        payload = {"email": self.user.email, "password": "TestPass123!"}
+        self.assertEqual(client.post("/api/auth/login", payload, format="json").status_code, 403)
+
+        token_response = client.get("/api/auth/csrf")
+        token = token_response.data["csrfToken"]
+        self.assertEqual(client.post(
+            "/api/auth/login", payload, format="json", HTTP_X_CSRF_TOKEN=token
+        ).status_code, 200)
+        self.assertEqual(client.post("/api/auth/logout").status_code, 403)
+        self.assertEqual(client.post(
+            "/api/auth/logout", HTTP_X_CSRF_TOKEN=token
+        ).status_code, 204)
+
+    def test_remember_me_sets_session_expiry(self):
+        response = self.client.post("/api/auth/login", {
+            "email": self.user.email, "password": "TestPass123!", "rememberMe": True
+        }, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertAlmostEqual(self.client.session.get_expiry_age(), 1800, delta=5)
+
+    def test_missing_or_invalid_login_details_are_rejected(self):
+        self.assertEqual(self.client.post("/api/auth/login", {
+            "email": self.user.email, "password": ""
+        }, format="json").status_code, 400)
+        self.assertEqual(self.client.post("/api/auth/login", {
+            "email": self.user.email, "password": "TestPass123!", "rememberMe": "false"
+        }, format="json").status_code, 400)
