@@ -31,7 +31,7 @@ jobs:
         env:
           SECRET_KEY: ci-only-not-for-production
           DB_NAME: erp_ci
-        run: python manage.py test apps.accounts apps.companies --verbosity 2
+        run: python manage.py test apps.core apps.accounts apps.companies --verbosity 2
 
   frontend:
     runs-on: ubuntu-latest
@@ -120,7 +120,7 @@ jobs:
         working-directory: django
         run: |
           python manage.py migrate --noinput
-          python manage.py test apps.accounts apps.companies --verbosity 2
+          python manage.py test apps.core apps.accounts apps.companies --verbosity 2
 
       - uses: actions/setup-dotnet@v4
         with:
