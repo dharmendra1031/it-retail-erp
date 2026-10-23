@@ -259,6 +259,14 @@ def check_api():
     status, customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 201 and customer["code"] == "C-001" and customer["creditLimit"] == "2500.750", "Customer creation failed"
     assert customer["companyName"] == "Credit Shop LLC" and customer["openingBalance"] == "50.250", "Customer details missing"
+    status, customer_updated = request(client, f"/api/customers/{customer['id']}", "PUT", {
+        **customer_data, "contactPerson": "Fatima",
+        "openingBalance": "60.375", "companyName": "Credit Shop Updated",
+    }, csrf)
+    assert status == 200 and customer_updated["contactPerson"] == "Fatima", f"Customer update failed: {status} {customer_updated}"
+    assert customer_updated["openingBalance"] == "60.375", "Customer opening balance update lost decimal precision"
+    status, reloaded_customer = request(client, f"/api/customers/{customer['id']}")
+    assert status == 200 and reloaded_customer["companyName"] == "Credit Shop Updated", "Customer update was not persisted"
     status, duplicate_customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 400, "Duplicate customer code accepted"
     status, invalid_credit = request(client, "/api/customers", "POST", {
@@ -275,6 +283,12 @@ def check_api():
     status, supplier = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 201 and supplier["openingBalance"] == "135.500", f"Supplier opening balance incorrect: {status} {supplier}"
     assert supplier["creditLimit"] == "800.500" and supplier["contactPerson"] == "Omar", "Supplier details missing"
+    status, supplier_updated = request(client, f"/api/suppliers/{supplier['id']}", "PUT", {
+        **supplier_data, "contactPerson": "Sara", "creditLimit": "955.125",
+    }, csrf)
+    assert status == 200 and supplier_updated["creditLimit"] == "955.125", f"Supplier update failed: {status} {supplier_updated}"
+    status, reloaded_supplier = request(client, f"/api/suppliers/{supplier['id']}")
+    assert status == 200 and reloaded_supplier["contactPerson"] == "Sara", "Supplier update was not persisted"
     status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 400, "Duplicate supplier code accepted"
 

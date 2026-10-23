@@ -59,6 +59,51 @@ class PartnerApiTests(TestCase):
         self.assertEqual(response.data["creditLimit"], "800.500")
         self.assertEqual(self.client.post("/api/suppliers", self.supplier, format="json").status_code, 400)
 
+    def test_customer_optional_details_update_round_trip(self):
+        self.client.force_authenticate(user=self.admin)
+        created = self.client.post("/api/customers", self.customer, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        identifier = created.data["id"]
+        original = self.client.get(f"/api/customers/{identifier}")
+        self.assertEqual(original.data["contactPerson"], "Ali")
+        self.assertEqual(original.data["openingBalance"], "15.250")
+
+        updated = self.client.put(f"/api/customers/{identifier}", {
+            **self.customer, "companyName": "Updated IT",
+            "contactPerson": "Sara", "openingBalance": "21.375",
+        }, format="json")
+        self.assertEqual(updated.status_code, 200, updated.data)
+        self.assertEqual(updated.data["companyName"], "Updated IT")
+        self.assertEqual(updated.data["openingBalance"], "21.375")
+        self.assertEqual(Customer.objects.get(pk=identifier).contact_person, "Sara")
+
+        invalid = self.client.put(f"/api/customers/{identifier}", {
+            **self.customer, "email": "not an email",
+        }, format="json")
+        self.assertEqual(invalid.status_code, 400)
+        self.assertEqual(self.client.get(f"/api/customers/{identifier}").data["companyName"], "Updated IT")
+
+    def test_supplier_optional_details_update_round_trip(self):
+        self.client.force_authenticate(user=self.admin)
+        created = self.client.post("/api/suppliers", self.supplier, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        identifier = created.data["id"]
+        self.assertEqual(created.data["creditLimit"], "800.500")
+
+        updated = self.client.put(f"/api/suppliers/{identifier}", {
+            **self.supplier, "creditLimit": "950.125",
+            "contactPerson": "Fatima", "remarks": "Revised terms",
+        }, format="json")
+        self.assertEqual(updated.status_code, 200, updated.data)
+        self.assertEqual(updated.data["creditLimit"], "950.125")
+        self.assertEqual(Supplier.objects.get(pk=identifier).contact_person, "Fatima")
+
+        invalid = self.client.put(f"/api/suppliers/{identifier}", {
+            **self.supplier, "creditLimit": "-1.000",
+        }, format="json")
+        self.assertEqual(invalid.status_code, 400)
+        self.assertEqual(self.client.get(f"/api/suppliers/{identifier}").data["creditLimit"], "950.125")
+
     def test_civil_id_hidden_from_nonadmin(self):
         self.client.force_authenticate(user=self.admin)
         self.client.post("/api/customers", self.customer, format="json")
