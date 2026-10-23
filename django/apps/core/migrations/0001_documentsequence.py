@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="DocumentSequence",
             fields=[
-                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("series", models.CharField(max_length=20)),
                 ("fiscal_year", models.PositiveSmallIntegerField()),
                 ("branch_id", models.BigIntegerField(default=0)),
