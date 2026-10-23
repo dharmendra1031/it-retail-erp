@@ -89,8 +89,19 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    options.InvalidModelStateResponseFactory = _ =>
-        new BadRequestObjectResult(new { detail = "Invalid request." });
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            var fields = context.ModelState
+                .Where(item => item.Value?.Errors.Count > 0)
+                .Select(item => item.Key)
+                .ToArray();
+            return new BadRequestObjectResult(new { detail = "Invalid request.", invalidFields = fields });
+        }
+
+        return new BadRequestObjectResult(new { detail = "Invalid request." });
+    };
 });
 
 var app = builder.Build();
