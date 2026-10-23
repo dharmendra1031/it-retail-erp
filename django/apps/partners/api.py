@@ -28,8 +28,8 @@ class PartnerSerializer(serializers.ModelSerializer):
     paymentTermsDays = serializers.IntegerField(source="payment_terms_days", min_value=0, max_value=365)
     isActive = serializers.BooleanField(source="is_active", required=False)
     contactPerson = serializers.CharField(source="contact_person", max_length=150, required=False, allow_blank=True)
-    telephone = serializers.CharField(source="telephone", max_length=30, required=False, allow_blank=True)
-    remarks = serializers.CharField(source="remarks", max_length=1000, required=False, allow_blank=True)
+    telephone = serializers.CharField(max_length=30, required=False, allow_blank=True)
+    remarks = serializers.CharField(max_length=1000, required=False, allow_blank=True)
 
     def validate_code(self, value):
         code = value.strip().upper()
@@ -50,7 +50,7 @@ class PartnerSerializer(serializers.ModelSerializer):
 class CustomerSerializer(PartnerSerializer):
     civilId = serializers.CharField(source="civil_id", max_length=30, required=False, allow_blank=True)
     companyName = serializers.CharField(source="company_name", max_length=200, required=False, allow_blank=True)
-    email = serializers.EmailField(source="email", max_length=200, required=False, allow_blank=True)
+    email = serializers.EmailField(max_length=200, required=False, allow_blank=True)
     taxNumber = serializers.CharField(source="tax_number", max_length=100, required=False, allow_blank=True)
     openingBalance = serializers.DecimalField(source="opening_balance", max_digits=18, decimal_places=3, min_value=0, required=False)
     customerType = serializers.ChoiceField(source="customer_type", choices=[
