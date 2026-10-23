@@ -187,11 +187,6 @@ export function Partners({ kind }: { kind: PartnerKind }) {
                   onChange={event => change("civilId", event.target.value)} />
               </label>
 
-              <label>{t("creditLimit")}
-                <input required inputMode="decimal" value={values.creditLimit}
-                  pattern="[0-9]+(\.[0-9]{1,3})?"
-                  onChange={event => change("creditLimit", event.target.value)} />
-              </label>
               <label>{t("email")}
                 <input type="email" maxLength={200} value={values.email}
                   onChange={event => change("email", event.target.value)} />
