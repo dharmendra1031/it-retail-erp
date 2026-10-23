@@ -274,6 +274,17 @@ def check_api():
     }, csrf)
     assert status == 400, "Negative credit limit accepted"
 
+    browser_customer = {
+        "code": "C-BROWSER", "nameEn": "Credit Partner", "nameAr": "عميل تجريبي",
+        "addressEn": "", "addressAr": "", "mobile": "", "contactPerson": "Ali",
+        "telephone": "", "remarks": "", "paymentTermsDays": 30, "isActive": True,
+        "companyName": "Credit Shop LLC", "civilId": "", "customerType": "retail",
+        "creditLimit": "2500.750", "email": "", "taxNumber": "",
+        "openingBalance": "15.250",
+    }
+    status, browser_customer_response = request(client, "/api/customers", "POST", browser_customer, csrf)
+    assert status == 201, f"Browser-equivalent customer payload rejected: {status} {browser_customer_response}"
+
     supplier_data = {
         "code": "S-001", "nameEn": "Main Supplier", "nameAr": "المورد",
         "paymentTermsDays": 14, "openingBalance": "135.500",
@@ -291,6 +302,15 @@ def check_api():
     assert status == 200 and reloaded_supplier["contactPerson"] == "Sara", "Supplier update was not persisted"
     status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 400, "Duplicate supplier code accepted"
+
+    browser_supplier = {
+        "code": "S-BROWSER", "nameEn": "First Supplier", "nameAr": "",
+        "addressEn": "", "addressAr": "", "mobile": "", "contactPerson": "Omar",
+        "telephone": "", "remarks": "", "paymentTermsDays": 0, "isActive": True,
+        "taxNumber": "", "email": "", "openingBalance": "135.500", "creditLimit": "800.500",
+    }
+    status, browser_supplier_response = request(client, "/api/suppliers", "POST", browser_supplier, csrf)
+    assert status == 201, f"Browser-equivalent supplier payload rejected: {status} {browser_supplier_response}"
 
     document_data = ("proof.pdf", "application/pdf", b"%PDF-1.4\\nprivate")
     status, document = request(client, f"/api/customers/{customer['id']}/documents", "POST", {
