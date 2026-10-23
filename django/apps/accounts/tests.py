@@ -134,6 +134,19 @@ class AuthenticationTests(TestCase):
         self.assertEqual(self.user.failed_login_attempts, 0)
         self.assertIsNone(self.user.locked_until)
 
+    def test_database_expired_session_is_rejected(self):
+        from datetime import timedelta
+        from django.contrib.sessions.models import Session
+        from django.conf import settings
+        from django.utils import timezone
+
+        self.client.force_login(self.user)
+        session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+        Session.objects.filter(session_key=session_key).update(
+            expire_date=timezone.now() - timedelta(minutes=1)
+        )
+        self.assertEqual(self.client.get("/api/companies").status_code, 401)
+
     def test_anonymous_and_expired_session_cannot_access_company(self):
         self.assertEqual(self.client.get("/api/companies").status_code, 401)
         self.client.force_login(self.user)

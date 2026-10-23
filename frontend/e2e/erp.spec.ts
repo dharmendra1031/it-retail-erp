@@ -140,3 +140,16 @@ test("admin can switch to Arabic with RTL navigation", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { name: "Role Master" })).toBeVisible();
 });
+
+
+test("admin is returned to login when the session expires", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await expect(page.getByRole("heading", { name: "Company Master" })).toBeVisible();
+  await page.context().clearCookies();
+  await page.getByRole("button", { name: "Role Master" }).click();
+  await expect(page.getByRole("button", { name: "Login" })).toBeVisible();
+});

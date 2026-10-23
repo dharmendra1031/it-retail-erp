@@ -33,6 +33,10 @@ export async function apiRequest<T>(
   });
 
   if (response.status === 401) {
+    csrfToken = "";
+    if (path !== "/api/auth/me" && path !== "/api/auth/login") {
+      window.dispatchEvent(new Event("erp:session-expired"));
+    }
     throw new Error("UNAUTHORIZED");
   }
 

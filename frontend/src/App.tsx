@@ -12,6 +12,15 @@ export default function App() {
   const [page, setPage] = useState<Page>("companies");
 
   useEffect(() => {
+    const handleExpiredSession = () => {
+      setUser(null);
+      setPage("companies");
+    };
+    window.addEventListener("erp:session-expired", handleExpiredSession);
+    return () => window.removeEventListener("erp:session-expired", handleExpiredSession);
+  }, []);
+
+  useEffect(() => {
     getCurrentUser()
       .then(setUser)
       .catch(() => setUser(null));
