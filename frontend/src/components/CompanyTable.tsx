@@ -60,10 +60,10 @@ export function CompanyTable({
                   {canManage && (
                     <>
                     <button className="secondary" type="button" onClick={() => onEdit(company)}>
-                      Edit
+                      {t("edit")}
                     </button>
                     <button className="danger" type="button" onClick={() => onDelete(company)}>
-                      Delete
+                      {t("delete")}
                     </button>
                     </>
                   )}

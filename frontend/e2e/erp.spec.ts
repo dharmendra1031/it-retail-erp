@@ -133,6 +133,13 @@ test("admin can switch to Arabic with RTL navigation", async ({ page }) => {
   await page.getByLabel("كلمة المرور").fill(password);
   await page.getByRole("button", { name: "تسجيل الدخول" }).click();
   await expect(page.getByRole("heading", { name: "بيانات الشركة" })).toBeVisible();
+  await page.getByLabel("اسم الشركة (بالإنجليزية)").fill("Arabic Buttons Shop");
+  await page.getByRole("button", { name: "حفظ الشركة" }).click();
+  const companyRow = page.getByRole("row").filter({ hasText: "Arabic Buttons Shop" });
+  await expect(companyRow.getByRole("button", { name: "تعديل" })).toBeVisible();
+  page.once("dialog", dialog => dialog.accept());
+  await companyRow.getByRole("button", { name: "حذف" }).click();
+  await expect(companyRow).toHaveCount(0);
   await page.getByRole("button", { name: "إدارة الأدوار" }).click();
   await expect(page.getByRole("heading", { name: "إدارة الأدوار" })).toBeVisible();
 
