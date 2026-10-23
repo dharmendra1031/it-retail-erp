@@ -24,3 +24,16 @@ No production data, secret, payment or existing customer instance is touched. Se
 - WP01 requirement/evidence storage is version-controlled documents. There is no need for a runtime audit/traceability table in this scope.
 
 ERP-0020 acceptance is limited to *current foundational surfaces*. Future feature-specific E2E remains pending its owning package.
+
+
+## Final scoped verification — 2026-10-23
+
+GitHub [Actions run 39911998441](https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441) completed all five jobs successfully on code commit `54901a8b2f7d630bbaf8056e5c15ab675a517053`.
+
+- Django SQLite: 27 PASS + 5 SQL-only skipped; SQL Server: 32/32 PASS.
+- ASP.NET Core: xUnit document sequence 3/3 PASS, EF migration forward/rollback/reapply PASS, Admin login/Role + Arabic Company CRUD REST smoke PASS.
+- Playwright: Django 2/2 PASS, ASP 1/1 PASS, same frontend.
+- React production build and ASP.NET Core Release build PASS.
+- Production secret/DB missing negative checks PASS, no model migration drift.
+
+**ERP-0019–0020 are complete only for WP01-owned traceability/foundation surfaces.** Downstream mandatory SRS acceptance cases (purchases, inventory, sales, returns, accounting, audit, printing) are still pending their owners and are NOT included in this sign-off.

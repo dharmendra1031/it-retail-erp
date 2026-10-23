@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0019",
+  "nextStepId": "ERP-0051",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -26,10 +26,42 @@
     "ERP-0015",
     "ERP-0016",
     "ERP-0017",
-    "ERP-0018"
+    "ERP-0018",
+    "ERP-0019",
+    "ERP-0020",
+    "ERP-0021",
+    "ERP-0022",
+    "ERP-0023",
+    "ERP-0024",
+    "ERP-0025",
+    "ERP-0026",
+    "ERP-0027",
+    "ERP-0028",
+    "ERP-0029",
+    "ERP-0030",
+    "ERP-0031",
+    "ERP-0032",
+    "ERP-0033",
+    "ERP-0034",
+    "ERP-0035",
+    "ERP-0036",
+    "ERP-0037",
+    "ERP-0038",
+    "ERP-0039",
+    "ERP-0040",
+    "ERP-0041",
+    "ERP-0042",
+    "ERP-0043",
+    "ERP-0044",
+    "ERP-0045",
+    "ERP-0046",
+    "ERP-0047",
+    "ERP-0048",
+    "ERP-0049",
+    "ERP-0050"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "ecfaa0887be2d197467567a1416e84c6ce5aa7cd",
+  "lastVerifiedCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -578,6 +610,698 @@
         "productionDatabaseTouched": false
       },
       "notes": "WP01 is version-controlled requirement traceability, not a runtime owner/evidence table. Added tested Role Master and Company write authorization; current runnable Django unit cases pass. Full SQL Server, parallel backend and browser workflows remain downstream acceptance, not falsely marked passed."
+    },
+    {
+      "stepId": "ERP-0019",
+      "status": "complete",
+      "scope": "WP01",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0019_0020_VERIFICATION.md",
+        ".github/workflows/erp-verification.yml",
+        "django/apps/companies/test_sqlserver.py",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Disposable SQL Server migrations, numeric ID/Unicode/concurrency checks, React browser E2E and both backend API smoke executed. Downstream SRS business modules excluded.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0020",
+      "status": "complete",
+      "scope": "WP01",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0019_0020_VERIFICATION.md",
+        "docs/api-contract.md",
+        "aspnet-core/src/ITRetailERP.Web/Program.cs"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Reviewed current security, validation parity, migrations, duplicate code and API docs; future-owned issues recorded, no false production sign-off.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0021",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Mapped source SRS §§46,54–58,60–61,63 to backend interchangeability, numbering invariants and downstream owners.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0022",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md",
+        "frontend/vite.config.ts",
+        "django/config/api_urls.py"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Inspected actual net10 EF controllers, Django DRF routing and Vite relative /api proxy source.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0023",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Checked SRS-to-code gaps; branch/warehouse, stock, financial docs and audit remain future-owned.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0024",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Same React admin workflow tested against Django and ASP backend with unchanged UI.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0025",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md",
+        "django/apps/core/test_sqlserver.py",
+        "django/config/exceptions.py"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Duplicate names and concurrent sequence allocation rejected by server/database; matching Role/Company error status contract recorded.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0026",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/apps/core/models.py",
+        "aspnet-core/src/ITRetailERP.Web/Models/DocumentSequence.cs",
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "BIGINT DocumentSequence with composite unique series/year/branch scope in both backends.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0027",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Defined status/data safety, no money floats, Unicode and transaction lock; document format and final posting rollback deferred DEC-05/WP24–34.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0028",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "aspnet-core/src/ITRetailERP.Web/Services/DocumentNumberService.cs"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "ASP.NET model, DbContext, sequence service and EF migration implemented.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0029",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/apps/core/models.py",
+        "django/apps/core/numbering.py"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Django DocumentSequence, sequence allocation and migration implemented.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0030",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/apps/core/migrations/0001_documentsequence.py",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023070000_DocumentSequences.cs"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Both SQL Server migrations, unique indexes and safe down/up tests completed in isolated CI databases.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0031",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/api-contract.md",
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Auth/Company/Role API payloads, statuses, validation/error contract and numbering interface documented.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0032",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Services/DocumentNumberService.cs",
+        "aspnet-core/tests/ITRetailERP.Tests/DocumentNumberTests.cs"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "ASP.NET DocumentNumberService uses SQL Server sp_getapplock in transaction, tested concurrent/scoped allocation.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0033",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/apps/core/numbering.py",
+        "django/apps/core/tests.py",
+        "django/apps/core/test_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Django number allocation uses atomic transaction and sp_getapplock under SQL Server, tested concurrent/scoped allocation.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0034",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/apps/accounts/roles_api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/RolesApiController.cs",
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Role/Company admin restrictions verified; future tenant scope and immutable audit owned by WP06–09/WP46.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0035",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "frontend/vite.config.ts",
+        "frontend/src/api/client.ts",
+        "frontend/playwright.config.ts"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "One React/Vite app switched between both backends via proxy env, no duplicated frontend.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0036",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "django/apps/companies/test_sqlserver.py",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Arabic company text round-trip verified in two SQL Server backends; full RTL/currency/printing deferred WP11/WP44.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0037",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/DocumentNumberTests.cs",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "ASP.NET SQL-backed numbering xUnit tests 3/3 PASS; React admin parity smoke on ASP PASS.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0038",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/apps/core/tests.py",
+        "django/apps/core/test_sqlserver.py",
+        "django/apps/accounts/tests.py"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Django 32/32 on SQL Server, 27 PASS/5 skipped SQL-only on SQLite, including sequence/role concurrency.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0039",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Ephemeral SQL Server tests plus Playwright React admin journey on ASP and Django; future business E2E remains future-owned.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0040",
+      "status": "complete",
+      "scope": "WP02",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/api-contract.md",
+        "docs/ERP_0021_0040_SHARED_ARCHITECTURE.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Reviewed constraints, API errors, concurrency, schema drift and CI; recorded missing advanced integrations as deferred, not passed.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0041",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        "docs/SRS_BASELINE.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Extracted developer environment acceptance requirements from SRS §§56,59,62,65–66.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0042",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        "django/README.md",
+        "aspnet-core/README.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Inspected .NET 10, EF, ODBC SQL, Python 3.12/Django config, Node 22/Vite and .env samples.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0043",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Tracked missing production setup and future hosting/release features separately from developer environment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0044",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "README.md",
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "GitHub Actions fresh checkout, dependency restore, migration and React integration proofs pass on disposable environment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0045",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/config/settings.py",
+        ".github/workflows/erp-verification.yml",
+        "docs/ERP_0041_0050_ENVIRONMENT.md"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Missing SECRET_KEY/DB_NAME fail clearly; missing .NET conn string handled by startup; migration drift checks run.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0046",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "No new schema owned by WP03; verified existing BIGINT schema and sequence indexes in SQL Server.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0047",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        "django/config/settings.py",
+        ".gitignore"
+      ],
+      "verification": {
+        "kind": "source review / documented acceptance",
+        "description": "Documented secret policy, Unicode, numeric IDs and safe rollback; .env ignored by Git.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0048",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Program.cs",
+        "aspnet-core/README.md",
+        "aspnet-core/.env.example"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "ASP startup/DI configuration fixed, protected env loading, .NET 10 setup and migration validation.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0049",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "django/config/settings.py",
+        "django/README.md",
+        "django/.env.example"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "Django production secret/DB guard, test-only SQLite config, reproducible SQL Server migrations.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
+    },
+    {
+      "stepId": "ERP-0050",
+      "status": "complete",
+      "scope": "WP03",
+      "reviewedRepoCommit": "54901a8b2f7d630bbaf8056e5c15ab675a517053",
+      "evidence": [
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_0041_0050_ENVIRONMENT.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "kind": "runtime and source verification",
+        "description": "No WP03-owned new table; reviewed EF/Django migration/index schema and exercised down/up on disposable SQL Server.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441",
+        "ciJobs": "5/5 passed",
+        "django": "32/32 SQL Server, 27 passing on SQLite with 5 SQL-only skips",
+        "aspnet": "3/3 number sequence tests, EF migration and REST smoke PASS",
+        "browser": "Django 2/2, ASP.NET 1/1",
+        "productionDatabase": "not touched; only disposable CI SQL Server",
+        "deferred": "full sales/purchase/stock/financial posting, tenant audit and localized print remain downstream work packages"
+      }
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

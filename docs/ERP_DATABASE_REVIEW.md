@@ -206,3 +206,16 @@ ERP-0015 owns no database entity or migration. Reviewed current React API usage 
 Inspected Django `Role`/`User` models and migrations, ASP.NET Core Identity<long>/RoleManager, Company write authorization, and both existing Company schemas. Roles use numeric BigAutoField/BIGINT IDENTITY. The new Django `accounts.0002_admin_role` data migration inserts the reserved Admin role only if absent; no table/column/FK/index schema change. ASP.NET IdentitySeeder now creates/assigns the Admin role for the configured administrator. Role delete is blocked while assigned to users. Company writes now require an administrator on both backends; reads still require login.
 
 GitHub Actions run 39905510876: Django 22/22 unit tests PASS on isolated SQLite; ASP.NET Core Release build PASS (0 warnings, 0 errors); React production build PASS. Real SQL Server migration, Unicode round trip, database concurrency, backend parity and browser E2E are **not run**, owned by ERP-0019/WP02/WP49. DB-001 through DB-006 remain subject to their existing owner work packages. No production database or secrets touched.
+
+
+## Review 019 — 2026-10-23, ERP-0019–ERP-0020 (WP01)
+
+GitHub Actions [39911998441](https://github.com/dharmendra1031/it-retail-erp/actions/runs/39911998441) verified Django SQLite and SQL Server tests, SQL Server schema/Unicode concurrency, ASP.NET Core EF migration/auth/Role/Company CRUD, Playwright on both APIs, .NET document-sequence unit tests, and Python/.NET migration rollback checks. Current core keys use BIGINT. No production database was touched. Remaining DB-001–DB-006 remain tracked by their owner packages; full SRS business acceptance still depends on later modules.
+
+## Review 020 — 2026-10-23, ERP-0021–ERP-0040 (WP02)
+
+Added `core_documentsequence` and `DocumentSequences` tables (Django and ASP.NET independently) with numeric BIGINT IDENTITY/BigAutoField, series NVARCHAR/varchar equivalent (20 chars), fiscal year integer, branch scope BIGINT (0 reserved for default single-site), last number BIGINT. Unique constraint/index on (series, fiscalYear, branchId), with SQL Server `sp_getapplock` transaction-based allocator, prevents duplicate sequence numbers under concurrent allocations. Django 5-thread, ASP.NET 6-request concurrency tests passed. EF and Django down/up tested on disposable SQL Server, no existing business data. Branch FK, final formatted prefix/number policy and in-document transaction binding deferred DEC-05 and WP09/WP24–34. Company Arabic Unicode tested in both backends. Financial DECIMAL and stock/ledger integrity remain future-owned DB-003.
+
+## Review 021 — 2026-10-23, ERP-0041–ERP-0050 (WP03)
+
+Environment/CI steps add **no WP03 schema or migration**. Tested existing Django/EF migrations, rollback/reapply of WP02 sequence tables, schema drift checks (`makemigrations --check`, EF `has-pending-model-changes`). SQL Server integration uses generated CI-only SA/admin credentials and disposable databases, not production. Missing environment config negative tests execute. Numeric IDs, FK/index design and Unicode remain unchanged. DB-001–DB-006 remain pending appropriate downstream owner decisions and live-data-safe migrations.
