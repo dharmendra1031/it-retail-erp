@@ -22,3 +22,30 @@ ASP.NET framework's own Identity claim rows currently have `INT` support IDs; th
 - Verify column identity and FK/unique constraints, Arabic round-trip, duplicate prevention and concurrent numbering.
 - Run two-backend role/company APIs and Playwright; don't mark backend parity from builds alone.
 - Never mutate production database during test execution.
+
+## Step-wise verified acceptance
+
+| Step | Outcome | Evidence |
+|---|---|---|
+| ERP-0061 | SRS database/Unicode/numeric-ID acceptance mapped to WP04 | `docs/SRS_BASELINE.md` |
+| ERP-0062 | Reviewed EF/Django model definitions, indexes, SQL Server migrations and frontend ID serialization | `docs/ERP_CODE_INVENTORY.md` |
+| ERP-0063 | Identified missing email uniqueness (now fixed), claim-table INT support keys and deferred finance decimal schema | `docs/ERP_DATABASE_REVIEW.md` |
+| ERP-0064 | Django/EF disposable SQL Server migrations and Company/Role create/query verified | `aspnet-core/tests/smoke_sqlserver.py` |
+| ERP-0065 | Filtered email uniqueness and user-role FK orphan rejection verified | `aspnet-core/src/ITRetailERP.Web/Migrations/20261023080000_UniqueNormalizedEmail.cs` |
+| ERP-0066 | Existing app keys retained BIGINT Identity/BigAutoField and validated SQL indexes | `aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs` |
+| ERP-0067 | No float money introduced; SQL DECIMAL KWD policy remains WP18+ decision, Unicode and rollback documented | `docs/ERP_0061_0080_DATABASE.md` |
+| ERP-0068 | ASP.NET EF normalized-email unique index/model snapshot and non-destructive migration | `aspnet-core/src/ITRetailERP.Web/Migrations/ApplicationDbContextModelSnapshot.cs` |
+| ERP-0069 | Django User/Role/Company numeric ID, Unicode and DB constraints reviewed | `django/apps/accounts/models.py` |
+| ERP-0070 | Django and EF migrations forward/backward/reapply tested on disposable SQL Server | `aspnet-core/src/ITRetailERP.Web/Migrations/20261023080000_UniqueNormalizedEmail.cs` |
+| ERP-0071 | Shared business API response/validation and numeric-ID transport contract documented | `docs/api-contract.md` |
+| ERP-0072 | ASP.NET DocumentNumberService atomic SQL Server scope/concurrency remains owner-implemented | `aspnet-core/src/ITRetailERP.Web/Services/DocumentNumberService.cs` |
+| ERP-0073 | Django numbering transactions/uniqueness verified against SQL Server | `django/apps/core/numbering.py` |
+| ERP-0074 | Admin-only Company writes and Role access enforced; tenant/branch audit later WP06–09/WP46 | `django/apps/companies/api.py` |
+| ERP-0075 | Shared React rejects unsafe JavaScript integers from BIGINT JSON; no money endpoints yet | `frontend/src/api/client.ts` |
+| ERP-0076 | English/Arabic Company Unicode in SQL Server and RTL/keyboard Playwright checks | `frontend/e2e/erp.spec.ts` |
+| ERP-0077 | ASP.NET migrations, normalized email index and xUnit SQL tests 4/4 PASS | `aspnet-core/tests/ITRetailERP.Tests/DocumentNumberTests.cs` |
+| ERP-0078 | Django unique email/orphan relation/concurrency checks PASS on SQL Server | `django/apps/accounts/tests.py` |
+| ERP-0079 | SQL Server + React browser suites green for presently implemented masters/auth | `frontend/e2e/erp.spec.ts` |
+| ERP-0080 | Schema/review reconciliation; no production database touched, finance/stock deferred | `docs/ERP_DATABASE_REVIEW.md` |
+
+**CI:** [39920485489](https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489): all five jobs PASS; Django SQL Server 47/47, ASP.NET SQL xUnit 4/4, Playwright Django 9/9 and ASP.NET 8/8. No production migration. Completion covers this package only, not later inventory, sales, accounts or full Arabic report printing.

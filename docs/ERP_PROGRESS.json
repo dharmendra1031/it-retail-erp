@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0061",
+  "nextStepId": "ERP-0101",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -68,10 +68,50 @@
     "ERP-0057",
     "ERP-0058",
     "ERP-0059",
-    "ERP-0060"
+    "ERP-0060",
+    "ERP-0061",
+    "ERP-0062",
+    "ERP-0063",
+    "ERP-0064",
+    "ERP-0065",
+    "ERP-0066",
+    "ERP-0067",
+    "ERP-0068",
+    "ERP-0069",
+    "ERP-0070",
+    "ERP-0071",
+    "ERP-0072",
+    "ERP-0073",
+    "ERP-0074",
+    "ERP-0075",
+    "ERP-0076",
+    "ERP-0077",
+    "ERP-0078",
+    "ERP-0079",
+    "ERP-0080",
+    "ERP-0081",
+    "ERP-0082",
+    "ERP-0083",
+    "ERP-0084",
+    "ERP-0085",
+    "ERP-0086",
+    "ERP-0087",
+    "ERP-0088",
+    "ERP-0089",
+    "ERP-0090",
+    "ERP-0091",
+    "ERP-0092",
+    "ERP-0093",
+    "ERP-0094",
+    "ERP-0095",
+    "ERP-0096",
+    "ERP-0097",
+    "ERP-0098",
+    "ERP-0099",
+    "ERP-0100"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "7de114b516b9951a4c09b9bbddd7f9c86e33a35a",
+  "lastVerifiedCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -1496,6 +1536,846 @@
         "database": "disposable SQL Server 2022; no production operation"
       },
       "deferredAcceptance": "WP05–WP50: full permissions, company/branch scope, bilingual formatting/printing, financial posting, stock, immutable audit, production SQL2019 validation"
+    },
+    {
+      "stepId": "ERP-0061",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "SRS database/Unicode/numeric-ID acceptance mapped to WP04",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0062",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_CODE_INVENTORY.md",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Reviewed EF/Django model definitions, indexes, SQL Server migrations and frontend ID serialization",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0063",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Identified missing email uniqueness (now fixed), claim-table INT support keys and deferred finance decimal schema",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0064",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django/EF disposable SQL Server migrations and Company/Role create/query verified",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0065",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023080000_UniqueNormalizedEmail.cs",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Filtered email uniqueness and user-role FK orphan rejection verified",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0066",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Existing app keys retained BIGINT Identity/BigAutoField and validated SQL indexes",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0067",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_0061_0080_DATABASE.md",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "No float money introduced; SQL DECIMAL KWD policy remains WP18+ decision, Unicode and rollback documented",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0068",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Migrations/ApplicationDbContextModelSnapshot.cs",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "ASP.NET EF normalized-email unique index/model snapshot and non-destructive migration",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0069",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/models.py",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django User/Role/Company numeric ID, Unicode and DB constraints reviewed",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0070",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023080000_UniqueNormalizedEmail.cs",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django and EF migrations forward/backward/reapply tested on disposable SQL Server",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0071",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/api-contract.md",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Shared business API response/validation and numeric-ID transport contract documented",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0072",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Services/DocumentNumberService.cs",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "ASP.NET DocumentNumberService atomic SQL Server scope/concurrency remains owner-implemented",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0073",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/core/numbering.py",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django numbering transactions/uniqueness verified against SQL Server",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0074",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/companies/api.py",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Admin-only Company writes and Role access enforced; tenant/branch audit later WP06–09/WP46",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0075",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "frontend/src/api/client.ts",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Shared React rejects unsafe JavaScript integers from BIGINT JSON; no money endpoints yet",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0076",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "English/Arabic Company Unicode in SQL Server and RTL/keyboard Playwright checks",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0077",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/DocumentNumberTests.cs",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "ASP.NET migrations, normalized email index and xUnit SQL tests 4/4 PASS",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0078",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/tests.py",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django unique email/orphan relation/concurrency checks PASS on SQL Server",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0079",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "SQL Server + React browser suites green for presently implemented masters/auth",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0080",
+      "status": "complete",
+      "scope": "WP04 SQL Server foundation",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_0061_0080_DATABASE.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Schema/review reconciliation; no production database touched, finance/stock deferred",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "Business monetary DECIMAL, stock/accounting FK graph, full SQL Server 2019 production qualification belong to owning packages."
+    },
+    {
+      "stepId": "ERP-0081",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Authentication sections SRS §§6,7,57,59 mapped to WP05",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0082",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Program.cs",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Inspected ASP Identity cookies/CSRF/seeding and Django session/lockout code",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0083",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_0081_0100_AUTH.md",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Resolved missing lockout/CSRF/session mismatch; IP rate-limit/audit beyond package",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0084",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/management/commands/seed_admin.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Seeded-admin login/authorized Company & Role requests verified in both APIs",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0085",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Invalid password/session, missing CSRF and unauthorized mutations denied",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0086",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/migrations/0003_login_lockout.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django numeric user lockout fields; ASP Identity<long> columns unchanged; session data setup",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0087",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_0081_0100_AUTH.md",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "HTTP 401/403/400 policy, 5 attempts/15m, cookie duration 30m and safe rollback",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0088",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Program.cs",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "ASP.NET identity lockout/cookie/CSRF configuration implemented",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0089",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/api.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django database-backed lockout/session/explicit CSRF, private admin bootstrap",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0090",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/migrations/0003_login_lockout.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django 0003 lockout columns and existing ASP Identity schema migrated/tested",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0091",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/api-contract.md",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Auth CSRF/login/me/logout responses and cookie behavior documented",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0092",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/AuthController.cs",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "ASP.NET login/logout/bootstrap/lockout via Identity and CSRF filter",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0093",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/api.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django atomic password failures, lockout and session expiry parity",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0094",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Anonymous access rejected and company/role Admin checks; branch/audit downstream",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0095",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "frontend/src/api/client.ts",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "React expired-session 401 recovery and login/logout flow verified",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0096",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "English/Arabic UI/RTL plus keyboard Enter/Tab and mobile tests verified",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0097",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "aspnet-core/tests/auth_negative_sqlserver.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "ASP.NET real SQL login, CSRF, lockout and 4/4 xUnit checks PASS",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0098",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "django/apps/accounts/tests.py",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Django 47/47 SQL Server, expired session, invalid login and CSRF tests PASS",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0099",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "implemented or CI verified",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "SQL Server migration, browser both backends, CSRF negative and lockout PASS",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0100",
+      "status": "complete",
+      "scope": "WP05 authentication and sessions",
+      "completionMode": "source review / future-scope disposition",
+      "reviewedRepoCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+      "evidence": [
+        "docs/ERP_0081_0100_AUTH.md",
+        "docs/ERP_0081_0100_AUTH.md",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Reviewed current code, security/performance gaps and documented verified CI",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39920485489",
+        "django": "47/47 PASS on disposable SQL Server 2022; 40 passing and 7 SQL-only skipped on SQLite",
+        "aspnet": "4/4 SQL xUnit, REST/CSRF and five-attempt lockout PASS",
+        "browser": "Django Playwright 9/9 PASS; ASP.NET Playwright 8/8 PASS",
+        "productionDatabase": "not touched"
+      },
+      "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

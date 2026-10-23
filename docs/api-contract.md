@@ -59,3 +59,10 @@ The shared TypeScript client reads the `detail` field of JSON error responses. R
 - `GET /api/auth/me` returns that user object with a valid session; `POST /api/auth/logout` returns 204. Missing/expired session gives 401.
 - Invalid password returns 401; five failures lock an existing account for 15 minutes. Invalid payload returns `400 { "detail": "Invalid request." }`; CSRF failures return **403**, with no sensitive server details. Both implementations use `X-CSRF-TOKEN` for unsafe methods.
 - Session lifetime 30 minutes. `rememberMe` keeps the cookie across browser restarts until expiry; without it the cookie is session-only. The React app handles 401 on protected API requests by returning to Login.
+
+
+## Authentication security (WP05)
+
+`GET /api/auth/csrf` returns `{ "csrfToken": "..." }`; `POST /api/auth/login` accepts `{ "email": "...", "password": "...", "rememberMe": false }` and returns the same current-user payload as `GET /api/auth/me`: numeric `id`, `name`, `email`, `isAdmin`. `POST /api/auth/logout` returns 204. All mutating requests require `X-CSRF-TOKEN`; invalid/missing CSRF returns 403. Bad credentials/locked account and expired sessions return 401. Five wrong passwords lock an existing account for 15 minutes. Idle session lifetime is 30 minutes; remember-me persists the cookie for that duration, without remember-me it is a browser-session cookie. React returns to Login when a previously authenticated API reports 401.
+
+For current API JSON numeric IDs, frontend rejects values outside JavaScript's safe-integer range rather than silently rounding SQL BIGINT. Future monetary endpoints must use decimal storage and exact decimal strings/approved precision; financial and KWD calculations are **not yet part of the current master endpoints**. English/Arabic UI labels and RTL keyboard forms are included on Login, Company and Role; full translated reports remain later work.
