@@ -8,7 +8,7 @@ from apps.accounts.users_api import UserViewSet
 from apps.companies.api import CompanyViewSet
 from apps.companies.organization_api import BranchViewSet, WarehouseViewSet
 from apps.partners.api import CustomerViewSet, SupplierViewSet, download_document
-from apps.catalog.api import CategoryViewSet, BrandViewSet, UnitViewSet
+from apps.catalog.api import CategoryViewSet, BrandViewSet, UnitViewSet, ProductViewSet
 
 router = SimpleRouter(trailing_slash=False)
 router.register("companies", CompanyViewSet, basename="company")
@@ -21,6 +21,7 @@ router.register("suppliers", SupplierViewSet, basename="suppliers")
 router.register("categories", CategoryViewSet, basename="categories")
 router.register("brands", BrandViewSet, basename="brands")
 router.register("units", UnitViewSet, basename="units")
+router.register("products", ProductViewSet, basename="products")
 
 urlpatterns = [
     path("auth/csrf", csrf, name="api-csrf"),

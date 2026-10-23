@@ -4,6 +4,7 @@ from .models import AccessPermission
 
 
 PERMISSION_ACTIONS = {
+    'products': ['view', 'add', 'edit', 'delete'],
     'categories': ['view', 'add', 'edit', 'delete'],
     'brands': ['view', 'add', 'edit', 'delete'],
     'units': ['view', 'add', 'edit', 'delete'],
