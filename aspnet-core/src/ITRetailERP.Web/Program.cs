@@ -91,7 +91,9 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
     {
-        if (builder.Environment.IsDevelopment())
+        if (builder.Environment.IsDevelopment() &&
+            (context.HttpContext.Request.Path.StartsWithSegments("/api/customers") ||
+             context.HttpContext.Request.Path.StartsWithSegments("/api/suppliers")))
         {
             var fields = context.ModelState
                 .Where(item => item.Value?.Errors.Count > 0)
