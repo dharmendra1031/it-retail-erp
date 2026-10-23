@@ -43,6 +43,7 @@ class CategorySerializer(NamedSerializer):
         model = Category
         fields = ("id", "code", "nameEn", "nameAr", "parentId", "isActive")
         read_only_fields = ("id",)
+        validators = []  # Sibling/root uniqueness is checked against the resolved parent.
 
     def validate(self, values):
         category = self.instance
