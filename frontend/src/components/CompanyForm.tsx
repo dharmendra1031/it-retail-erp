@@ -1,6 +1,7 @@
 import { FormEvent } from "react";
 import { CompanyFormValues } from "../api/companies";
 import { advanceOnEnter } from "../forms/keyboard";
+import { useLanguage } from "../i18n";
 
 
 interface Props {

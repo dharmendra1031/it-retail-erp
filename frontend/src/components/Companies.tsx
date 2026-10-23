@@ -10,7 +10,6 @@ import {
 import { CompanyForm } from "./CompanyForm";
 import { languageError, useLanguage } from "../i18n";
 import { CompanyTable } from "./CompanyTable";
-import { useLanguage } from "../i18n";
 
 const emptyForm: CompanyFormValues = {
   nameEn: "",
