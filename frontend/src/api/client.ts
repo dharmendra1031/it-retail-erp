@@ -10,6 +10,18 @@ export async function refreshCsrfToken() {
   csrfToken = data.csrfToken;
 }
 
+function ensureSafeIds(value: unknown) {
+  const rows = Array.isArray(value) ? value : [value];
+  for (const row of rows) {
+    if (row && typeof row === "object" && "id" in row) {
+      const id = (row as { id: unknown }).id;
+      if (typeof id !== "number" || !Number.isSafeInteger(id)) {
+        throw new Error("Invalid or unsafe numeric ID.");
+      }
+    }
+  }
+}
+
 export async function apiRequest<T>(
   path: string,
   options: RequestInit = {},
@@ -53,7 +65,9 @@ export async function apiRequest<T>(
     return undefined as T;
   }
 
-  return (await response.json()) as T;
+  const data: T = await response.json();
+  ensureSafeIds(data);
+  return data;
 }
 
 export function jsonBody(value: unknown) {
