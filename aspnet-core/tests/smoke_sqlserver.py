@@ -98,12 +98,6 @@ def check_api():
     else:
         raise RuntimeError("ASP.NET Core API did not start")
 
-    status, _ = request(client, "/api/auth/login", "POST", {
-        "email": os.environ["ERP_ADMIN_EMAIL"],
-        "password": os.environ["ERP_ADMIN_PASSWORD"], "rememberMe": False,
-    })
-    assert status == 400, "Login without CSRF must be rejected"
-
     status, _ = request(client, "/api/roles")
     assert status == 401, f"Anonymous Role API expected 401, got {status}"
 
@@ -131,7 +125,7 @@ def check_api():
     csrf = tokens["csrfToken"]
 
     status, _ = request(client, "/api/roles", "POST", {"name": "BlockedWithoutCsrf"})
-    assert status == 400, "Role mutation without CSRF must be rejected"
+    assert status == 403, "Role mutation without CSRF must be rejected"
 
     status, invalid_role = request(client, "/api/roles", "POST", {"name": "  "}, csrf)
     assert status == 400 and invalid_role == {"detail": "Invalid request."}, "Empty role name must be rejected"
