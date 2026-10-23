@@ -107,8 +107,8 @@ export function Companies({ canManage }: { canManage: boolean }) {
 
       resetForm();
       await loadCompanies();
-    } catch {
-      setError("Unable to save company.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to save company.");
     } finally {
       setSaving(false);
     }

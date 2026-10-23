@@ -37,8 +37,8 @@ export function Roles() {
       }
       reset();
       await loadRoles();
-    } catch {
-      setError("Unable to save role. Check the name is not duplicated.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to save role.");
     } finally {
       setSaving(false);
     }
@@ -53,8 +53,8 @@ export function Roles() {
     try {
       await deleteRole(role.id);
       await loadRoles();
-    } catch {
-      setError("Unable to delete role. It may be assigned to users.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to delete role.");
     }
   }
 

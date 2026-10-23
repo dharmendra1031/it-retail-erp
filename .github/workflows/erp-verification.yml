@@ -186,7 +186,7 @@ jobs:
           export E2E_PASSWORD="$ERP_ADMIN_PASSWORD"
           dotnet run --no-build --project aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj --urls http://127.0.0.1:5000 > /tmp/aspnet-browser.log 2>&1 &
           cd frontend
-          npm run test:e2e -- --grep "admin can manage roles"
+          npm run test:e2e -- --grep "admin"
 
   browser:
     runs-on: ubuntu-latest

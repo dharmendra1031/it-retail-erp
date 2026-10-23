@@ -45,3 +45,8 @@ Full financial/stock transaction response schemas and human-readable document re
 ## Document sequences (internal service)
 
 There is no public number-reservation endpoint. Both backends implement SQL Server transaction-locked `DocumentSequences` counters scoped by `series`, `fiscalYear` and `branchId`. Numeric database keys stay auto-increment `BIGINT`. Formatting, branch prefixes and period resets remain a separate configuration/business approval, never encoded in database IDs.
+
+
+## Current frontend validation feedback
+
+The shared TypeScript client reads the `detail` field of JSON error responses. Role Master displays duplicate/assigned role errors, and Company Master displays backend validation messages. The client does not render raw HTML error responses. This is for the current foundational endpoints; stock/financial document errors belong to their future modules.
