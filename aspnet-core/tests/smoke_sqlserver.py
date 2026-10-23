@@ -69,6 +69,12 @@ def check_schema():
             )
             assert cursor.fetchone()[0] == 1, f"{table}.Id must be IDENTITY"
 
+        cursor.execute(
+            "SELECT is_unique FROM sys.indexes WHERE object_id = OBJECT_ID('AspNetUsers') "
+            "AND name = 'EmailIndex'"
+        )
+        assert cursor.fetchone()[0] == 1, "NormalizedEmail index must be unique"
+
 
 def check_api():
     client = build_opener(HTTPCookieProcessor(CookieJar()))
@@ -84,6 +90,17 @@ def check_api():
 
     status, _ = request(client, "/api/roles")
     assert status == 401, f"Anonymous Role API expected 401, got {status}"
+
+    status, _ = request(client, "/api/auth/login", "POST", {
+        "email": os.environ["ERP_ADMIN_EMAIL"],
+        "password": os.environ["ERP_ADMIN_PASSWORD"],
+    })
+    assert status in (400, 403), "Login without CSRF must fail"
+
+    status, _ = request(client, "/api/auth/login", "POST", {
+        "email": os.environ["ERP_ADMIN_EMAIL"], "password": "wrong password",
+    }, tokens["csrfToken"])
+    assert status == 401, "Invalid password must be rejected"
 
     status, account = request(
         client, "/api/auth/login", "POST",

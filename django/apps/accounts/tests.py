@@ -181,3 +181,35 @@ class EmailIntegrityTests(TestCase):
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 User.objects.create_user(username="unique2", email="unique@example.com", password="TestPass123!")
+
+
+class AdminBootstrapTests(TestCase):
+    def test_seed_admin_is_idempotent(self):
+        from io import StringIO
+        from unittest.mock import patch
+        from django.core.management import call_command
+
+        with patch.dict("os.environ", {
+            "ERP_ADMIN_EMAIL": "bootstrap@example.com",
+            "ERP_ADMIN_PASSWORD": "TestPass123!",
+        }):
+            call_command("seed_admin", stdout=StringIO())
+            call_command("seed_admin", stdout=StringIO())
+
+        admin = User.objects.get(email="bootstrap@example.com")
+        self.assertTrue(admin.is_superuser)
+        self.assertTrue(admin.roles.filter(name="Admin").exists())
+        self.assertEqual(User.objects.filter(email="bootstrap@example.com").count(), 1)
+
+    def test_seed_admin_rejects_missing_credentials(self):
+        from io import StringIO
+        from unittest.mock import patch
+        from django.core.management import call_command
+        from django.core.management.base import CommandError
+
+        with patch.dict("os.environ", {
+            "ERP_ADMIN_EMAIL": "",
+            "ERP_ADMIN_PASSWORD": "",
+        }):
+            with self.assertRaises(CommandError):
+                call_command("seed_admin", stdout=StringIO())
