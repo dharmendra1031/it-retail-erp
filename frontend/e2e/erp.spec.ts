@@ -309,7 +309,7 @@ test("Arabic permission actions and print date use the selected locale", async (
 
   await page.getByRole("button", { name: "بيانات الشركة" }).click();
   await page.getByLabel("اسم الشركة (بالإنجليزية)").fill("Locale Preview Company");
-  await page.getByLabel("اسم الشركة").fill("شركة عربية");
+  await page.getByRole("textbox", { name: "اسم الشركة", exact: true }).fill("شركة عربية");
   await page.getByRole("button", { name: "حفظ الشركة" }).click();
   const company = page.getByRole("row").filter({ hasText: "Locale Preview Company" });
   await page.evaluate(() => { window.print = () => {}; });
