@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
 
 from django.conf import settings
-from django.db import IntegrityError, connection, connections
+from django.db import IntegrityError, connection, connections, transaction
 from django.test import TestCase, TransactionTestCase
 
 from apps.accounts.models import Role, User
@@ -36,6 +36,11 @@ class SqlServerSchemaTests(TestCase):
                         "WHERE TABLE_NAME='companies_company' AND COLUMN_NAME=%s", [column]
                     )
                     self.assertEqual(cursor.fetchone()[0].lower(), "nvarchar")
+
+    def test_orphan_user_role_is_rejected(self):
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                User.roles.through.objects.create(user_id=999999999, role_id=999999999)
 
     def test_arabic_company_values_round_trip(self):
         company = Company.objects.create(

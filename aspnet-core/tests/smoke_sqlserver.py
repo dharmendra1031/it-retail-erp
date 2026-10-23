@@ -75,6 +75,16 @@ def check_schema():
         )
         assert cursor.fetchone()[0] == 1, "NormalizedEmail index must be unique"
 
+        try:
+            cursor.execute(
+                "INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES (?, ?)",
+                999999999, 999999999,
+            )
+            raise AssertionError("Orphan role relation should be rejected")
+        except pyodbc.IntegrityError:
+            db.rollback()
+
+
 
 def check_api():
     client = build_opener(HTTPCookieProcessor(CookieJar()))
