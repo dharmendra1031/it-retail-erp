@@ -1,0 +1,83 @@
+from decimal import Decimal
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
+from rest_framework.test import APIClient
+
+from apps.accounts.models import AccessPermission, Role, User
+from .models import Customer, PartnerDocument, Supplier
+
+
+class PartnerApiTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            username="partner-admin", email="partner-admin@example.test", password="StrongPass123!"
+        )
+        self.employee = User.objects.create_user(
+            username="partner-staff", email="partner-staff@example.test", password="StrongPass123!"
+        )
+        self.client = APIClient()
+        self.customer = {
+            "code": "c-001", "nameEn": "Al Noor", "nameAr": "النور",
+            "addressAr": "مدينة الكويت", "customerType": "corporate",
+            "paymentTermsDays": 30, "creditLimit": "2500.750", "civilId": "123456",
+        }
+        self.supplier = {
+            "code": "s-001", "nameEn": "Supplier", "nameAr": "المورد",
+            "paymentTermsDays": 14, "openingBalance": "135.500",
+        }
+
+    def test_customer_credit_duplicate_and_validation(self):
+        self.client.force_authenticate(user=self.admin)
+        created = self.client.post("/api/customers", self.customer, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        item = Customer.objects.get(pk=created.data["id"])
+        self.assertEqual((item.code, item.name_ar, item.credit_limit),
+                         ("C-001", "النور", Decimal("2500.750")))
+        self.assertEqual(self.client.post("/api/customers", {
+            **self.customer, "code": "C-001"
+        }, format="json").status_code, 400)
+        for changes in ({"creditLimit": "-1.000"}, {"paymentTermsDays": 366}):
+            self.assertEqual(self.client.post("/api/customers", {
+                **self.customer, "code": "C-002", **changes
+            }, format="json").status_code, 400)
+        self.assertEqual(Customer.objects.count(), 1)
+
+    def test_supplier_balance_and_duplicate(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.post("/api/suppliers", self.supplier, format="json")
+        self.assertEqual(response.status_code, 201, response.data)
+        self.assertEqual(Supplier.objects.get(pk=response.data["id"]).opening_balance,
+                         Decimal("135.500"))
+        self.assertEqual(self.client.post("/api/suppliers", self.supplier, format="json").status_code, 400)
+
+    def test_civil_id_hidden_from_nonadmin(self):
+        self.client.force_authenticate(user=self.admin)
+        self.client.post("/api/customers", self.customer, format="json")
+        role = Role.objects.create(name="Customer Reader")
+        role.permissions.add(AccessPermission.objects.get(code="customers.view"))
+        self.employee.roles.add(role)
+        self.client.force_authenticate(user=self.employee)
+        result = self.client.get("/api/customers")
+        self.assertEqual(result.status_code, 200)
+        self.assertNotIn("civilId", result.data[0])
+        self.assertEqual(self.client.post("/api/customers", self.customer, format="json").status_code, 403)
+        self.assertEqual(self.client.get("/api/customers/1/documents").status_code, 403)
+
+    def test_secure_upload_download_and_corrupt_rejection(self):
+        self.client.force_authenticate(user=self.admin)
+        created = self.client.post("/api/customers", self.customer, format="json")
+        url = f"/api/customers/{created.data['id']}/documents"
+        bad = self.client.post(url, {"file": SimpleUploadedFile(
+            "bad.pdf", b"garbage", content_type="application/pdf"
+        )}, format="multipart")
+        self.assertEqual(bad.status_code, 400)
+        good = self.client.post(url, {"file": SimpleUploadedFile(
+            "civil.pdf", b"%PDF-1.4\nsecret", content_type="application/pdf"
+        )}, format="multipart")
+        self.assertEqual(good.status_code, 201, good.data)
+        document_id = good.data["id"]
+        self.assertEqual(PartnerDocument.objects.count(), 1)
+        self.assertEqual(self.client.get(f"{url}/{document_id}").content, b"%PDF-1.4\nsecret")
+        self.client.force_authenticate(user=self.employee)
+        self.assertEqual(self.client.get(f"{url}/{document_id}").status_code, 403)
