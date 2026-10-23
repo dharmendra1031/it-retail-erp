@@ -316,3 +316,29 @@ test("Arabic permission actions and print date use the selected locale", async (
   await company.getByRole("button", { name: "طباعة بيانات الشركة" }).click();
   await expect(page.getByRole("region", { name: "طباعة بيانات الشركة" })).toContainText("تاريخ الطباعة");
 });
+
+
+test("admin uses keyboard to create bilingual credit customer and supplier", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Customer Master" }).click();
+  await page.getByLabel("Code").fill("C-E2E");
+  await page.getByLabel("Code").press("Enter");
+  await expect(page.getByLabel("Company Name (English)")).toBeFocused();
+  await page.getByLabel("Company Name (English)").fill("Credit Partner");
+  await page.getByLabel("اسم الشركة").fill("عميل تجريبي");
+  await page.getByLabel("Credit Limit").fill("2500.750");
+  await page.getByLabel("Payment Terms (days)").fill("30");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "Credit Partner" })).toContainText("عميل تجريبي");
+
+  await page.getByRole("button", { name: "Supplier Master" }).click();
+  await page.getByLabel("Code").fill("S-E2E");
+  await page.getByLabel("Company Name (English)").fill("First Supplier");
+  await page.getByLabel("Opening Balance").fill("135.500");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "First Supplier" })).toBeVisible();
+});

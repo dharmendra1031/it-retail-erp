@@ -71,3 +71,10 @@ For current API JSON numeric IDs, frontend rejects values outside JavaScript's s
 ## Permissions / Role grants (WP06–WP07)
 
 `GET /api/permissions` lists supported action codes. `GET /api/roles/{id}/permissions` and CSRF-protected `PUT /api/roles/{id}/permissions` read/replace grants with `{permissions: string[]}`. Unknown codes yield 400, non-admin requests 403, missing roles 404. Role-grant data is persisted in Django `Role.permissions` M2M and ASP.NET `AspNetRoleClaims` using `erp.permission` claim type; no separate runtime table is required by WP07.
+
+
+## Customer/Supplier Masters (WP12–WP13)
+
+`GET/POST /api/customers`, `GET/PUT/DELETE /api/customers/{id}`; analogous `/api/suppliers`. Server-side permission policy `customers.*`/`suppliers.*`, Admin implicit grants. Numeric BIGINT IDs and unique uppercase code. Customer JSON fields `code,nameEn,nameAr,addressEn,addressAr,mobile,civilId,customerType,paymentTermsDays,creditLimit,isActive`, supplier replaces CivilID/type/credit with `email,taxNumber,openingBalance`. Decimal money values use invariant fixed-point strings with three decimals. Credit and opening balances must be non-negative.
+
+Protected documents: `GET/POST /api/{customers|suppliers}/{id}/documents` (Admin only), and authenticated Admin-only `GET .../documents/{docId}`. Body stores in SQL Server `varbinary(max)`/`BinaryField`, not an unauthenticated static-media URL. Upload supports PDF/PNG/JPEG signatures and maximum 5 MiB. No public file identifiers/links are emitted to non-Admin users. A customer reader without Admin does not receive the CivilID field. Protected-document owner cannot be deleted (409).
