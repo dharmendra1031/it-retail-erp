@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0101",
+  "nextStepId": "ERP-0201",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -108,10 +108,110 @@
     "ERP-0097",
     "ERP-0098",
     "ERP-0099",
-    "ERP-0100"
+    "ERP-0100",
+    "ERP-0101",
+    "ERP-0102",
+    "ERP-0103",
+    "ERP-0104",
+    "ERP-0105",
+    "ERP-0106",
+    "ERP-0107",
+    "ERP-0108",
+    "ERP-0109",
+    "ERP-0110",
+    "ERP-0111",
+    "ERP-0112",
+    "ERP-0113",
+    "ERP-0114",
+    "ERP-0115",
+    "ERP-0116",
+    "ERP-0117",
+    "ERP-0118",
+    "ERP-0119",
+    "ERP-0120",
+    "ERP-0121",
+    "ERP-0122",
+    "ERP-0123",
+    "ERP-0124",
+    "ERP-0125",
+    "ERP-0126",
+    "ERP-0127",
+    "ERP-0128",
+    "ERP-0129",
+    "ERP-0130",
+    "ERP-0131",
+    "ERP-0132",
+    "ERP-0133",
+    "ERP-0134",
+    "ERP-0135",
+    "ERP-0136",
+    "ERP-0137",
+    "ERP-0138",
+    "ERP-0139",
+    "ERP-0140",
+    "ERP-0141",
+    "ERP-0142",
+    "ERP-0143",
+    "ERP-0144",
+    "ERP-0145",
+    "ERP-0146",
+    "ERP-0147",
+    "ERP-0148",
+    "ERP-0149",
+    "ERP-0150",
+    "ERP-0151",
+    "ERP-0152",
+    "ERP-0153",
+    "ERP-0154",
+    "ERP-0155",
+    "ERP-0156",
+    "ERP-0157",
+    "ERP-0158",
+    "ERP-0159",
+    "ERP-0160",
+    "ERP-0161",
+    "ERP-0162",
+    "ERP-0163",
+    "ERP-0164",
+    "ERP-0165",
+    "ERP-0166",
+    "ERP-0167",
+    "ERP-0168",
+    "ERP-0169",
+    "ERP-0170",
+    "ERP-0171",
+    "ERP-0172",
+    "ERP-0173",
+    "ERP-0174",
+    "ERP-0175",
+    "ERP-0176",
+    "ERP-0177",
+    "ERP-0178",
+    "ERP-0179",
+    "ERP-0180",
+    "ERP-0181",
+    "ERP-0182",
+    "ERP-0183",
+    "ERP-0184",
+    "ERP-0185",
+    "ERP-0186",
+    "ERP-0187",
+    "ERP-0188",
+    "ERP-0189",
+    "ERP-0190",
+    "ERP-0191",
+    "ERP-0192",
+    "ERP-0193",
+    "ERP-0194",
+    "ERP-0195",
+    "ERP-0196",
+    "ERP-0197",
+    "ERP-0198",
+    "ERP-0199",
+    "ERP-0200"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "88b05638831778d48b21ee8f83a95a2e40bf4419",
+  "lastVerifiedCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -2376,6 +2476,2056 @@
         "productionDatabase": "not touched"
       },
       "deferredAcceptance": "IP rate limits, multi-branch action permissions, audit trail, print/localization and production rollout remain downstream owners."
+    },
+    {
+      "stepId": "ERP-0101",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/SRS_BASELINE.md"
+      ],
+      "verification": {
+        "finding": "Mapped exact SRS package scope and future-owner exclusions: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0102",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Security/PermissionRequirement.cs",
+        "django/apps/accounts/permissions.py"
+      ],
+      "verification": {
+        "finding": "Inspected currently checked-in Django/ASP.NET/React code: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0103",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "finding": "Compared implemented surfaces with documented business acceptance and gaps: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0104",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/PermissionsApiController.cs",
+        "django/apps/accounts/permissions_api.py"
+      ],
+      "verification": {
+        "finding": "Verified current package happy path using API/UI smoke: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0105",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Verified current package authorization/validation negative path: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0106",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/migrations/0004_permission_catalog.py"
+      ],
+      "verification": {
+        "finding": "Reviewed existing BIGINT/Unicode/FK schema and transactional invariants: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0107",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/permissions.py"
+      ],
+      "verification": {
+        "finding": "Documented input constraints and rollback/ownership boundaries: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0108",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Security/PermissionRequirement.cs"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed ASP.NET Core package-owned code: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0109",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/permissions.py"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed Django package-owned code: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0110",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/migrations/0004_permission_catalog.py",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Verified real package migration/schema and documented non-owned migration cases: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0111",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/api-contract.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/PermissionsApiController.cs"
+      ],
+      "verification": {
+        "finding": "Documented shared request/response/error shapes: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0112",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Security/PermissionRequirement.cs"
+      ],
+      "verification": {
+        "finding": "Verified ASP.NET package operations and current server-side enforcement: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0113",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/permissions.py"
+      ],
+      "verification": {
+        "finding": "Verified Django package operations and transaction scope: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0114",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Security/PermissionRequirement.cs",
+        "django/apps/accounts/permissions.py"
+      ],
+      "verification": {
+        "finding": "Checked implemented authorization, with future-only branch/audit controls deferred: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0115",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "frontend/src/components/Roles.tsx"
+      ],
+      "verification": {
+        "finding": "Verified shared React screen, API integration and user feedback: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0116",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Verified currently implemented English/Arabic labels, RTL layout and keyboard behavior: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0117",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Ran available ASP.NET build/API/integration checks for package functionality: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0118",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/tests.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Ran Django unit/SQL integration/negative tests for package functionality: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0119",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Ran disposable SQL Server plus browser smoke (and defined future-module exclusions): Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0120",
+      "status": "complete",
+      "scope": "WP06 Permission catalog/action policies",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "finding": "Reviewed current changes, regression evidence, security/performance boundaries and CI: Permission catalog/action policies.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Sales/Purchase/stock posting actions and immutable audit are later owning packages; available Company CRUD permissions are exercised today."
+    },
+    {
+      "stepId": "ERP-0121",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/SRS_BASELINE.md"
+      ],
+      "verification": {
+        "finding": "Mapped exact SRS package scope and future-owner exclusions: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0122",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/RolesApiController.cs",
+        "django/apps/accounts/roles_api.py"
+      ],
+      "verification": {
+        "finding": "Inspected currently checked-in Django/ASP.NET/React code: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0123",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "finding": "Compared implemented surfaces with documented business acceptance and gaps: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0124",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/RoleRequest.cs",
+        "django/apps/accounts/serializers.py"
+      ],
+      "verification": {
+        "finding": "Verified current package happy path using API/UI smoke: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0125",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Verified current package authorization/validation negative path: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0126",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/models.py"
+      ],
+      "verification": {
+        "finding": "Reviewed existing BIGINT/Unicode/FK schema and transactional invariants: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0127",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/roles_api.py"
+      ],
+      "verification": {
+        "finding": "Documented input constraints and rollback/ownership boundaries: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0128",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/RolesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed ASP.NET Core package-owned code: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0129",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/roles_api.py"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed Django package-owned code: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0130",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/models.py",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Verified real package migration/schema and documented non-owned migration cases: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0131",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/api-contract.md",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/RoleRequest.cs"
+      ],
+      "verification": {
+        "finding": "Documented shared request/response/error shapes: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0132",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/RolesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Verified ASP.NET package operations and current server-side enforcement: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0133",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/roles_api.py"
+      ],
+      "verification": {
+        "finding": "Verified Django package operations and transaction scope: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0134",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/RolesApiController.cs",
+        "django/apps/accounts/roles_api.py"
+      ],
+      "verification": {
+        "finding": "Checked implemented authorization, with future-only branch/audit controls deferred: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0135",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "frontend/src/components/Roles.tsx"
+      ],
+      "verification": {
+        "finding": "Verified shared React screen, API integration and user feedback: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0136",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Verified currently implemented English/Arabic labels, RTL layout and keyboard behavior: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0137",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Ran available ASP.NET build/API/integration checks for package functionality: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0138",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "django/apps/accounts/tests.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Ran Django unit/SQL integration/negative tests for package functionality: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0139",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Ran disposable SQL Server plus browser smoke (and defined future-module exclusions): Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0140",
+      "status": "complete",
+      "scope": "WP07 Role Master/permission assignment",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0101_0140_PERMISSIONS.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "finding": "Reviewed current changes, regression evidence, security/performance boundaries and CI: Role Master/permission assignment.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Invoice permission behavior is not claimed before Sales APIs exist; only catalog assignment, validation and current Company permission enforcement are verified."
+    },
+    {
+      "stepId": "ERP-0141",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "docs/SRS_BASELINE.md"
+      ],
+      "verification": {
+        "finding": "Mapped exact SRS package scope and future-owner exclusions: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0142",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/UsersApiController.cs",
+        "django/apps/accounts/users_api.py"
+      ],
+      "verification": {
+        "finding": "Inspected currently checked-in Django/ASP.NET/React code: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0143",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "finding": "Compared implemented surfaces with documented business acceptance and gaps: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0144",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/UserRequest.cs",
+        "django/apps/accounts/models.py"
+      ],
+      "verification": {
+        "finding": "Verified current package happy path using API/UI smoke: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0145",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Verified current package authorization/validation negative path: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0146",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023100000_UserIsActive.cs"
+      ],
+      "verification": {
+        "finding": "Reviewed existing BIGINT/Unicode/FK schema and transactional invariants: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0147",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "django/apps/accounts/users_api.py"
+      ],
+      "verification": {
+        "finding": "Documented input constraints and rollback/ownership boundaries: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0148",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/UsersApiController.cs"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed ASP.NET Core package-owned code: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0149",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "django/apps/accounts/users_api.py"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed Django package-owned code: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0150",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023100000_UserIsActive.cs",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Verified real package migration/schema and documented non-owned migration cases: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0151",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "docs/api-contract.md",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/UserRequest.cs"
+      ],
+      "verification": {
+        "finding": "Documented shared request/response/error shapes: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0152",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/UsersApiController.cs"
+      ],
+      "verification": {
+        "finding": "Verified ASP.NET package operations and current server-side enforcement: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0153",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "django/apps/accounts/users_api.py"
+      ],
+      "verification": {
+        "finding": "Verified Django package operations and transaction scope: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0154",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/UsersApiController.cs",
+        "django/apps/accounts/users_api.py"
+      ],
+      "verification": {
+        "finding": "Checked implemented authorization, with future-only branch/audit controls deferred: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0155",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "frontend/src/components/Users.tsx"
+      ],
+      "verification": {
+        "finding": "Verified shared React screen, API integration and user feedback: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0156",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Verified currently implemented English/Arabic labels, RTL layout and keyboard behavior: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0157",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Ran available ASP.NET build/API/integration checks for package functionality: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0158",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "django/apps/accounts/tests.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Ran Django unit/SQL integration/negative tests for package functionality: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0159",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Ran disposable SQL Server plus browser smoke (and defined future-module exclusions): User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0160",
+      "status": "complete",
+      "scope": "WP08 User Master/role membership",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0141_0160_USER_MASTER.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "finding": "Reviewed current changes, regression evidence, security/performance boundaries and CI: User Master/role membership.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Employee HR profile, account audit log, password invitation workflow and optional richer business attributes remain later packages."
+    },
+    {
+      "stepId": "ERP-0161",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "docs/SRS_BASELINE.md"
+      ],
+      "verification": {
+        "finding": "Mapped exact SRS package scope and future-owner exclusions: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0162",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BranchesApiController.cs",
+        "django/apps/companies/organization_api.py"
+      ],
+      "verification": {
+        "finding": "Inspected currently checked-in Django/ASP.NET/React code: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0163",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "finding": "Compared implemented surfaces with documented business acceptance and gaps: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0164",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/WarehousesApiController.cs",
+        "django/apps/companies/models.py"
+      ],
+      "verification": {
+        "finding": "Verified current package happy path using API/UI smoke: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0165",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Verified current package authorization/validation negative path: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0166",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023110000_BranchesWarehouses.cs"
+      ],
+      "verification": {
+        "finding": "Reviewed existing BIGINT/Unicode/FK schema and transactional invariants: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0167",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "django/apps/companies/organization_api.py"
+      ],
+      "verification": {
+        "finding": "Documented input constraints and rollback/ownership boundaries: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0168",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BranchesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed ASP.NET Core package-owned code: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0169",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "django/apps/companies/organization_api.py"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed Django package-owned code: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0170",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023110000_BranchesWarehouses.cs",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Verified real package migration/schema and documented non-owned migration cases: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0171",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "docs/api-contract.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/WarehousesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Documented shared request/response/error shapes: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0172",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BranchesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Verified ASP.NET package operations and current server-side enforcement: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0173",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "django/apps/companies/organization_api.py"
+      ],
+      "verification": {
+        "finding": "Verified Django package operations and transaction scope: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0174",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BranchesApiController.cs",
+        "django/apps/companies/organization_api.py"
+      ],
+      "verification": {
+        "finding": "Checked implemented authorization, with future-only branch/audit controls deferred: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0175",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "frontend/src/components/Organization.tsx"
+      ],
+      "verification": {
+        "finding": "Verified shared React screen, API integration and user feedback: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0176",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Verified currently implemented English/Arabic labels, RTL layout and keyboard behavior: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0177",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Ran available ASP.NET build/API/integration checks for package functionality: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0178",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "django/apps/accounts/tests.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Ran Django unit/SQL integration/negative tests for package functionality: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0179",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Ran disposable SQL Server plus browser smoke (and defined future-module exclusions): Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0180",
+      "status": "complete",
+      "scope": "WP09 Branch/Warehouse reference and read scope",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0161_0180_BRANCHES.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "finding": "Reviewed current changes, regression evidence, security/performance boundaries and CI: Branch/Warehouse reference and read scope.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Actual stock transfers, purchase/sale posting branch enforcement, and historical audit trails have no endpoints yet and must be tested under the owning business packages."
+    },
+    {
+      "stepId": "ERP-0181",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "docs/SRS_BASELINE.md"
+      ],
+      "verification": {
+        "finding": "Mapped exact SRS package scope and future-owner exclusions: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0182",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "django/apps/companies/serializers.py"
+      ],
+      "verification": {
+        "finding": "Inspected currently checked-in Django/ASP.NET/React code: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0183",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md"
+      ],
+      "verification": {
+        "finding": "Compared implemented surfaces with documented business acceptance and gaps: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0184",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/src/ITRetailERP.Web/Services/CompanyLogoStorage.cs",
+        "django/apps/companies/api.py"
+      ],
+      "verification": {
+        "finding": "Verified current package happy path using API/UI smoke: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0185",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Verified current package authorization/validation negative path: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0186",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "django/apps/companies/migrations/0001_initial.py"
+      ],
+      "verification": {
+        "finding": "Reviewed existing BIGINT/Unicode/FK schema and transactional invariants: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0187",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "django/apps/companies/serializers.py"
+      ],
+      "verification": {
+        "finding": "Documented input constraints and rollback/ownership boundaries: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0188",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed ASP.NET Core package-owned code: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0189",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "django/apps/companies/serializers.py"
+      ],
+      "verification": {
+        "finding": "Implemented or reviewed Django package-owned code: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0190",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "django/apps/companies/migrations/0001_initial.py",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "finding": "Verified real package migration/schema and documented non-owned migration cases: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0191",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "docs/api-contract.md",
+        "aspnet-core/src/ITRetailERP.Web/Services/CompanyLogoStorage.cs"
+      ],
+      "verification": {
+        "finding": "Documented shared request/response/error shapes: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0192",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs"
+      ],
+      "verification": {
+        "finding": "Verified ASP.NET package operations and current server-side enforcement: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0193",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "django/apps/companies/serializers.py"
+      ],
+      "verification": {
+        "finding": "Verified Django package operations and transaction scope: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0194",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "django/apps/companies/serializers.py"
+      ],
+      "verification": {
+        "finding": "Checked implemented authorization, with future-only branch/audit controls deferred: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0195",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "frontend/src/components/Companies.tsx"
+      ],
+      "verification": {
+        "finding": "Verified shared React screen, API integration and user feedback: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0196",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Verified currently implemented English/Arabic labels, RTL layout and keyboard behavior: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0197",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "finding": "Ran available ASP.NET build/API/integration checks for package functionality: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0198",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "django/apps/accounts/tests.py",
+        "django/apps/companies/tests.py"
+      ],
+      "verification": {
+        "finding": "Ran Django unit/SQL integration/negative tests for package functionality: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0199",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code/CI within current package",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "finding": "Ran disposable SQL Server plus browser smoke (and defined future-module exclusions): Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
+    },
+    {
+      "stepId": "ERP-0200",
+      "status": "complete",
+      "scope": "WP10 Company Master/logo lifecycle",
+      "completionMode": "code-and-requirements review",
+      "reviewedRepoCommit": "710f0f05a8fedc080a58c6149c961d56a7f6d4dd",
+      "evidence": [
+        "docs/ERP_0181_0200_COMPANY.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "finding": "Reviewed current changes, regression evidence, security/performance boundaries and CI: Company Master/logo lifecycle.",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39979943571",
+        "currentSqlTests": "Django 60/60 on disposable SQL Server 2022; Django SQLite 53 PASS + 7 SQL-only skips",
+        "currentNetTests": "ASP.NET 4/4 SQL xUnit, EF migrations, API/CSRF/Role/User/Branch/Warehouse/Company smoke PASS",
+        "browser": "Django 13/13 Playwright; ASP.NET 11/11 Playwright; React production build and .NET Release build PASS",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Full financial invoice/quotation/report rendering and physical printer acceptance are WP44. ASP upload checks format, signature and size; full image-content decoding and advanced malicious-file analysis are not certified by the current tests."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
