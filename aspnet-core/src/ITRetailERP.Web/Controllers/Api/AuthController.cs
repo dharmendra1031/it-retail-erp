@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ITRetailERP.Web.Security;
 
 namespace ITRetailERP.Web.Controllers.Api;
 
@@ -32,7 +33,7 @@ public sealed class AuthController(
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var user = await userManager.FindByEmailAsync(request.Email.Trim());
@@ -54,7 +55,7 @@ public sealed class AuthController(
 
     [HttpPost("logout")]
     [Authorize]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Logout()
     {
         await signInManager.SignOutAsync();

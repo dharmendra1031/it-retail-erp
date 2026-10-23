@@ -4,6 +4,7 @@ using ITRetailERP.Web.Models;
 using ITRetailERP.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITRetailERP.Web.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITRetailERP.Web.Controllers.Api;
@@ -35,7 +36,7 @@ public sealed class CompaniesApiController(
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<ActionResult<CompanyResponse>> Create([FromForm] CompanyRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.NameEn) || !ValidateLogo(request.Logo))
@@ -62,7 +63,7 @@ public sealed class CompaniesApiController(
 
     [HttpPut("{id:long}")]
     [Authorize(Roles = "Admin")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<ActionResult<CompanyResponse>> Update(long id, [FromForm] CompanyRequest request)
     {
         var company = await db.Companies.FindAsync(id);
@@ -97,7 +98,7 @@ public sealed class CompaniesApiController(
 
     [HttpDelete("{id:long}")]
     [Authorize(Roles = "Admin")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Delete(long id)
     {
         var company = await db.Companies.FindAsync(id);

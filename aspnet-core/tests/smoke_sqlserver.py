@@ -111,7 +111,7 @@ def check_api():
         "email": os.environ["ERP_ADMIN_EMAIL"],
         "password": os.environ["ERP_ADMIN_PASSWORD"],
     })
-    assert status in (400, 403), "Login without CSRF must fail"
+    assert status == 403, "Login without CSRF must return 403"
 
     status, _ = request(client, "/api/auth/login", "POST", {
         "email": os.environ["ERP_ADMIN_EMAIL"], "password": "wrong password",

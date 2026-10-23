@@ -3,6 +3,7 @@ using ITRetailERP.Web.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ITRetailERP.Web.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITRetailERP.Web.Controllers.Api;
@@ -33,7 +34,7 @@ public sealed class RolesApiController(
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Create(RoleRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
@@ -58,7 +59,7 @@ public sealed class RolesApiController(
     }
 
     [HttpPut("{id:long}")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Update(long id, RoleRequest request)
     {
         var role = await roleManager.FindByIdAsync(id.ToString());
@@ -86,7 +87,7 @@ public sealed class RolesApiController(
     }
 
     [HttpDelete("{id:long}")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Delete(long id)
     {
         var role = await roleManager.FindByIdAsync(id.ToString());
