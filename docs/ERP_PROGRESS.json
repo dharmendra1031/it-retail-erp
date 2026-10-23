@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0018",
+  "nextStepId": "ERP-0019",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -25,10 +25,11 @@
     "ERP-0014",
     "ERP-0015",
     "ERP-0016",
-    "ERP-0017"
+    "ERP-0017",
+    "ERP-0018"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "d1a83adb9f362d1f5af5fb951df408d4e4f058d9",
+  "lastVerifiedCommit": "ecfaa0887be2d197467567a1416e84c6ce5aa7cd",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -548,6 +549,35 @@
         ],
         "schemaChanged": false
       }
+    },
+    {
+      "stepId": "ERP-0018",
+      "status": "complete",
+      "reviewedRepoCommit": "ecfaa0887be2d197467567a1416e84c6ce5aa7cd",
+      "evidence": [
+        "docs/ERP_0018_DJANGO_TEST_GATE.md",
+        "django/apps/accounts/tests.py",
+        "django/apps/companies/tests.py",
+        ".github/workflows/erp-verification.yml",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "GitHub Actions Django unit tests and backend/frontend compile checks",
+        "workflowRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/39905510876",
+        "djangoTests": "22/22 PASS on isolated SQLite test database",
+        "aspnetBuild": "PASS (0 warnings, 0 errors)",
+        "reactBuild": "PASS",
+        "sqlServerIntegration": "not run; next ERP-0019",
+        "crossBackendE2E": "not run; WP02/WP49 owns full parity",
+        "loginCsrfLogoRuntime": "partial test coverage; remaining cases deferred to WP05/WP10/WP49"
+      },
+      "databaseReview": {
+        "addedTables": 0,
+        "roleSeedMigration": "Django accounts.0002_admin_role; safe get_or_create",
+        "schemaIds": "BIGINT/BigAutoField unchanged",
+        "productionDatabaseTouched": false
+      },
+      "notes": "WP01 is version-controlled requirement traceability, not a runtime owner/evidence table. Added tested Role Master and Company write authorization; current runnable Django unit cases pass. Full SQL Server, parallel backend and browser workflows remain downstream acceptance, not falsely marked passed."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

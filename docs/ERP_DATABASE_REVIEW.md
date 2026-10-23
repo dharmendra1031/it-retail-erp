@@ -199,3 +199,10 @@ ERP-0015 owns no database entity or migration. Reviewed current React API usage 
 - No `dotnet test`, SQL migration or runtime DB test was executed; none is claimed passed. Production data untouched.
 
 **Outcome:** ERP-0017 satisfies its dependency-aware test-specification gate; executable ASP.NET tests remain pending the WP03 harness and relevant feature owners.
+
+
+## Review 018 — 2026-10-23, ERP-0018
+
+Inspected Django `Role`/`User` models and migrations, ASP.NET Core Identity<long>/RoleManager, Company write authorization, and both existing Company schemas. Roles use numeric BigAutoField/BIGINT IDENTITY. The new Django `accounts.0002_admin_role` data migration inserts the reserved Admin role only if absent; no table/column/FK/index schema change. ASP.NET IdentitySeeder now creates/assigns the Admin role for the configured administrator. Role delete is blocked while assigned to users. Company writes now require an administrator on both backends; reads still require login.
+
+GitHub Actions run 39905510876: Django 22/22 unit tests PASS on isolated SQLite; ASP.NET Core Release build PASS (0 warnings, 0 errors); React production build PASS. Real SQL Server migration, Unicode round trip, database concurrency, backend parity and browser E2E are **not run**, owned by ERP-0019/WP02/WP49. DB-001 through DB-006 remain subject to their existing owner work packages. No production database or secrets touched.
