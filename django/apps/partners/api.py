@@ -50,7 +50,7 @@ class PartnerSerializer(serializers.ModelSerializer):
 class CustomerSerializer(PartnerSerializer):
     civilId = serializers.CharField(source="civil_id", max_length=30, required=False, allow_blank=True)
     companyName = serializers.CharField(source="company_name", max_length=200, required=False, allow_blank=True)
-    email = serializers.CharField(source="email", max_length=200, required=False, allow_blank=True)
+    email = serializers.EmailField(source="email", max_length=200, required=False, allow_blank=True)
     taxNumber = serializers.CharField(source="tax_number", max_length=100, required=False, allow_blank=True)
     openingBalance = serializers.DecimalField(source="opening_balance", max_digits=18, decimal_places=3, min_value=0, required=False)
     customerType = serializers.ChoiceField(source="customer_type", choices=[

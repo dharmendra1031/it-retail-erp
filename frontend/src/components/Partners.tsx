@@ -186,6 +186,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
                 <input maxLength={30} value={values.civilId}
                   onChange={event => change("civilId", event.target.value)} />
               </label>
+
               <label>{t("creditLimit")}
                 <input required inputMode="decimal" value={values.creditLimit}
                   pattern="[0-9]+(\.[0-9]{1,3})?"
@@ -224,6 +225,11 @@ export function Partners({ kind }: { kind: PartnerKind }) {
                 <input required inputMode="decimal" value={values.openingBalance}
                   pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("openingBalance", event.target.value)} />
+              </label>
+              <label>{t("creditLimit")}
+                <input required inputMode="decimal" value={values.creditLimit}
+                  pattern="[0-9]+(\.[0-9]{1,3})?"
+                  onChange={event => change("creditLimit", event.target.value)} />
               </label>
             </>
           )}

@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.AddField(model_name="customer", name="company_name",
                             field=models.CharField(max_length=200, blank=True, default=""), preserve_default=False),
         migrations.AddField(model_name="customer", name="email",
-                            field=models.CharField(max_length=200, blank=True, default=""), preserve_default=False),
+                            field=models.EmailField(max_length=200, blank=True, default=""), preserve_default=False),
         migrations.AddField(model_name="customer", name="tax_number",
                             field=models.CharField(max_length=100, blank=True, default=""), preserve_default=False),
         migrations.AddField(model_name="customer", name="opening_balance",

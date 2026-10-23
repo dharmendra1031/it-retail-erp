@@ -38,6 +38,9 @@ export interface PartnerValues {
   addressEn: string;
   addressAr: string;
   mobile: string;
+  contactPerson: string;
+  telephone: string;
+  remarks: string;
   paymentTermsDays: number;
   isActive: boolean;
   companyName: string;
