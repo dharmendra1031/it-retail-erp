@@ -77,6 +77,14 @@ const english = {
   unableSaveCompany: "Unable to save company.",
   unableDeleteCompany: "Unable to delete company.",
   invalidRequest: "Invalid request.",
+  duplicateCode: "Code already exists.",
+  invalidCode: "Invalid code.",
+  nameRequired: "Name is required.",
+  duplicateCategory: "Category code already exists.",
+  duplicateBrand: "Brand code already exists.",
+  duplicateUnit: "Unit code already exists.",
+  recordInUse: "Record is in use.",
+  protectedDocuments: "Protected documents exist.",
   duplicateRole: "Role name already exists.",
   assignedRole: "Role is assigned to users.",
   confirmDeleteRole: "Delete role",
@@ -190,6 +198,14 @@ const arabic: Record<keyof typeof english, string> = {
   unableSaveCompany: "تعذر حفظ الشركة.",
   unableDeleteCompany: "تعذر حذف الشركة.",
   invalidRequest: "البيانات المدخلة غير صحيحة.",
+  duplicateCode: "الرمز مستخدم بالفعل.",
+  invalidCode: "الرمز غير صالح.",
+  nameRequired: "الاسم مطلوب.",
+  duplicateCategory: "رمز الفئة مستخدم بالفعل.",
+  duplicateBrand: "رمز العلامة التجارية مستخدم بالفعل.",
+  duplicateUnit: "رمز الوحدة مستخدم بالفعل.",
+  recordInUse: "لا يمكن حذف سجل مستخدم.",
+  protectedDocuments: "لا يمكن حذف سجل يحتوي على مستندات محمية.",
   duplicateRole: "اسم الدور موجود بالفعل.",
   assignedRole: "هذا الدور مخصص لمستخدمين.",
   confirmDeleteRole: "حذف الدور",
@@ -263,9 +279,23 @@ export function useLanguage() {
   return context;
 }
 
+const errorKeys: Record<string, TranslationKey> = {
+  "Role name already exists.": "duplicateRole",
+  "Role is assigned to users.": "assignedRole",
+  "Invalid request.": "invalidRequest",
+  "Code already exists.": "duplicateCode",
+  "Invalid code.": "invalidCode",
+  "Name required.": "nameRequired",
+  "Name is required.": "nameRequired",
+  "Category code already exists.": "duplicateCategory",
+  "Brand code already exists.": "duplicateBrand",
+  "Unit code already exists.": "duplicateUnit",
+  "Record is in use.": "recordInUse",
+  "Protected documents exist.": "protectedDocuments",
+  "Invalid document.": "invalidDocument",
+};
+
 export function languageError(message: string, t: (key: TranslationKey) => string) {
-  if (message === "Role name already exists.") return t("duplicateRole");
-  if (message === "Role is assigned to users.") return t("assignedRole");
-  if (message === "Invalid request.") return t("invalidRequest");
-  return message;
+  const key = errorKeys[message];
+  return key ? t(key) : message;
 }
