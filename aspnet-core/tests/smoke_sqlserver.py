@@ -22,11 +22,22 @@ def request(client, path, method="GET", payload=None, csrf=None, multipart=False
     if payload is not None:
         if multipart:
             boundary = "ERP-Smoke-Boundary"
-            fields = [
-                f"--{boundary}\r\nContent-Disposition: form-data; name=\"{key}\"\r\n\r\n{value}\r\n"
-                for key, value in payload.items()
-            ]
-            body = ("".join(fields) + f"--{boundary}--\r\n").encode("utf-8")
+            fields = []
+            for key, value in payload.items():
+                if isinstance(value, tuple):
+                    filename, mime, contents = value
+                    fields.append(
+                        f'--{boundary}\r\nContent-Disposition: form-data; '
+                        f'name="{key}"; filename="{filename}"\r\n'
+                        f'Content-Type: {mime}\r\n\r\n'.encode("utf-8")
+                        + contents + b"\r\n"
+                    )
+                else:
+                    fields.append(
+                        f'--{boundary}\r\nContent-Disposition: form-data; '
+                        f'name="{key}"\r\n\r\n{value}\r\n'.encode("utf-8")
+                    )
+            body = b"".join(fields) + f"--{boundary}--\r\n".encode("utf-8")
             headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
         else:
             body = json.dumps(payload).encode("utf-8")
@@ -182,12 +193,14 @@ def check_api():
         }, csrf,
     )
     assert status == 200 and deactivated["isActive"] is False, "User deactivation failed"
+    employee = build_opener(HTTPCookieProcessor(CookieJar()))
+    _, employee_csrf = request(employee, "/api/auth/csrf")
     status, _ = request(
-        build_opener(HTTPCookieProcessor(CookieJar())),
-        "/api/auth/login", "POST",
+        employee, "/api/auth/login", "POST",
         {"email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False},
+        employee_csrf["csrfToken"],
     )
-    assert status in (400, 403, 401), "Disabled-user login unexpectedly permitted"
+    assert status == 401, "Disabled-user login unexpectedly permitted"
 
     status, company = request(
         client, "/api/companies", "POST",
@@ -199,8 +212,78 @@ def check_api():
     status, company = request(client, f"/api/companies/{company['id']}")
     assert status == 200 and company["nameAr"] == "متجر اختبار", "Arabic round-trip failed"
 
+    status, branch = request(client, "/api/branches", "POST", {
+        "companyId": company["id"], "code": "HQ", "nameEn": "Head Office",
+        "nameAr": "المكتب الرئيسي", "isActive": True,
+    }, csrf)
+    assert status == 201 and branch["companyId"] == company["id"], "Branch creation failed"
+    status, duplicate_branch = request(client, "/api/branches", "POST", {
+        "companyId": company["id"], "code": "HQ", "nameEn": "Duplicate",
+    }, csrf)
+    assert status == 400, "Duplicate branch code must be rejected"
+    status, another_branch = request(client, "/api/branches", "POST", {
+        "companyId": company["id"], "code": "B2", "nameEn": "Branch Two",
+    }, csrf)
+    assert status == 201, "Second branch missing"
+    status, warehouse = request(client, "/api/warehouses", "POST", {
+        "branchId": branch["id"], "code": "MAIN",
+        "nameEn": "Main Warehouse", "nameAr": "المخزن الرئيسي",
+    }, csrf)
+    assert status == 201, "Warehouse creation failed"
+    status, duplicate_warehouse = request(client, "/api/warehouses", "POST", {
+        "branchId": branch["id"], "code": "MAIN", "nameEn": "Duplicate",
+    }, csrf)
+    assert status == 400, "Duplicate warehouse key accepted"
+
+    status, assigned_user = request(client, f"/api/users/{created_user['id']}", "PUT", {
+        "username": "sqlsales", "email": "sqlsales@example.test",
+        "fullName": "SQL Sales", "mobile": "9876543210",
+        "roleIds": [role["id"]], "isActive": True, "branchId": branch["id"],
+    }, csrf)
+    assert status == 200 and assigned_user["branchId"] == branch["id"], "Branch assignment failed"
+    employee = build_opener(HTTPCookieProcessor(CookieJar()))
+    _, employee_csrf = request(employee, "/api/auth/csrf")
+    status, session = request(employee, "/api/auth/login", "POST", {
+        "email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False,
+    }, employee_csrf["csrfToken"])
+    assert status == 200 and not session["isAdmin"], "Branch employee login failed"
+    status, visible_branches = request(employee, "/api/branches")
+    assert status == 200 and [item["id"] for item in visible_branches] == [branch["id"]], "Cross-branch list leaked"
+    status, visible_warehouses = request(employee, "/api/warehouses")
+    assert status == 200 and [item["id"] for item in visible_warehouses] == [warehouse["id"]], "Cross-branch warehouse leaked"
+    status, _ = request(employee, f"/api/branches/{another_branch['id']}")
+    assert status == 404, "Cross-branch record access allowed"
+    _, employee_csrf = request(employee, "/api/auth/csrf")
+    status, _ = request(employee, "/api/branches", "POST", {
+        "companyId": company["id"], "code": "BAD", "nameEn": "Forbidden",
+    }, employee_csrf["csrfToken"])
+    assert status == 403, "Employee changed branch without permission"
     status, _ = request(client, f"/api/companies/{company['id']}", "DELETE", csrf=csrf)
-    assert status == 204, "Company delete failed"
+    assert status == 409, "Referenced company must remain protected"
+    status, _ = request(client, f"/api/branches/{branch['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "In-use branch must remain protected"
+
+    from io import BytesIO
+    from PIL import Image
+    image = BytesIO()
+    Image.new("RGB", (2, 2), "white").save(image, format="PNG")
+    status, invalid_logo = request(client, "/api/companies", "POST", {
+        "nameEn": "Bad Mime Shop", "logo": ("logo.png", "text/plain", image.getvalue()),
+    }, csrf, multipart=True)
+    assert status == 400, "Mismatched MIME type accepted"
+    status, invalid_logo = request(client, "/api/companies", "POST", {
+        "nameEn": "Corrupt Image Shop", "logo": ("logo.png", "image/png", b"not an image"),
+    }, csrf, multipart=True)
+    assert status == 400, "Invalid PNG signature accepted"
+    status, logo_company = request(client, "/api/companies", "POST", {
+        "nameEn": "Logo Shop", "logo": ("logo.png", "image/png", image.getvalue()),
+    }, csrf, multipart=True)
+    assert status == 201 and logo_company["logoUrl"], "Valid logo upload failed"
+    with client.open(URL + logo_company["logoUrl"], timeout=10) as image_response:
+        assert image_response.status == 200 and image_response.read() == image.getvalue(), "Uploaded logo unavailable"
+    status, _ = request(client, f"/api/companies/{logo_company['id']}", "DELETE", csrf=csrf)
+    assert status == 204, "Unreferenced Logo Company delete failed"
+
     status, _ = request(client, f"/api/roles/{role['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Assigned role must remain protected"
     status, _ = request(client, "/api/auth/logout", "POST", csrf=csrf)
