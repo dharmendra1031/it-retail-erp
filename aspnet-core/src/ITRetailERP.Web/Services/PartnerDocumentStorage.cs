@@ -30,6 +30,7 @@ public static class PartnerDocumentStorage
     public static string SafeName(string name)
     {
         var result = Path.GetFileName(name.Replace('\\', '/'));
-        return string.Concat(result.Where(c => !char.IsControl(c) && c != '"'))[..Math.Min(200, result.Length)];
+        var safe = string.Concat(result.Where(c => !char.IsControl(c) && c != '"'));
+        return safe[..Math.Min(200, safe.Length)];
     }
 }
