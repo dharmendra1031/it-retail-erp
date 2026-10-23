@@ -58,12 +58,14 @@ export function CompanyTable({
                 <td className="actions">
                   <button className="secondary" type="button" onClick={() => onPrint(company)}>{t("printIdentity")}</button>
                   {canManage && (
+                    <>
                     <button className="secondary" type="button" onClick={() => onEdit(company)}>
                       Edit
                     </button>
                     <button className="danger" type="button" onClick={() => onDelete(company)}>
                       Delete
                     </button>
+                    </>
                   )}
                 </td>
               </tr>
