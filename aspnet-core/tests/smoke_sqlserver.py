@@ -202,6 +202,39 @@ def check_api():
     )
     assert status == 401, "Disabled-user login unexpectedly permitted"
 
+    customer_data = {
+        "code": "C-001", "nameEn": "Credit Shop", "nameAr": "عميل الائتمان",
+        "addressAr": "الكويت", "customerType": "corporate",
+        "paymentTermsDays": 30, "creditLimit": "2500.750", "civilId": "123456",
+    }
+    status, customer = request(client, "/api/customers", "POST", customer_data, csrf)
+    assert status == 201 and customer["code"] == "C-001" and customer["creditLimit"] == "2500.750", "Customer creation failed"
+    status, duplicate_customer = request(client, "/api/customers", "POST", customer_data, csrf)
+    assert status == 400, "Duplicate customer code accepted"
+    status, invalid_credit = request(client, "/api/customers", "POST", {
+        **customer_data, "code": "C-002", "creditLimit": "-5.000",
+    }, csrf)
+    assert status == 400, "Negative credit limit accepted"
+
+    supplier_data = {
+        "code": "S-001", "nameEn": "Main Supplier", "nameAr": "المورد",
+        "paymentTermsDays": 14, "openingBalance": "135.500",
+    }
+    status, supplier = request(client, "/api/suppliers", "POST", supplier_data, csrf)
+    assert status == 201 and supplier["openingBalance"] == "135.500", "Supplier opening balance incorrect"
+    status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
+    assert status == 400, "Duplicate supplier code accepted"
+
+    document_data = ("proof.pdf", "application/pdf", b"%PDF-1.4\\nprivate")
+    status, document = request(client, f"/api/customers/{customer['id']}/documents", "POST", {
+        "file": document_data,
+    }, csrf, multipart=True)
+    assert status == 201 and document["fileName"] == "proof.pdf", "Private customer upload failed"
+    with client.open(URL + f"/api/customers/{customer['id']}/documents/{document['id']}") as downloaded:
+        assert downloaded.read() == b"%PDF-1.4\\nprivate", "Customer document changed"
+    status, _ = request(client, f"/api/customers/{customer['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "Customer with protected documents must not delete"
+
     status, company = request(
         client, "/api/companies", "POST",
         {"nameEn": "SQL Shop", "nameAr": "متجر اختبار", "isActive": "true"},
