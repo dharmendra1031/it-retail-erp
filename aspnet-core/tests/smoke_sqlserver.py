@@ -212,6 +212,14 @@ def check_api():
     status, company = request(client, f"/api/companies/{company['id']}")
     assert status == 200 and company["nameAr"] == "متجر اختبار", "Arabic round-trip failed"
 
+    status, invalid_update = request(
+        client, f"/api/companies/{company['id']}", "PUT",
+        {"nameEn": "   "}, csrf, multipart=True
+    )
+    assert status == 400 and invalid_update == {"detail": "Invalid request."}, "Blank Company update accepted"
+    status, unchanged_company = request(client, f"/api/companies/{company['id']}")
+    assert status == 200 and unchanged_company["nameEn"] == "SQL Shop", "Rejected Company update modified record"
+
     status, branch = request(client, "/api/branches", "POST", {
         "companyId": company["id"], "code": "HQ", "nameEn": "Head Office",
         "nameAr": "المكتب الرئيسي", "isActive": True,
@@ -275,6 +283,12 @@ def check_api():
         "nameEn": "Corrupt Image Shop", "logo": ("logo.png", "image/png", b"not an image"),
     }, csrf, multipart=True)
     assert status == 400, "Invalid PNG signature accepted"
+
+    status, oversized_logo = request(client, "/api/companies", "POST", {
+        "nameEn": "Oversized Logo Shop",
+        "logo": ("too-large.png", "image/png", b"X" * (2 * 1024 * 1024 + 1)),
+    }, csrf, multipart=True)
+    assert status == 400, "Oversized logo was accepted"
     status, logo_company = request(client, "/api/companies", "POST", {
         "nameEn": "Logo Shop", "logo": ("logo.png", "image/png", image.getvalue()),
     }, csrf, multipart=True)

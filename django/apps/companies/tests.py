@@ -204,6 +204,18 @@ class CompanyLogoLifecycleTests(TestCase):
         self.assertTrue(os.path.exists(company.logo.path))
         self.assertFalse(os.path.exists(os.path.join(self.folder.name, old_name)))
 
+    def test_oversized_logo_is_rejected_without_creating_company(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        oversized = SimpleUploadedFile(
+            "too-large.png", b"X" * (2 * 1024 * 1024 + 1), content_type="image/png"
+        )
+        response = self.client.post(
+            "/api/companies", {"nameEn": "Too Large", "logo": oversized}, format="multipart"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Company.objects.filter(name_en="Too Large").exists())
+
     def test_invalid_mime_and_corrupt_image_rejected(self):
         from django.core.files.uploadedfile import SimpleUploadedFile
         from .models import Company

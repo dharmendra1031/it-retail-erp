@@ -72,7 +72,7 @@ public sealed class CompaniesApiController(
         return CreatedAtAction(nameof(Get), new { id = company.Id }, CompanyResponse.FromEntity(company));
     }
 
-        [HttpPut("{id:long}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "companies.edit")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<ActionResult<CompanyResponse>> Update(long id, [FromForm] CompanyRequest request)
@@ -83,7 +83,7 @@ public sealed class CompaniesApiController(
             return NotFound();
         }
 
-        if (!ValidateLogo(request.Logo))
+        if (string.IsNullOrWhiteSpace(request.NameEn) || !ValidateLogo(request.Logo))
         {
             return BadRequest(new { detail = "Invalid request." });
         }
@@ -115,7 +115,7 @@ public sealed class CompaniesApiController(
         return Ok(CompanyResponse.FromEntity(company));
     }
 
-        [HttpDelete("{id:long}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "companies.delete")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Delete(long id)
