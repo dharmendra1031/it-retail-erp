@@ -130,7 +130,7 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
         model.AddressEn = request.AddressEn.Trim();
         model.AddressAr = request.AddressAr.Trim();
         model.Mobile = request.Mobile.Trim();
-        model.Email = request.Email.Trim();
+        model.Email = request.Email?.Trim() ?? "";
         model.TaxNumber = request.TaxNumber.Trim();
         model.PaymentTermsDays = request.PaymentTermsDays;
         model.OpeningBalance = request.OpeningBalance;

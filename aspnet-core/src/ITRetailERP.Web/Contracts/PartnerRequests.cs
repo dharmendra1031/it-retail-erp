@@ -27,7 +27,7 @@ public sealed class CustomerRequest : PartnerRequest
 
 public sealed class SupplierRequest : PartnerRequest
 {
-    [EmailAddress, MaxLength(200)] public string Email { get; set; } = "";
+    [EmailAddress, MaxLength(200)] public string? Email { get; set; }
     [MaxLength(100)] public string TaxNumber { get; set; } = "";
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public decimal OpeningBalance { get; set; }

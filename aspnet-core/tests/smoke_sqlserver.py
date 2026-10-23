@@ -221,7 +221,7 @@ def check_api():
         "paymentTermsDays": 14, "openingBalance": "135.500",
     }
     status, supplier = request(client, "/api/suppliers", "POST", supplier_data, csrf)
-    assert status == 201 and supplier["openingBalance"] == "135.500", "Supplier opening balance incorrect"
+    assert status == 201 and supplier["openingBalance"] == "135.500", f"Supplier opening balance incorrect: {status} {supplier}"
     status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 400, "Duplicate supplier code accepted"
 
