@@ -132,6 +132,7 @@ jobs:
           admin_password="Erp9$(openssl rand -hex 18)!"
           echo "::add-mask::$admin_password"
           echo "ERP_ADMIN_PASSWORD=$admin_password" >> "$GITHUB_ENV"
+          dotnet restore aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj
           dotnet tool install --global dotnet-ef --version 10.0.13
           dotnet ef database update --project aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj
       - name: ASP.NET Core API + SQL Server smoke
