@@ -10,8 +10,12 @@ export interface Partner {
   addressEn: string;
   addressAr: string;
   mobile: string;
+  contactPerson: string;
+  telephone: string;
+  remarks: string;
   paymentTermsDays: number;
   isActive: boolean;
+  companyName?: string;
   civilId?: string;
   customerType?: string;
   creditLimit?: string;
@@ -36,6 +40,7 @@ export interface PartnerValues {
   mobile: string;
   paymentTermsDays: number;
   isActive: boolean;
+  companyName: string;
   civilId: string;
   customerType: string;
   creditLimit: string;
@@ -56,12 +61,18 @@ export function savePartner(kind: PartnerKind, values: PartnerValues, id?: numbe
     addressEn: values.addressEn,
     addressAr: values.addressAr,
     mobile: values.mobile,
+    contactPerson: values.contactPerson,
+    telephone: values.telephone,
+    remarks: values.remarks,
     paymentTermsDays: values.paymentTermsDays,
     isActive: values.isActive,
   };
   const details = kind === "customers"
-    ? { civilId: values.civilId, customerType: values.customerType, creditLimit: values.creditLimit }
-    : { taxNumber: values.taxNumber, email: values.email, openingBalance: values.openingBalance };
+    ? { companyName: values.companyName, civilId: values.civilId, customerType: values.customerType,
+        creditLimit: values.creditLimit, email: values.email, taxNumber: values.taxNumber,
+        openingBalance: values.openingBalance }
+    : { taxNumber: values.taxNumber, email: values.email, openingBalance: values.openingBalance,
+        creditLimit: values.creditLimit };
 
   return apiRequest<Partner>(`/api/${kind}${id ? `/${id}` : ""}`, {
     method: id ? "PUT" : "POST",

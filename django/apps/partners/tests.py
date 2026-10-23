@@ -21,10 +21,15 @@ class PartnerApiTests(TestCase):
             "code": "c-001", "nameEn": "Al Noor", "nameAr": "النور",
             "addressAr": "مدينة الكويت", "customerType": "corporate",
             "paymentTermsDays": 30, "creditLimit": "2500.750", "civilId": "123456",
+            "companyName": "Al Noor IT", "contactPerson": "Ali", "telephone": "22223333",
+            "email": "sales@example.test", "taxNumber": "VAT-123",
+            "openingBalance": "15.250", "remarks": "First order",
         }
         self.supplier = {
             "code": "s-001", "nameEn": "Supplier", "nameAr": "المورد",
             "paymentTermsDays": 14, "openingBalance": "135.500",
+            "creditLimit": "800.500", "contactPerson": "Omar",
+            "telephone": "22221111", "remarks": "Monthly terms",
         }
 
     def test_customer_credit_duplicate_and_validation(self):
@@ -34,6 +39,8 @@ class PartnerApiTests(TestCase):
         item = Customer.objects.get(pk=created.data["id"])
         self.assertEqual((item.code, item.name_ar, item.credit_limit),
                          ("C-001", "النور", Decimal("2500.750")))
+        self.assertEqual((item.company_name, item.opening_balance, item.tax_number),
+                         ("Al Noor IT", Decimal("15.250"), "VAT-123"))
         self.assertEqual(self.client.post("/api/customers", {
             **self.customer, "code": "C-001"
         }, format="json").status_code, 400)
@@ -49,6 +56,7 @@ class PartnerApiTests(TestCase):
         self.assertEqual(response.status_code, 201, response.data)
         self.assertEqual(Supplier.objects.get(pk=response.data["id"]).opening_balance,
                          Decimal("135.500"))
+        self.assertEqual(response.data["creditLimit"], "800.500")
         self.assertEqual(self.client.post("/api/suppliers", self.supplier, format="json").status_code, 400)
 
     def test_civil_id_hidden_from_nonadmin(self):

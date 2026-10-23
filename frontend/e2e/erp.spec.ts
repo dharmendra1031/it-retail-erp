@@ -332,6 +332,9 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByLabel("Company Name (English)").fill("Credit Partner");
   await page.getByLabel("اسم الشركة").fill("عميل تجريبي");
   await page.getByLabel("Credit Limit").fill("2500.750");
+  await page.getByLabel("Company Name", { exact: true }).fill("Credit Shop LLC");
+  await page.getByLabel("Contact Person").fill("Ali");
+  await page.getByLabel("Opening Balance").fill("15.250");
   await page.getByLabel("Payment Terms (days)").fill("30");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: "Credit Partner" })).toContainText("عميل تجريبي");
@@ -341,6 +344,8 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByLabel("Code").fill(`S-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("First Supplier");
   await page.getByLabel("Opening Balance").fill("135.500");
+  await page.getByLabel("Credit Limit").fill("800.500");
+  await page.getByLabel("Contact Person").fill("Omar");
 
   const supplierForm = page.locator("form.company-form");
   expect(await supplierForm.evaluate((form: HTMLFormElement) => form.checkValidity())).toBe(true);

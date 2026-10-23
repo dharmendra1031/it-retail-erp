@@ -8,7 +8,8 @@ import { languageError, useLanguage } from "../i18n";
 
 const blank: PartnerValues = {
   code: "", nameEn: "", nameAr: "", addressEn: "", addressAr: "",
-  mobile: "", paymentTermsDays: 0, isActive: true, civilId: "",
+  mobile: "", telephone: "", contactPerson: "", remarks: "", companyName: "",
+  paymentTermsDays: 0, isActive: true, civilId: "",
   customerType: "retail", creditLimit: "0.000",
   taxNumber: "", email: "", openingBalance: "0.000",
 };
@@ -154,18 +155,54 @@ export function Partners({ kind }: { kind: PartnerKind }) {
             <input maxLength={30} value={values.mobile}
               onChange={event => change("mobile", event.target.value)} />
           </label>
+          <label>{t("telephone")}
+            <input maxLength={30} value={values.telephone}
+              onChange={event => change("telephone", event.target.value)} />
+          </label>
+          <label>{t("contactPerson")}
+            <input maxLength={150} value={values.contactPerson}
+              onChange={event => change("contactPerson", event.target.value)} />
+          </label>
           {isCustomer ? (
             <>
+              <label>{t("companyName")}
+                <input maxLength={200} value={values.companyName}
+                  onChange={event => change("companyName", event.target.value)} />
+              </label>
               <label>{t("customerType")}
                 <select value={values.customerType} onChange={event => change("customerType", event.target.value)}>
                   <option value="retail">{t("retail")}</option>
                   <option value="wholesale">{t("wholesale")}</option>
                   <option value="corporate">{t("corporate")}</option>
+                  <option value="cash">{t("cash")}</option>
+                  <option value="credit">{t("credit")}</option>
+                  <option value="individual">{t("individual")}</option>
+                  <option value="company">{t("company")}</option>
+                  <option value="government">{t("government")}</option>
+                  <option value="other">{t("other")}</option>
                 </select>
               </label>
               <label>{t("civilId")}
                 <input maxLength={30} value={values.civilId}
                   onChange={event => change("civilId", event.target.value)} />
+              </label>
+              <label>{t("creditLimit")}
+                <input required inputMode="decimal" value={values.creditLimit}
+                  pattern="[0-9]+(\.[0-9]{1,3})?"
+                  onChange={event => change("creditLimit", event.target.value)} />
+              </label>
+              <label>{t("email")}
+                <input type="email" maxLength={200} value={values.email}
+                  onChange={event => change("email", event.target.value)} />
+              </label>
+              <label>{t("taxNumber")}
+                <input maxLength={100} value={values.taxNumber}
+                  onChange={event => change("taxNumber", event.target.value)} />
+              </label>
+              <label>{t("openingBalance")}
+                <input required inputMode="decimal" value={values.openingBalance}
+                  pattern="[0-9]+(\.[0-9]{1,3})?"
+                  onChange={event => change("openingBalance", event.target.value)} />
               </label>
               <label>{t("creditLimit")}
                 <input required inputMode="decimal" value={values.creditLimit}
@@ -190,6 +227,10 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               </label>
             </>
           )}
+          <label>{t("remarks")}
+            <textarea maxLength={1000} value={values.remarks}
+              onChange={event => change("remarks", event.target.value)} />
+          </label>
           <label>{t("paymentTermsDays")}
             <input type="number" min={0} max={365} step={1} required
               value={values.paymentTermsDays}

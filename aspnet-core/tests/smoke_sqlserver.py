@@ -252,9 +252,13 @@ def check_api():
         "code": "C-001", "nameEn": "Credit Shop", "nameAr": "عميل الائتمان",
         "addressAr": "الكويت", "customerType": "corporate",
         "paymentTermsDays": 30, "creditLimit": "2500.750", "civilId": "123456",
+        "companyName": "Credit Shop LLC", "contactPerson": "Ahmed",
+        "telephone": "22221111", "email": "credit@example.test",
+        "taxNumber": "VAT-555", "openingBalance": "50.250", "remarks": "Net 30",
     }
     status, customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 201 and customer["code"] == "C-001" and customer["creditLimit"] == "2500.750", "Customer creation failed"
+    assert customer["companyName"] == "Credit Shop LLC" and customer["openingBalance"] == "50.250", "Customer details missing"
     status, duplicate_customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 400, "Duplicate customer code accepted"
     status, invalid_credit = request(client, "/api/customers", "POST", {
@@ -265,9 +269,12 @@ def check_api():
     supplier_data = {
         "code": "S-001", "nameEn": "Main Supplier", "nameAr": "المورد",
         "paymentTermsDays": 14, "openingBalance": "135.500",
+        "creditLimit": "800.500", "contactPerson": "Omar",
+        "telephone": "12345678", "remarks": "Net 14",
     }
     status, supplier = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 201 and supplier["openingBalance"] == "135.500", f"Supplier opening balance incorrect: {status} {supplier}"
+    assert supplier["creditLimit"] == "800.500" and supplier["contactPerson"] == "Omar", "Supplier details missing"
     status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
     assert status == 400, "Duplicate supplier code accepted"
 
