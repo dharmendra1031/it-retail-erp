@@ -2,7 +2,7 @@ from pathlib import Path
 
 from django.http import HttpResponse
 from rest_framework import serializers
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -135,6 +135,8 @@ class SupplierViewSet(PartnerViewSet):
     document_fk = "supplier"
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def download_document(request, kind, partner_id, document_id):
     if not request.user.is_authenticated or not IsAdminUser().has_permission(request, None):
         return HttpResponse(status=403)
