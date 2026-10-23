@@ -32,6 +32,18 @@ jobs:
           SECRET_KEY: ci-only-not-for-production
           DB_NAME: erp_ci
         run: python manage.py makemigrations --check --dry-run
+      - name: Reject incomplete production environment
+        run: |
+          if env -u SECRET_KEY -u DB_NAME DJANGO_SETTINGS_MODULE=config.settings DEBUG=False python manage.py check > /tmp/erp-env-check.log 2>&1; then
+            echo "Django started without SECRET_KEY"
+            exit 1
+          fi
+          grep -q 'SECRET_KEY is required' /tmp/erp-env-check.log
+          if env -u DB_NAME DJANGO_SETTINGS_MODULE=config.settings DEBUG=False SECRET_KEY=ci-secret python manage.py check > /tmp/erp-env-check.log 2>&1; then
+            echo "Django started without DB_NAME"
+            exit 1
+          fi
+          grep -q 'DB_NAME is required' /tmp/erp-env-check.log
       - name: Django unit tests
         env:
           SECRET_KEY: ci-only-not-for-production
@@ -143,6 +155,8 @@ jobs:
           dotnet tool install --global dotnet-ef --version 10.0.13
           dotnet ef database update --project aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj
           dotnet ef migrations has-pending-model-changes --project aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj
+          dotnet ef database update 20260918070000_InitialCreate --project aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj
+          dotnet ef database update --project aspnet-core/src/ITRetailERP.Web/ITRetailERP.Web.csproj
       - name: ASP.NET Core document numbering integration tests
         run: dotnet test aspnet-core/tests/ITRetailERP.Tests/ITRetailERP.Tests.csproj --configuration Release --verbosity minimal
       - name: ASP.NET Core API + SQL Server smoke

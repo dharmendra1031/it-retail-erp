@@ -34,3 +34,14 @@ Role JSON: `{ "id": 1, "name": "Cashier" }`. Create/update use JSON `{ "name": "
 Company reads require login; create/update/delete require Admin. Authentication responses include `isAdmin` boolean. Both backends use the same CSRF header for mutations.
 
 All entity IDs are numeric auto-increment values.
+
+
+## Validation/error contract
+
+Both APIs return `{ "detail": "Invalid request." }` for malformed or missing required fields. The duplicate-role condition returns `{ "detail": "Role name already exists." }`. Unauthorized (401), forbidden (403) and missing resources (404) use the HTTP status with an empty payload. Role delete while assigned returns 409 and an explanatory `detail`. Backend-native field-level validation text is intentionally not exposed by this minimal shared contract.
+
+Full financial/stock transaction response schemas and human-readable document references depend on the owning business modules and decision DEC-05; they are not yet implemented.
+
+## Document sequences (internal service)
+
+There is no public number-reservation endpoint. Both backends implement SQL Server transaction-locked `DocumentSequences` counters scoped by `series`, `fiscalYear` and `branchId`. Numeric database keys stay auto-increment `BIGINT`. Formatting, branch prefixes and period resets remain a separate configuration/business approval, never encoded in database IDs.
