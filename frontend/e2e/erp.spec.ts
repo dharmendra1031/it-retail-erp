@@ -218,3 +218,28 @@ test("admin assigns role permission matrix with keyboard-accessible checkboxes",
   await row.getByRole("button", { name: "Delete" }).click();
   await expect(row).toHaveCount(0);
 });
+
+
+test("admin creates and deactivates an employee from keyboard-friendly User Master", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "User Master" }).click();
+  await expect(page.getByRole("heading", { name: "User Master" })).toBeVisible();
+  const username = page.getByLabel("Username");
+  await username.fill("browseremployee");
+  await username.press("Enter");
+  await expect(page.getByLabel("Full Name")).toBeFocused();
+  await page.getByLabel("Full Name").fill("Browser Employee");
+  await page.getByLabel("Email").last().fill("browseremployee@example.test");
+  await page.getByLabel("Password").last().fill("StrongBrowserPass123!");
+  await page.getByRole("button", { name: "Save User" }).click();
+  const row = page.getByRole("row").filter({ hasText: "browseremployee" });
+  await expect(row).toBeVisible();
+  await row.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("checkbox", { name: "Active" }).uncheck();
+  await page.getByRole("button", { name: "Save User" }).click();
+  await expect(row).toContainText("Inactive");
+});
