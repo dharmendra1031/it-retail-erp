@@ -50,3 +50,12 @@ There is no public number-reservation endpoint. Both backends implement SQL Serv
 ## Current frontend validation feedback
 
 The shared TypeScript client reads the `detail` field of JSON error responses. Role Master displays duplicate/assigned role errors, and Company Master displays backend validation messages. The client does not render raw HTML error responses. This is for the current foundational endpoints; stock/financial document errors belong to their future modules.
+
+
+## Authentication and session lifecycle (WP05)
+
+- `GET /api/auth/csrf` returns `{ "csrfToken": "..." }`. React refreshes the token after login (Django rotates it when signing in).
+- `POST /api/auth/login` accepts `{ "email": "...", "password": "...", "rememberMe": false }`; successful response `{ "id": number, "name": string, "email": string, "isAdmin": boolean }`.
+- `GET /api/auth/me` returns that user object with a valid session; `POST /api/auth/logout` returns 204. Missing/expired session gives 401.
+- Invalid password returns 401; five failures lock an existing account for 15 minutes. Invalid payload returns `400 { "detail": "Invalid request." }`; CSRF failures return **403**, with no sensitive server details. Both implementations use `X-CSRF-TOKEN` for unsafe methods.
+- Session lifetime 30 minutes. `rememberMe` keeps the cookie across browser restarts until expiry; without it the cookie is session-only. The React app handles 401 on protected API requests by returning to Login.

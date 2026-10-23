@@ -62,3 +62,8 @@ npm run dev
 ```
 
 The `development` branch CI verifies Django unit tests, real disposable SQL Server migrations/concurrency, ASP.NET Core build/migrations/API tests, frontend TypeScript build and Playwright browser smoke. Configuration failures are explicit; demo credentials must be changed before deployment.
+
+
+## Development standards
+
+The mandatory rules are in [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md): minimal idiomatic code, reusable keyboard-first form navigation (Enter = next field; last Enter submits), English/Arabic with RTL/LTR, and API parity for both SQL Server backends. New forms must add Playwright keyboard and bilingual tests.
