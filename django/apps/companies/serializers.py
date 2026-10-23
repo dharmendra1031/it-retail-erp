@@ -1,4 +1,5 @@
 from pathlib import Path
+from uuid import uuid4
 
 from django.core.files.storage import default_storage
 from rest_framework import serializers
@@ -97,9 +98,5 @@ class CompanySerializer(serializers.ModelSerializer):
     @staticmethod
     def _save_logo(company_id, file):
         extension = Path(file.name).suffix.lower()
-        path = f"company/company-{company_id}{extension}"
-
-        if default_storage.exists(path):
-            default_storage.delete(path)
-
+        path = f"company/company-{company_id}-{uuid4().hex}{extension}"
         return default_storage.save(path, file)
