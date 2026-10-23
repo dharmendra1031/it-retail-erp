@@ -1,10 +1,4 @@
 let csrfToken = "";
-let onUnauthorized: (() => void) | undefined;
-
-export function setUnauthorizedHandler(handler?: () => void) {
-  onUnauthorized = handler;
-}
-
 export async function refreshCsrfToken() {
   const response = await fetch("/api/auth/csrf", { credentials: "same-origin" });
 
