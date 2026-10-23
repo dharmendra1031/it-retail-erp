@@ -139,7 +139,7 @@ public sealed class CustomersApiController(ApplicationDbContext db) : Controller
         model.Remarks = request.Remarks.Trim();
         model.CivilId = request.CivilId.Trim();
         model.CompanyName = request.CompanyName.Trim();
-        model.Email = request.Email.Trim();
+        model.Email = request.Email?.Trim() ?? "";
         model.TaxNumber = request.TaxNumber.Trim();
         model.OpeningBalance = request.OpeningBalance;
         model.CustomerType = request.CustomerType;
