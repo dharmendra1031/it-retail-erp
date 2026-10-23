@@ -30,7 +30,7 @@ const emptyForm: CompanyFormValues = {
   logo: null,
 };
 
-export function Companies() {
+export function Companies({ canManage }: { canManage: boolean }) {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [form, setForm] = useState<CompanyFormValues>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -143,16 +143,19 @@ export function Companies() {
 
       {error && <div className="alert">{error}</div>}
 
-      <CompanyForm
-        values={form}
-        editing={editingId !== null}
-        saving={saving}
-        onChange={setValue}
-        onSubmit={saveCompany}
-        onCancel={resetForm}
-      />
+      {canManage && (
+        <CompanyForm
+          values={form}
+          editing={editingId !== null}
+          saving={saving}
+          onChange={setValue}
+          onSubmit={saveCompany}
+          onCancel={resetForm}
+        />
+      )}
 
       <CompanyTable
+        canManage={canManage}
         companies={filteredCompanies}
         query={query}
         onQueryChange={setQuery}

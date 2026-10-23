@@ -1,4 +1,8 @@
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
+from rest_framework.test import APIClient
+
+from apps.accounts.models import Role, User
+from .models import Company
 from django.urls import resolve
 
 from apps.companies.serializers import CompanySerializer
@@ -48,3 +52,46 @@ class ApiRouteTests(SimpleTestCase):
     def test_auth_login_route(self):
         match = resolve("/api/auth/login")
         self.assertEqual(match.url_name, "api-login")
+
+
+class CompanyAuthorizationTests(TestCase):
+    def setUp(self):
+        self.employee = User.objects.create_user(
+            username="employee", email="employee@example.com", password="TestPass123!"
+        )
+        self.admin = User.objects.create_superuser(
+            username="admin", email="admin@example.com", password="TestPass123!"
+        )
+        self.client = APIClient()
+
+    def test_employee_can_read_but_cannot_create_company(self):
+        Company.objects.create(name_en="Existing Company")
+        self.client.force_authenticate(user=self.employee)
+        self.assertEqual(self.client.get("/api/companies").status_code, 200)
+        self.assertEqual(
+            self.client.post("/api/companies", {"nameEn": "New Company"}, format="multipart").status_code,
+            403,
+        )
+        self.assertEqual(Company.objects.count(), 1)
+
+    def test_employee_cannot_change_or_delete_company(self):
+        company = Company.objects.create(name_en="Existing Company")
+        self.client.force_authenticate(user=self.employee)
+        self.assertEqual(
+            self.client.put(
+                f"/api/companies/{company.id}", {"nameEn": "Changed"}, format="multipart"
+            ).status_code,
+            403,
+        )
+        self.assertEqual(self.client.delete(f"/api/companies/{company.id}").status_code, 403)
+        company.refresh_from_db()
+        self.assertEqual(company.name_en, "Existing Company")
+
+    def test_admin_role_can_create_company(self):
+        self.employee.roles.add(Role.objects.get(name="Admin"))
+        self.client.force_authenticate(user=self.employee)
+        response = self.client.post(
+            "/api/companies", {"nameEn": "Authorized Company"}, format="multipart"
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Company.objects.filter(name_en="Authorized Company").exists())

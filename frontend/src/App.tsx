@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     <AppShell user={user} page={activePage} onPageChange={setPage} onLogout={handleLogout}>
-      {activePage === "roles" ? <Roles /> : <Companies />}
+      {activePage === "roles" ? <Roles /> : <Companies canManage={user.isAdmin} />}
     </AppShell>
   );
 }

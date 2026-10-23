@@ -34,6 +34,7 @@ public sealed class CompaniesApiController(
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult<CompanyResponse>> Create([FromForm] CompanyRequest request)
     {
@@ -60,6 +61,7 @@ public sealed class CompaniesApiController(
     }
 
     [HttpPut("{id:long}")]
+    [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult<CompanyResponse>> Update(long id, [FromForm] CompanyRequest request)
     {
@@ -94,6 +96,7 @@ public sealed class CompaniesApiController(
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(long id)
     {

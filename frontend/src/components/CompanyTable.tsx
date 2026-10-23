@@ -2,6 +2,7 @@ import { Company } from "../api/companies";
 
 interface Props {
   companies: Company[];
+  canManage: boolean;
   query: string;
   onQueryChange: (value: string) => void;
   onEdit: (company: Company) => void;
@@ -10,6 +11,7 @@ interface Props {
 
 export function CompanyTable({
   companies,
+  canManage,
   query,
   onQueryChange,
   onEdit,
@@ -37,7 +39,7 @@ export function CompanyTable({
               <th>Mobile</th>
               <th>Tax No.</th>
               <th>Status</th>
-              <th />
+              {canManage && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -49,27 +51,21 @@ export function CompanyTable({
                 <td>{company.mobile}</td>
                 <td>{company.taxNumber}</td>
                 <td>{company.isActive ? "Active" : "Inactive"}</td>
-                <td className="actions">
-                  <button
-                    className="secondary"
-                    type="button"
-                    onClick={() => onEdit(company)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="danger"
-                    type="button"
-                    onClick={() => onDelete(company)}
-                  >
-                    Delete
-                  </button>
-                </td>
+                {canManage && (
+                  <td className="actions">
+                    <button className="secondary" type="button" onClick={() => onEdit(company)}>
+                      Edit
+                    </button>
+                    <button className="danger" type="button" onClick={() => onDelete(company)}>
+                      Delete
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
             {!companies.length && (
               <tr>
-                <td colSpan={7} className="empty">
+                <td colSpan={canManage ? 7 : 6} className="empty">
                   No companies found.
                 </td>
               </tr>
