@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_protect
 from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
