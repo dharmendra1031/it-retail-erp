@@ -152,8 +152,9 @@ class AuthenticationTests(TestCase):
             "/api/auth/login", payload, format="json", HTTP_X_CSRF_TOKEN=token
         ).status_code, 200)
         self.assertEqual(client.post("/api/auth/logout").status_code, 403)
+        fresh_token = client.get("/api/auth/csrf").data["csrfToken"]
         self.assertEqual(client.post(
-            "/api/auth/logout", HTTP_X_CSRF_TOKEN=token
+            "/api/auth/logout", HTTP_X_CSRF_TOKEN=fresh_token
         ).status_code, 204)
 
     def test_remember_me_sets_session_expiry(self):
