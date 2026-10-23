@@ -31,7 +31,7 @@ class CompanySerializer(serializers.ModelSerializer):
     )
     socialMedia = serializers.CharField(source="social_media", allow_blank=True, required=False)
     isActive = serializers.BooleanField(source="is_active", required=False)
-    logo = serializers.ImageField(write_only=True, required=False)
+    logo = serializers.FileField(write_only=True, required=False)
     logoUrl = serializers.SerializerMethodField()
 
     class Meta:

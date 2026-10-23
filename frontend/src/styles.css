@@ -364,7 +364,13 @@ th {
   object-fit: contain;
 }
 
-.company-print { display: none; }
+.company-print {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #111;
+  margin-top: 16px;
+  padding: 20px;
+}
 
 @media print {
   .app-shell .sidebar, .app-shell .topbar, .content > :not(.company-print) {
@@ -372,5 +378,6 @@ th {
   }
   .app-shell { display: block; }
   .content { padding: 0; }
-  .company-print { display: block; padding: 20px; color: #111; }
+  .company-print { display: block; padding: 20px; color: #111; border: 0; }
+  .print-preview-close { display: none !important; }
 }

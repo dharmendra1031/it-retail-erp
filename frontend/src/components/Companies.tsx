@@ -183,6 +183,8 @@ export function Companies({ canManage }: { canManage: boolean }) {
       />
       {printCompany && (
         <section className="company-print" aria-label={t("printIdentity")}>
+          <button type="button" className="secondary print-preview-close"
+            onClick={() => setPrintCompany(null)}>{t("cancel")}</button>
           <h1>{printCompany.nameEn}</h1>
           <h2 dir="rtl">{printCompany.nameAr}</h2>
           <p>{printCompany.addressEn}</p>
