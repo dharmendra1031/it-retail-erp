@@ -128,7 +128,7 @@ jobs:
     env:
       DJANGO_SETTINGS_MODULE: config.settings_test
       SECRET_KEY: ci-only-browser-key
-      SQLITE_DB_PATH: ${{ runner.temp }}/erp-browser.sqlite3
+      SQLITE_DB_PATH: /tmp/erp-browser.sqlite3
       E2E_ADMIN_EMAIL: admin@example.test
       E2E_EMPLOYEE_EMAIL: staff@example.test
       VITE_PROXY_TARGET: http://127.0.0.1:8000
