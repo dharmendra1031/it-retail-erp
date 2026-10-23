@@ -295,6 +295,16 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 .WithMany().HasForeignKey("ParentId").OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity("ITRetailERP.Web.Models.Product", b =>
+        {
+            b.HasOne("ITRetailERP.Web.Models.Category", null).WithMany()
+                .HasForeignKey("CategoryId").OnDelete(DeleteBehavior.Restrict).IsRequired();
+            b.HasOne("ITRetailERP.Web.Models.Brand", null).WithMany()
+                .HasForeignKey("BrandId").OnDelete(DeleteBehavior.Restrict);
+            b.HasOne("ITRetailERP.Web.Models.Unit", null).WithMany()
+                .HasForeignKey("UnitId").OnDelete(DeleteBehavior.Restrict).IsRequired();
+        });
+
         modelBuilder.Entity("ITRetailERP.Web.Models.PartnerDocument", b =>
         {
             b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("bigint");
@@ -381,6 +391,37 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.HasKey("Id");
             b.HasIndex("Code").IsUnique();
             b.ToTable("Units");
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.Product", b =>
+        {
+            b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("bigint");
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+            b.Property<string>("Sku").IsRequired().HasMaxLength(40).HasColumnType("nvarchar(40)");
+            b.Property<string>("Barcode").HasMaxLength(64).HasColumnType("nvarchar(64)");
+            b.Property<string>("NameEn").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+            b.Property<string>("NameAr").IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+            b.Property<string>("DescriptionEn").IsRequired().HasMaxLength(1000).HasColumnType("nvarchar(1000)");
+            b.Property<string>("DescriptionAr").IsRequired().HasMaxLength(1000).HasColumnType("nvarchar(1000)");
+            b.Property<long>("CategoryId").HasColumnType("bigint");
+            b.Property<long?>("BrandId").HasColumnType("bigint");
+            b.Property<long>("UnitId").HasColumnType("bigint");
+            b.Property<string>("ProductType").IsRequired().HasMaxLength(20).HasColumnType("nvarchar(20)");
+            b.Property<bool>("SerialTracked").HasColumnType("bit");
+            b.Property<decimal>("CostPrice").HasPrecision(18, 3).HasColumnType("decimal(18,3)");
+            b.Property<decimal>("BasePrice").HasPrecision(18, 3).HasColumnType("decimal(18,3)");
+            b.Property<decimal>("MinPrice").HasPrecision(18, 3).HasColumnType("decimal(18,3)");
+            b.Property<decimal>("ReorderLevel").HasPrecision(18, 6).HasColumnType("decimal(18,6)");
+            b.Property<bool>("IsActive").HasColumnType("bit");
+            b.Property<DateTime>("CreatedAtUtc").HasColumnType("datetime2");
+            b.Property<DateTime>("UpdatedAtUtc").HasColumnType("datetime2");
+            b.HasKey("Id");
+            b.HasIndex("Sku").IsUnique();
+            b.HasIndex("Barcode").IsUnique().HasFilter("[Barcode] IS NOT NULL");
+            b.HasIndex("CategoryId");
+            b.HasIndex("BrandId");
+            b.HasIndex("UnitId");
+            b.ToTable("Products");
         });
 
         modelBuilder.Entity("ITRetailERP.Web.Models.Company", b =>
