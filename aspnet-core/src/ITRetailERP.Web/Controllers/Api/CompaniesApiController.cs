@@ -49,19 +49,30 @@ public sealed class CompaniesApiController(
         company.CreatedAt = DateTime.UtcNow;
         company.UpdatedAt = company.CreatedAt;
 
-        db.Companies.Add(company);
-        await db.SaveChangesAsync();
-
-        if (request.Logo is not null)
+        string? newLogo = null;
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        try
         {
-            company.LogoPath = await logoStorage.SaveAsync(company.Id, request.Logo);
+            db.Companies.Add(company);
             await db.SaveChangesAsync();
+            if (request.Logo is not null)
+            {
+                newLogo = await logoStorage.SaveAsync(company.Id, request.Logo);
+                company.LogoPath = newLogo;
+                await db.SaveChangesAsync();
+            }
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            logoStorage.Delete(newLogo);
+            throw;
         }
 
         return CreatedAtAction(nameof(Get), new { id = company.Id }, CompanyResponse.FromEntity(company));
     }
 
-    [HttpPut("{id:long}")]
+        [HttpPut("{id:long}")]
     [Authorize(Policy = "companies.edit")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<ActionResult<CompanyResponse>> Update(long id, [FromForm] CompanyRequest request)
@@ -77,26 +88,34 @@ public sealed class CompaniesApiController(
             return BadRequest(new { detail = "Invalid request." });
         }
 
-        Apply(company, request);
-        company.UpdatedAt = DateTime.UtcNow;
-
         var previousLogo = company.LogoPath;
-        if (request.Logo is not null)
+        string? newLogo = null;
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        try
         {
-            company.LogoPath = await logoStorage.SaveAsync(company.Id, request.Logo);
+            Apply(company, request);
+            company.UpdatedAt = DateTime.UtcNow;
+            if (request.Logo is not null)
+            {
+                newLogo = await logoStorage.SaveAsync(company.Id, request.Logo);
+                company.LogoPath = newLogo;
+            }
+            await db.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            logoStorage.Delete(newLogo);
+            throw;
         }
 
-        await db.SaveChangesAsync();
-
-        if (request.Logo is not null && previousLogo != company.LogoPath)
-        {
+        if (newLogo is not null && previousLogo != newLogo)
             logoStorage.Delete(previousLogo);
-        }
 
         return Ok(CompanyResponse.FromEntity(company));
     }
 
-    [HttpDelete("{id:long}")]
+        [HttpDelete("{id:long}")]
     [Authorize(Policy = "companies.delete")]
     [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Delete(long id)
