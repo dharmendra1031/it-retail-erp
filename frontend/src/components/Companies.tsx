@@ -9,6 +9,7 @@ import {
 } from "../api/companies";
 import { CompanyForm } from "./CompanyForm";
 import { CompanyTable } from "./CompanyTable";
+import { useLanguage } from "../i18n";
 
 const emptyForm: CompanyFormValues = {
   nameEn: "",
@@ -31,6 +32,7 @@ const emptyForm: CompanyFormValues = {
 };
 
 export function Companies({ canManage }: { canManage: boolean }) {
+  const { t, error: translateError } = useLanguage();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [form, setForm] = useState<CompanyFormValues>(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -60,7 +62,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
     try {
       setCompanies(await getCompanies());
     } catch {
-      setError("Unable to load companies.");
+      setError(t("unableLoadCompanies"));
     }
   }
 
@@ -108,7 +110,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
       resetForm();
       await loadCompanies();
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Unable to save company.");
+      setError(translateError(error, "unableSaveCompany"));
     } finally {
       setSaving(false);
     }
@@ -123,7 +125,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
       await deleteCompany(company.id);
       await loadCompanies();
     } catch {
-      setError("Unable to delete company.");
+      setError(t("unableDeleteCompany"));
     }
   }
 
@@ -137,11 +139,11 @@ export function Companies({ canManage }: { canManage: boolean }) {
   return (
     <main className="content">
       <div className="page-heading">
-        <h1>Company Master</h1>
-        <p>Manage company identity, tax and invoice information.</p>
+        <h1>{t("companyMaster")}</h1>
+        <p>{t("companyDescription")}</p>
       </div>
 
-      {error && <div className="alert">{error}</div>}
+      {error && <div className="alert" role="alert">{error}</div>}
 
       {canManage && (
         <CompanyForm

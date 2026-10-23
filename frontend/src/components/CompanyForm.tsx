@@ -1,5 +1,7 @@
 import { FormEvent } from "react";
 import { CompanyFormValues } from "../api/companies";
+import { useLanguage } from "../i18n";
+import { handleFormEnter } from "../utils/formKeyboard";
 
 interface Props {
   values: CompanyFormValues;
@@ -71,6 +73,7 @@ export function CompanyForm({
   onSubmit,
   onCancel,
 }: Props) {
+  const { t } = useLanguage();
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     onSubmit();
@@ -79,73 +82,73 @@ export function CompanyForm({
   return (
     <section className="panel">
       <div className="panel-heading">
-        <h2>{editing ? "Edit Company" : "Add Company"}</h2>
+        <h2>{editing ? t("editCompany") : t("addCompany")}</h2>
         {editing && (
           <button className="secondary" type="button" onClick={onCancel}>
-            Cancel
+            {t("cancel")}
           </button>
         )}
       </div>
 
-      <form className="company-form" onSubmit={handleSubmit}>
+      <form className="company-form" onSubmit={handleSubmit} onKeyDown={handleFormEnter}>
         <TextField
-          label="Company Name (English)"
+          label={t("nameEn")}
           value={values.nameEn}
           onChange={(value) => onChange("nameEn", value)}
           required
         />
         <TextField
-          label="اسم الشركة"
+          label={t("nameAr")}
           value={values.nameAr}
           onChange={(value) => onChange("nameAr", value)}
           dir="rtl"
         />
         <TextArea
-          label="Address (English)"
+          label={t("addressEn")}
           value={values.addressEn}
           onChange={(value) => onChange("addressEn", value)}
         />
         <TextArea
-          label="العنوان"
+          label={t("addressAr")}
           value={values.addressAr}
           onChange={(value) => onChange("addressAr", value)}
           dir="rtl"
         />
         <TextField
-          label="Telephone"
+          label={t("telephone")}
           value={values.telephone}
           onChange={(value) => onChange("telephone", value)}
         />
         <TextField
-          label="Mobile"
+          label={t("mobile")}
           value={values.mobile}
           onChange={(value) => onChange("mobile", value)}
         />
         <TextField
-          label="Email"
+          label={t("email")}
           value={values.email}
           onChange={(value) => onChange("email", value)}
           type="email"
         />
         <TextField
-          label="Website"
+          label={t("website")}
           value={values.website}
           onChange={(value) => onChange("website", value)}
           type="url"
         />
         <TextField
-          label="VAT / Tax Number"
+          label={t("taxNumber")}
           value={values.taxNumber}
           onChange={(value) => onChange("taxNumber", value)}
         />
         <TextField
-          label="Commercial Registration Number"
+          label={t("registration")}
           value={values.commercialRegistrationNumber}
           onChange={(value) => onChange("commercialRegistrationNumber", value)}
         />
 
         <label className="full-width">
-          Company Logo
+          {t("logo")}
           <input
             type="file"
             accept=".jpg,.jpeg,.png,.webp"
@@ -154,27 +157,27 @@ export function CompanyForm({
         </label>
 
         <TextArea
-          label="Bank Details"
+          label={t("bank")}
           value={values.bankDetails}
           onChange={(value) => onChange("bankDetails", value)}
         />
         <TextArea
-          label="Social Media"
+          label={t("social")}
           value={values.socialMedia}
           onChange={(value) => onChange("socialMedia", value)}
         />
         <TextArea
-          label="Invoice Header"
+          label={t("invoiceHeader")}
           value={values.invoiceHeader}
           onChange={(value) => onChange("invoiceHeader", value)}
         />
         <TextArea
-          label="Invoice Footer"
+          label={t("invoiceFooter")}
           value={values.invoiceFooter}
           onChange={(value) => onChange("invoiceFooter", value)}
         />
         <TextArea
-          label="Terms & Conditions"
+          label={t("terms")}
           value={values.termsAndConditions}
           onChange={(value) => onChange("termsAndConditions", value)}
           fullWidth
@@ -186,12 +189,12 @@ export function CompanyForm({
             checked={values.isActive}
             onChange={(event) => onChange("isActive", event.target.checked)}
           />
-          Active
+          {t("active")}
         </label>
 
         <div className="form-actions full-width">
           <button type="submit" disabled={saving}>
-            {saving ? "Saving..." : editing ? "Save Changes" : "Save Company"}
+            {saving ? t("saving") : editing ? t("saveChanges") : t("saveCompany")}
           </button>
         </div>
       </form>

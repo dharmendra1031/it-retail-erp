@@ -1,11 +1,14 @@
 import { FormEvent, useState } from "react";
 import { CurrentUser, login } from "../api/auth";
+import { useLanguage } from "../i18n";
+import { handleFormEnter } from "../utils/formKeyboard";
 
 interface Props {
   onLogin: (user: CurrentUser) => void;
 }
 
 export function Login({ onLogin }: Props) {
+  const { language, setLanguage, t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -20,7 +23,7 @@ export function Login({ onLogin }: Props) {
     try {
       onLogin(await login(email, password, rememberMe));
     } catch {
-      setError("Invalid email or password.");
+      setError(t("invalidLogin"));
     } finally {
       setSubmitting(false);
     }
@@ -28,14 +31,21 @@ export function Login({ onLogin }: Props) {
 
   return (
     <main className="login-page">
-      <form className="login-card" onSubmit={handleSubmit}>
+      <form className="login-card" onSubmit={handleSubmit} onKeyDown={handleFormEnter}>
         <h1>IT Retail ERP</h1>
-        <p>Sign in to continue</p>
+        <p>{t("signInPrompt")}</p>
+        <label>
+          {t("language")}
+          <select aria-label="Language" value={language} onChange={(event) => setLanguage(event.target.value as "en" | "ar")}>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+          </select>
+        </label>
 
-        {error && <div className="alert">{error}</div>}
+        {error && <div className="alert" role="alert">{error}</div>}
 
         <label>
-          Email
+          {t("email")}
           <input
             type="email"
             value={email}
@@ -46,7 +56,7 @@ export function Login({ onLogin }: Props) {
         </label>
 
         <label>
-          Password
+          {t("password")}
           <input
             type="password"
             value={password}
@@ -62,11 +72,11 @@ export function Login({ onLogin }: Props) {
             checked={rememberMe}
             onChange={(event) => setRememberMe(event.target.checked)}
           />
-          Remember me
+          {t("remember")}
         </label>
 
         <button type="submit" disabled={submitting}>
-          {submitting ? "Signing in..." : "Login"}
+          {submitting ? t("signingIn") : t("login")}
         </button>
       </form>
     </main>

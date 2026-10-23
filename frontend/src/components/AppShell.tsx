@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { CurrentUser } from "../api/auth";
 import { Page } from "../App";
+import { useLanguage } from "../i18n";
 
 interface Props {
   user: CurrentUser;
@@ -11,18 +12,19 @@ interface Props {
 }
 
 export function AppShell({ user, page, onPageChange, onLogout, children }: Props) {
+  const { t, language, setLanguage } = useLanguage();
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">IT Retail ERP</div>
         <nav>
-          <span className="nav-section">Masters</span>
+          <span className="nav-section">{t("masters")}</span>
           <button
             type="button"
             className={`nav-link ${page === "companies" ? "active" : ""}`}
             onClick={() => onPageChange("companies")}
           >
-            Company Master
+            {t("companyMaster")}
           </button>
           {user.isAdmin && (
             <button
@@ -30,7 +32,7 @@ export function AppShell({ user, page, onPageChange, onLogout, children }: Props
               className={`nav-link ${page === "roles" ? "active" : ""}`}
               onClick={() => onPageChange("roles")}
             >
-              Role Master
+              {t("roleMaster")}
             </button>
           )}
         </nav>
@@ -38,8 +40,15 @@ export function AppShell({ user, page, onPageChange, onLogout, children }: Props
 
       <div className="main-area">
         <header className="topbar">
+          <label className="language-switch">
+            {t("language")}
+            <select aria-label="Language" value={language} onChange={(event) => setLanguage(event.target.value as "en" | "ar")}>
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
+          </label>
           <div><strong>{user.name || user.email}</strong></div>
-          <button className="secondary" type="button" onClick={onLogout}>Logout</button>
+          <button className="secondary" type="button" onClick={onLogout}>{t("logout")}</button>
         </header>
         {children}
       </div>

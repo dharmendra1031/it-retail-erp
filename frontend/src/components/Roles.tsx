@@ -1,7 +1,10 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Role, createRole, deleteRole, getRoles, updateRole } from "../api/roles";
+import { useLanguage } from "../i18n";
+import { handleFormEnter } from "../utils/formKeyboard";
 
 export function Roles() {
+  const { t, error: translateError } = useLanguage();
   const [roles, setRoles] = useState<Role[]>([]);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -16,7 +19,7 @@ export function Roles() {
     try {
       setRoles(await getRoles());
     } catch {
-      setError("Unable to load roles.");
+      setError(t("unableLoadRoles"));
     }
   }
 
@@ -38,7 +41,7 @@ export function Roles() {
       reset();
       await loadRoles();
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Unable to save role.");
+      setError(translateError(error, "unableSaveRole"));
     } finally {
       setSaving(false);
     }
@@ -54,49 +57,49 @@ export function Roles() {
       await deleteRole(role.id);
       await loadRoles();
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Unable to delete role.");
+      setError(translateError(error, "unableDeleteRole"));
     }
   }
 
   return (
     <main className="content">
       <div className="page-heading">
-        <h1>Role Master</h1>
-        <p>Manage user roles. Assigned roles cannot be deleted.</p>
+        <h1>{t("roleMaster")}</h1>
+        <p>{t("roleDescription")}</p>
       </div>
 
       {error && <div className="alert" role="alert">{error}</div>}
 
       <section className="panel">
         <div className="panel-heading">
-          <h2>{editingId === null ? "Add Role" : "Edit Role"}</h2>
+          <h2>{editingId === null ? t("addRole") : t("editRole")}</h2>
           {editingId !== null && (
-            <button className="secondary" type="button" onClick={reset}>Cancel</button>
+            <button className="secondary" type="button" onClick={reset}>{t("cancel")}</button>
           )}
         </div>
-        <form className="role-form" onSubmit={save}>
+        <form className="role-form" onSubmit={save} onKeyDown={handleFormEnter}>
           <label>
-            Role Name
+            {t("roleName")}
             <input
               value={name}
               maxLength={100}
               required
               onChange={(event) => setName(event.target.value)}
-              placeholder="e.g. Sales Manager"
+              placeholder={t("rolePlaceholder")}
             />
           </label>
           <button disabled={saving || !name.trim()} type="submit">
-            {saving ? "Saving..." : editingId === null ? "Add Role" : "Save Changes"}
+            {saving ? t("saving") : editingId === null ? t("addRole") : t("saveChanges")}
           </button>
         </form>
       </section>
 
       <section className="panel">
-        <div className="panel-heading"><h2>Roles ({roles.length})</h2></div>
+        <div className="panel-heading"><h2>{t("roles")} ({roles.length})</h2></div>
         <div className="table-wrap">
           <table>
             <thead>
-              <tr><th>ID</th><th>Role Name</th><th>Actions</th></tr>
+              <tr><th>ID</th><th>{t("roleName")}</th><th>{t("actions")}</th></tr>
             </thead>
             <tbody>
               {roles.map((role) => (
@@ -110,7 +113,7 @@ export function Roles() {
                           setName(role.name);
                           setEditingId(role.id);
                           setError("");
-                        }}>Edit</button>
+                        }}>{t("edit")}</button>
                         <button className="danger" type="button" onClick={() => void remove(role)}>
                           Delete
                         </button>
@@ -121,7 +124,7 @@ export function Roles() {
               ))}
             </tbody>
           </table>
-          {roles.length === 0 && <p className="empty">No roles available.</p>}
+          {roles.length === 0 && <p className="empty">{t("noRoles")}</p>}
         </div>
       </section>
     </main>

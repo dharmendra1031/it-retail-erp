@@ -1,4 +1,5 @@
 import { Company } from "../api/companies";
+import { useLanguage } from "../i18n";
 
 interface Props {
   companies: Company[];
@@ -17,13 +18,14 @@ export function CompanyTable({
   onEdit,
   onDelete,
 }: Props) {
+  const { t } = useLanguage();
   return (
     <section className="panel">
       <div className="panel-heading">
-        <h2>Companies</h2>
+        <h2>{t("companies")}</h2>
         <input
           className="search"
-          placeholder="Search companies..."
+          placeholder={t("searchCompanies")}
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
         />
@@ -34,12 +36,12 @@ export function CompanyTable({
           <thead>
             <tr>
               <th>ID</th>
-              <th>Company</th>
-              <th>Arabic Name</th>
-              <th>Mobile</th>
-              <th>Tax No.</th>
-              <th>Status</th>
-              {canManage && <th>Actions</th>}
+              <th>{t("company")}</th>
+              <th>{t("arabicName")}</th>
+              <th>{t("mobile")}</th>
+              <th>{t("taxNo")}</th>
+              <th>{t("status")}</th>
+              {canManage && <th>{t("actions")}</th>}
             </tr>
           </thead>
           <tbody>
@@ -50,7 +52,7 @@ export function CompanyTable({
                 <td dir="rtl">{company.nameAr}</td>
                 <td>{company.mobile}</td>
                 <td>{company.taxNumber}</td>
-                <td>{company.isActive ? "Active" : "Inactive"}</td>
+                <td>{company.isActive ? t("active") : t("inactive")}</td>
                 {canManage && (
                   <td className="actions">
                     <button className="secondary" type="button" onClick={() => onEdit(company)}>
@@ -66,7 +68,7 @@ export function CompanyTable({
             {!companies.length && (
               <tr>
                 <td colSpan={canManage ? 7 : 6} className="empty">
-                  No companies found.
+                  {t("noCompanies")}
                 </td>
               </tr>
             )}
