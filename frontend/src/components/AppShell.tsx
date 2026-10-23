@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { CurrentUser } from "../api/auth";
 import { Page } from "../App";
 import { useLanguage } from "../i18n";
+import { useLanguage } from "../i18n";
 
 interface Props {
   user: CurrentUser;
@@ -16,7 +17,7 @@ export function AppShell({ user, page, onPageChange, onLogout, children }: Props
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand">IT Retail ERP</div>
+        <div className="brand">{t("title")}</div>
         <nav>
           <span className="nav-section">{t("masters")}</span>
           <button

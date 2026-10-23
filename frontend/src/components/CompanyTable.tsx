@@ -1,5 +1,6 @@
 import { Company } from "../api/companies";
 import { useLanguage } from "../i18n";
+import { useLanguage } from "../i18n";
 
 interface Props {
   companies: Company[];

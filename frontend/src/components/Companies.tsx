@@ -8,6 +8,7 @@ import {
   updateCompany,
 } from "../api/companies";
 import { CompanyForm } from "./CompanyForm";
+import { languageError, useLanguage } from "../i18n";
 import { CompanyTable } from "./CompanyTable";
 import { useLanguage } from "../i18n";
 
@@ -32,6 +33,7 @@ const emptyForm: CompanyFormValues = {
 };
 
 export function Companies({ canManage }: { canManage: boolean }) {
+  const { t } = useLanguage();
   const { t, error: translateError } = useLanguage();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [form, setForm] = useState<CompanyFormValues>(emptyForm);
@@ -117,7 +119,7 @@ export function Companies({ canManage }: { canManage: boolean }) {
   }
 
   async function removeCompany(company: Company) {
-    if (!window.confirm(`Delete ${company.nameEn}?`)) {
+    if (!window.confirm(`${t("confirmDeleteCompany")} ${company.nameEn}?`)) {
       return;
     }
 

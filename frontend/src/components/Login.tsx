@@ -1,5 +1,7 @@
 import { FormEvent, useState } from "react";
 import { CurrentUser, login } from "../api/auth";
+import { advanceOnEnter } from "../forms/keyboard";
+import { useLanguage } from "../i18n";
 import { useLanguage } from "../i18n";
 import { handleFormEnter } from "../utils/formKeyboard";
 
@@ -8,6 +10,7 @@ interface Props {
 }
 
 export function Login({ onLogin }: Props) {
+  const { language, setLanguage, t } = useLanguage();
   const { language, setLanguage, t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -1,79 +1,149 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-const en = {
-  language: "Language", login: "Login", logout: "Logout", email: "Email",
-  password: "Password", remember: "Remember me", signingIn: "Signing in...",
-  signInPrompt: "Sign in to continue", invalidLogin: "Invalid email or password.",
-  companyMaster: "Company Master", roleMaster: "Role Master", masters: "Masters",
-  companyDescription: "Manage company identity, tax and invoice information.",
-  addCompany: "Add Company", editCompany: "Edit Company", saveCompany: "Save Company",
-  saveChanges: "Save Changes", saving: "Saving...", cancel: "Cancel",
-  nameEn: "Company Name (English)", nameAr: "اسم الشركة",
-  addressEn: "Address (English)", addressAr: "العنوان",
-  telephone: "Telephone", mobile: "Mobile", website: "Website",
-  taxNumber: "VAT / Tax Number", registration: "Commercial Registration Number",
-  logo: "Company Logo", bank: "Bank Details", social: "Social Media",
-  invoiceHeader: "Invoice Header", invoiceFooter: "Invoice Footer",
-  terms: "Terms & Conditions", active: "Active", inactive: "Inactive",
-  companies: "Companies", company: "Company", arabicName: "Arabic Name",
-  taxNo: "Tax No.", status: "Status", actions: "Actions",
-  searchCompanies: "Search companies...", noCompanies: "No companies found.",
-  edit: "Edit", delete: "Delete", unableLoadCompanies: "Unable to load companies.",
-  unableSaveCompany: "Unable to save company.", unableDeleteCompany: "Unable to delete company.",
+const english = {
+  title: "IT Retail ERP",
+  signIn: "Sign in to continue",
+  email: "Email",
+  password: "Password",
+  rememberMe: "Remember me",
+  login: "Login",
+  signingIn: "Signing in...",
+  logout: "Logout",
+  invalidLogin: "Invalid email or password.",
+  masters: "Masters",
+  companyMaster: "Company Master",
+  roleMaster: "Role Master",
+  companiesDescription: "Manage company identity, tax and invoice information.",
   roleDescription: "Manage user roles. Assigned roles cannot be deleted.",
-  addRole: "Add Role", editRole: "Edit Role", roleName: "Role Name",
-  rolePlaceholder: "e.g. Sales Manager", roles: "Roles",
-  noRoles: "No roles available.", unableLoadRoles: "Unable to load roles.",
-  unableSaveRole: "Unable to save role.", unableDeleteRole: "Unable to delete role.",
-  duplicateRole: "Role name already exists.", invalidRequest: "Invalid request.",
-  assignedRole: "Role is assigned to users.", confirmDelete: "Delete",
+  addCompany: "Add Company",
+  editCompany: "Edit Company",
+  addRole: "Add Role",
+  editRole: "Edit Role",
+  companyNameEnglish: "Company Name (English)",
+  companyNameArabic: "اسم الشركة",
+  addressEnglish: "Address (English)",
+  addressArabic: "العنوان",
+  telephone: "Telephone",
+  mobile: "Mobile",
+  website: "Website",
+  taxNumber: "VAT / Tax Number",
+  commercialRegistration: "Commercial Registration Number",
+  companyLogo: "Company Logo",
+  bankDetails: "Bank Details",
+  socialMedia: "Social Media",
+  invoiceHeader: "Invoice Header",
+  invoiceFooter: "Invoice Footer",
+  terms: "Terms & Conditions",
+  active: "Active",
+  inactive: "Inactive",
+  saveCompany: "Save Company",
+  saveChanges: "Save Changes",
+  saving: "Saving...",
+  cancel: "Cancel",
+  companies: "Companies",
+  searchCompanies: "Search companies...",
+  company: "Company",
+  arabicName: "Arabic Name",
+  taxNo: "Tax No.",
+  status: "Status",
+  actions: "Actions",
+  edit: "Edit",
+  delete: "Delete",
+  noCompanies: "No companies found.",
+  roleName: "Role Name",
+  roles: "Roles",
+  noRoles: "No roles available.",
+  unableLoadRoles: "Unable to load roles.",
+  unableLoadCompanies: "Unable to load companies.",
+  unableSaveRole: "Unable to save role.",
+  unableDeleteRole: "Unable to delete role.",
+  unableSaveCompany: "Unable to save company.",
+  unableDeleteCompany: "Unable to delete company.",
+  invalidRequest: "Invalid request.",
+  duplicateRole: "Role name already exists.",
+  assignedRole: "Role is assigned to users.",
+  confirmDeleteRole: "Delete role",
+  confirmDeleteCompany: "Delete",
+  language: "Language",
 } as const;
 
-type Key = keyof typeof en;
-const ar: Record<Key, string> = {
-  language: "اللغة", login: "تسجيل الدخول", logout: "تسجيل الخروج",
-  email: "البريد الإلكتروني", password: "كلمة المرور", remember: "تذكرني",
-  signingIn: "جارٍ تسجيل الدخول...", signInPrompt: "سجّل الدخول للمتابعة",
+const arabic: Record<keyof typeof english, string> = {
+  title: "نظام إدارة متاجر تقنية المعلومات",
+  signIn: "تسجيل الدخول للمتابعة",
+  email: "البريد الإلكتروني",
+  password: "كلمة المرور",
+  rememberMe: "تذكرني",
+  login: "تسجيل الدخول",
+  signingIn: "جارٍ تسجيل الدخول...",
+  logout: "تسجيل الخروج",
   invalidLogin: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
-  companyMaster: "بيانات الشركة", roleMaster: "إدارة الأدوار", masters: "البيانات الأساسية",
-  companyDescription: "إدارة بيانات الشركة والضرائب والفواتير.",
-  addCompany: "إضافة شركة", editCompany: "تعديل الشركة", saveCompany: "حفظ الشركة",
-  saveChanges: "حفظ التغييرات", saving: "جارٍ الحفظ...", cancel: "إلغاء",
-  nameEn: "اسم الشركة (بالإنجليزية)", nameAr: "اسم الشركة",
-  addressEn: "العنوان (بالإنجليزية)", addressAr: "العنوان",
-  telephone: "الهاتف", mobile: "الجوال", website: "الموقع الإلكتروني",
-  taxNumber: "الرقم الضريبي", registration: "رقم السجل التجاري",
-  logo: "شعار الشركة", bank: "البيانات البنكية", social: "وسائل التواصل",
-  invoiceHeader: "ترويسة الفاتورة", invoiceFooter: "تذييل الفاتورة",
-  terms: "الشروط والأحكام", active: "نشط", inactive: "غير نشط",
-  companies: "الشركات", company: "الشركة", arabicName: "الاسم العربي",
-  taxNo: "الرقم الضريبي", status: "الحالة", actions: "الإجراءات",
-  searchCompanies: "البحث عن الشركات...", noCompanies: "لا توجد شركات.",
-  edit: "تعديل", delete: "حذف", unableLoadCompanies: "تعذر تحميل الشركات.",
-  unableSaveCompany: "تعذر حفظ الشركة.", unableDeleteCompany: "تعذر حذف الشركة.",
-  roleDescription: "إدارة أدوار المستخدمين. لا يمكن حذف الأدوار المرتبطة بمستخدمين.",
-  addRole: "إضافة دور", editRole: "تعديل الدور", roleName: "اسم الدور",
-  rolePlaceholder: "مثلاً: مدير المبيعات", roles: "الأدوار",
-  noRoles: "لا توجد أدوار.", unableLoadRoles: "تعذر تحميل الأدوار.",
-  unableSaveRole: "تعذر حفظ الدور.", unableDeleteRole: "تعذر حذف الدور.",
-  duplicateRole: "اسم الدور موجود بالفعل.", invalidRequest: "طلب غير صالح.",
-  assignedRole: "الدور مرتبط بمستخدمين.", confirmDelete: "حذف",
+  masters: "البيانات الأساسية",
+  companyMaster: "بيانات الشركة",
+  roleMaster: "إدارة الأدوار",
+  companiesDescription: "إدارة بيانات الشركة والضرائب والفواتير.",
+  roleDescription: "إدارة أدوار المستخدمين. لا يمكن حذف الأدوار المخصصة للمستخدمين.",
+  addCompany: "إضافة شركة",
+  editCompany: "تعديل الشركة",
+  addRole: "إضافة دور",
+  editRole: "تعديل الدور",
+  companyNameEnglish: "اسم الشركة (بالإنجليزية)",
+  companyNameArabic: "اسم الشركة",
+  addressEnglish: "العنوان (بالإنجليزية)",
+  addressArabic: "العنوان",
+  telephone: "الهاتف",
+  mobile: "الجوال",
+  website: "الموقع الإلكتروني",
+  taxNumber: "الرقم الضريبي",
+  commercialRegistration: "رقم السجل التجاري",
+  companyLogo: "شعار الشركة",
+  bankDetails: "التفاصيل البنكية",
+  socialMedia: "وسائل التواصل",
+  invoiceHeader: "ترويسة الفاتورة",
+  invoiceFooter: "تذييل الفاتورة",
+  terms: "الشروط والأحكام",
+  active: "نشط",
+  inactive: "غير نشط",
+  saveCompany: "حفظ الشركة",
+  saveChanges: "حفظ التغييرات",
+  saving: "جارٍ الحفظ...",
+  cancel: "إلغاء",
+  companies: "الشركات",
+  searchCompanies: "ابحث عن الشركات...",
+  company: "الشركة",
+  arabicName: "الاسم بالعربية",
+  taxNo: "الرقم الضريبي",
+  status: "الحالة",
+  actions: "الإجراءات",
+  edit: "تعديل",
+  delete: "حذف",
+  noCompanies: "لا توجد شركات.",
+  roleName: "اسم الدور",
+  roles: "الأدوار",
+  noRoles: "لا توجد أدوار.",
+  unableLoadRoles: "تعذر تحميل الأدوار.",
+  unableLoadCompanies: "تعذر تحميل الشركات.",
+  unableSaveRole: "تعذر حفظ الدور.",
+  unableDeleteRole: "تعذر حذف الدور.",
+  unableSaveCompany: "تعذر حفظ الشركة.",
+  unableDeleteCompany: "تعذر حذف الشركة.",
+  invalidRequest: "البيانات المدخلة غير صحيحة.",
+  duplicateRole: "اسم الدور موجود بالفعل.",
+  assignedRole: "هذا الدور مخصص لمستخدمين.",
+  confirmDeleteRole: "حذف الدور",
+  confirmDeleteCompany: "حذف",
+  language: "اللغة",
 };
 
 type Language = "en" | "ar";
-interface Locale {
+type TranslationKey = keyof typeof english;
+
+interface LanguageContextValue {
   language: Language;
-  setLanguage: (language: Language) => void;
-  t: (key: Key) => string;
-  error: (value: unknown, fallback: Key) => string;
+  setLanguage: (value: Language) => void;
+  t: (key: TranslationKey) => string;
 }
 
-const Context = createContext<Locale | null>(null);
-const errorKeys: Record<string, Key> = {
-  "Role name already exists.": "duplicateRole",
-  "Invalid request.": "invalidRequest",
-  "Role is assigned to users.": "assignedRole",
-};
+const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(
@@ -86,23 +156,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("erp.language", language);
   }, [language]);
 
-  const t = (key: Key) => (language === "ar" ? ar[key] : en[key]);
-  const error = (value: unknown, fallback: Key) => {
-    const text = value instanceof Error ? value.message : "";
-    return t(errorKeys[text] ?? fallback);
-  };
-
+  const dictionary: Record<TranslationKey, string> = language === "ar" ? arabic : english;
   return (
-    <Context.Provider value={{ language, setLanguage, t, error }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t: (key) => dictionary[key] }}>
       {children}
-    </Context.Provider>
+    </LanguageContext.Provider>
   );
 }
 
 export function useLanguage() {
-  const context = useContext(Context);
+  const context = useContext(LanguageContext);
   if (!context) {
     throw new Error("LanguageProvider is missing.");
   }
   return context;
+}
+
+export function languageError(message: string, t: (key: TranslationKey) => string) {
+  if (message === "Role name already exists.") return t("duplicateRole");
+  if (message === "Role is assigned to users.") return t("assignedRole");
+  if (message === "Invalid request.") return t("invalidRequest");
+  return message;
 }

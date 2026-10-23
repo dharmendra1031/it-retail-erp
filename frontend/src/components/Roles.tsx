@@ -1,9 +1,12 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Role, createRole, deleteRole, getRoles, updateRole } from "../api/roles";
+import { advanceOnEnter } from "../forms/keyboard";
+import { languageError, useLanguage } from "../i18n";
 import { useLanguage } from "../i18n";
 import { handleFormEnter } from "../utils/formKeyboard";
 
 export function Roles() {
+  const { t } = useLanguage();
   const { t, error: translateError } = useLanguage();
   const [roles, setRoles] = useState<Role[]>([]);
   const [name, setName] = useState("");
@@ -48,7 +51,7 @@ export function Roles() {
   }
 
   async function remove(role: Role) {
-    if (!window.confirm(`Delete role "${role.name}"?`)) {
+    if (!window.confirm(`${t("confirmDeleteRole")} "${role.name}"?`)) {
       return;
     }
 
@@ -115,7 +118,7 @@ export function Roles() {
                           setError("");
                         }}>{t("edit")}</button>
                         <button className="danger" type="button" onClick={() => void remove(role)}>
-                          Delete
+                          {t("delete")}
                         </button>
                       </div>
                     )}
