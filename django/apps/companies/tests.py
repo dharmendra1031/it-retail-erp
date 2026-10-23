@@ -155,3 +155,66 @@ class BranchWarehouseApiTests(TestCase):
         self.assertEqual(orphan.status_code, 400)
         self.assertEqual(self.client.delete(f"/api/branches/{self.branch.id}").status_code, 409)
         self.assertEqual(self.client.delete(f"/api/companies/{self.company.id}").status_code, 409)
+
+
+class CompanyLogoLifecycleTests(TestCase):
+    def setUp(self):
+        import tempfile
+        from django.test import override_settings
+        from apps.accounts.models import User
+
+        self.folder = tempfile.TemporaryDirectory()
+        self.addCleanup(self.folder.cleanup)
+        settings_override = override_settings(MEDIA_ROOT=self.folder.name)
+        settings_override.enable()
+        self.addCleanup(settings_override.disable)
+        self.admin = User.objects.create_superuser(
+            username="logoadmin", email="logoadmin@example.test", password="StrongPass123!"
+        )
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.admin)
+
+    def _logo(self, name="logo.png", mime="image/png"):
+        from io import BytesIO
+        from PIL import Image
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        output = BytesIO()
+        Image.new("RGB", (2, 2), color="white").save(output, format="PNG")
+        return SimpleUploadedFile(name, output.getvalue(), content_type=mime)
+
+    def test_valid_image_is_saved_and_replaced_without_orphan(self):
+        import os
+        from .models import Company
+
+        created = self.client.post("/api/companies", {
+            "nameEn": "Logo Shop", "logo": self._logo()
+        }, format="multipart")
+        self.assertEqual(created.status_code, 201)
+        company = Company.objects.get(pk=created.data["id"])
+        old_name = company.logo.name
+        self.assertTrue(os.path.exists(company.logo.path))
+
+        updated = self.client.put(f"/api/companies/{company.pk}", {
+            "nameEn": "Logo Shop", "logo": self._logo("replacement.png")
+        }, format="multipart")
+        self.assertEqual(updated.status_code, 200)
+        company.refresh_from_db()
+        self.assertNotEqual(company.logo.name, old_name)
+        self.assertTrue(os.path.exists(company.logo.path))
+        self.assertFalse(os.path.exists(os.path.join(self.folder.name, old_name)))
+
+    def test_invalid_mime_and_corrupt_image_rejected(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from .models import Company
+
+        mime = self.client.post("/api/companies", {
+            "nameEn": "Mime Test", "logo": self._logo(mime="text/plain")
+        }, format="multipart")
+        self.assertEqual(mime.status_code, 400)
+        invalid = self.client.post("/api/companies", {
+            "nameEn": "Corrupt Test",
+            "logo": SimpleUploadedFile("logo.png", b"not an image", content_type="image/png")
+        }, format="multipart")
+        self.assertEqual(invalid.status_code, 400)
+        self.assertFalse(Company.objects.filter(name_en__in=["Mime Test", "Corrupt Test"]).exists())
