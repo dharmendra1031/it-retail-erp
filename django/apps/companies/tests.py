@@ -15,6 +15,16 @@ class CompanySerializerTests(SimpleTestCase):
         self.assertTrue(serializer.is_valid(), serializer.errors)
         self.assertEqual(serializer.validated_data["name_ar"], "تجارة")
 
+    def test_name_over_max_length_is_rejected(self):
+        serializer = CompanySerializer(data={"nameEn": "A" * 201})
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("nameEn", serializer.errors)
+
+    def test_invalid_website_is_rejected(self):
+        serializer = CompanySerializer(data={"nameEn": "Retail", "website": "not-a-url"})
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("website", serializer.errors)
+
     def test_invalid_email_is_rejected(self):
         serializer = CompanySerializer(data={"nameEn": "Retail", "email": "invalid"})
         self.assertFalse(serializer.is_valid())
@@ -25,6 +35,15 @@ class ApiRouteTests(SimpleTestCase):
     def test_company_route(self):
         match = resolve("/api/companies")
         self.assertEqual(match.url_name, "company-list")
+
+    def test_company_detail_route(self):
+        match = resolve("/api/companies/123")
+        self.assertEqual(match.url_name, "company-detail")
+        self.assertEqual(match.kwargs["pk"], "123")
+
+    def test_auth_csrf_route(self):
+        match = resolve("/api/auth/csrf")
+        self.assertEqual(match.url_name, "api-csrf")
 
     def test_auth_login_route(self):
         match = resolve("/api/auth/login")
