@@ -3,6 +3,8 @@ export type Locale = "en" | "ar";
 const arabicModules: Record<string, string> = {
   companies: "الشركات", roles: "الأدوار", users: "المستخدمون",
   branches: "الفروع", warehouses: "المستودعات",
+  products: "المنتجات", categories: "الفئات", brands: "العلامات التجارية",
+  units: "الوحدات", customers: "العملاء", suppliers: "الموردون",
   quotations: "عروض الأسعار", sales: "المبيعات", purchases: "المشتريات",
   inventory: "المخزون", services: "الخدمات", reports: "التقارير",
 };

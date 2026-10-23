@@ -303,6 +303,9 @@ test("Arabic permission actions and print date use the selected locale", async (
   const row = page.getByRole("row").filter({ hasText: "Arabic Matrix" });
   await row.getByRole("button", { name: "تعديل" }).click();
   await expect(page.getByRole("checkbox", { name: "المبيعات - عرض" })).toBeVisible();
+  await expect(page.getByRole("checkbox", { name: "العملاء - عرض" })).toBeVisible();
+  await expect(page.getByRole("checkbox", { name: "الموردون - إضافة" })).toBeVisible();
+  await expect(page.getByRole("checkbox", { name: "الفئات - تعديل" })).toBeVisible();
   await page.getByRole("button", { name: "إلغاء" }).click();
   page.once("dialog", dialog => dialog.accept());
   await row.getByRole("button", { name: "حذف" }).click();
