@@ -1,0 +1,60 @@
+name: ERP Verification
+
+on:
+  push:
+    branches: [development]
+  workflow_dispatch:
+
+jobs:
+  django:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: django
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install ODBC runtime
+        run: sudo apt-get update && sudo apt-get install -y unixodbc-dev
+      - name: Install Django dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Django system checks
+        env:
+          SECRET_KEY: ci-only-not-for-production
+          DB_NAME: erp_ci
+        run: python manage.py check
+      - name: Django unit tests
+        env:
+          SECRET_KEY: ci-only-not-for-production
+          DB_NAME: erp_ci
+        run: python manage.py test apps.companies --verbosity 2
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: TypeScript and production build
+        run: npm run build
+
+  aspnet:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aspnet-core/src/ITRetailERP.Web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build
+        run: dotnet build --configuration Release
