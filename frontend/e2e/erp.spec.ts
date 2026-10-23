@@ -355,7 +355,7 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   );
   await page.getByRole("button", { name: "Save" }).click();
   const supplierResponse = await supplierRequest;
-  expect(supplierResponse.status(), await supplierResponse.text()).toBe(201);
+  expect(supplierResponse.status(), `Supplier payload: ${supplierResponse.request().postData()} | Response: ${await supplierResponse.text()}`).toBe(201);
   await expect(page.getByRole("row").filter({ hasText: `S-${suffix}` })).toContainText("First Supplier");
 });
 

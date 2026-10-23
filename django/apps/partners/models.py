@@ -31,7 +31,6 @@ class Customer(PartnerBase):
     company_name = models.CharField(max_length=200, blank=True)
     email = models.EmailField(max_length=200, blank=True)
     tax_number = models.CharField(max_length=100, blank=True)
-    credit_limit = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
     opening_balance = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
     customer_type = models.CharField(max_length=20, choices=TYPES, default="retail")
     credit_limit = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
@@ -40,6 +39,7 @@ class Customer(PartnerBase):
 class Supplier(PartnerBase):
     email = models.EmailField(max_length=200, blank=True)
     tax_number = models.CharField(max_length=100, blank=True)
+    credit_limit = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
     opening_balance = models.DecimalField(max_digits=18, decimal_places=3, default=Decimal("0.000"))
 
 
