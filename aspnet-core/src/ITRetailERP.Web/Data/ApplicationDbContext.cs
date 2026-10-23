@@ -9,6 +9,9 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>(options)
 {
     public DbSet<Company> Companies => Set<Company>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Supplier> Suppliers => Set<Supplier>();
+    public DbSet<PartnerDocument> PartnerDocuments => Set<PartnerDocument>();
     public DbSet<Branch> Branches => Set<Branch>();
     public DbSet<Warehouse> Warehouses => Set<Warehouse>();
     public DbSet<DocumentSequence> DocumentSequences => Set<DocumentSequence>();
@@ -43,6 +46,29 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         builder.Entity<DocumentSequence>(entity =>
             entity.HasIndex(x => new { x.Series, x.FiscalYear, x.BranchId }).IsUnique());
+
+        builder.Entity<Customer>(entity =>
+        {
+            entity.HasIndex(x => x.Code).IsUnique();
+            entity.Property(x => x.CreditLimit).HasPrecision(18, 3);
+        });
+
+        builder.Entity<Supplier>(entity =>
+        {
+            entity.HasIndex(x => x.Code).IsUnique();
+            entity.Property(x => x.OpeningBalance).HasPrecision(18, 3);
+        });
+
+        builder.Entity<PartnerDocument>(entity =>
+        {
+            entity.HasOne<Customer>().WithMany().HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne<Supplier>().WithMany().HasForeignKey(x => x.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.ToTable(table => table.HasCheckConstraint(
+                "CK_PartnerDocuments_OneOwner",
+                "([CustomerId] IS NOT NULL AND [SupplierId] IS NULL) OR ([CustomerId] IS NULL AND [SupplierId] IS NOT NULL)"));
+        });
 
         builder.Entity<Company>(entity =>
         {

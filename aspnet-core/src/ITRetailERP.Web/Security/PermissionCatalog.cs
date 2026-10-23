@@ -4,6 +4,8 @@ public static class PermissionCatalog
 {
     private static readonly Dictionary<string, string[]> Actions = new()
     {
+        ["customers"] = ["view", "add", "edit", "delete"],
+        ["suppliers"] = ["view", "add", "edit", "delete"],
         ["companies"] = ["view", "add", "edit", "delete"],
         ["roles"] = ["view", "add", "edit", "delete"],
         ["users"] = ["view", "add", "edit", "delete"],
