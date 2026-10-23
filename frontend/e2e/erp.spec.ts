@@ -264,12 +264,12 @@ test("admin creates a branch and warehouse for a company", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Branches & Warehouses" })).toBeVisible();
   const forms = page.locator(".company-form");
   await forms.first().locator("select").first().selectOption({ label: "Organization Test Company" });
-  await forms.first().getByLabel("Code").fill("HQ");
+  await forms.first().getByLabel("Code").fill(`HQ-${Date.now().toString(36)}`);
   await forms.first().getByLabel("Company Name (English)").fill("Head Office");
   await forms.first().getByRole("button", { name: "Save Branch" }).click();
 
   await forms.nth(1).locator("select").first().selectOption({ label: "Head Office" });
-  await forms.nth(1).getByLabel("Code").fill("MAIN");
+  await forms.nth(1).getByLabel("Code").fill(`MAIN-${Date.now().toString(36)}`);
   await forms.nth(1).getByLabel("Company Name (English)").fill("Main Store");
   await forms.nth(1).getByRole("button", { name: "Save Warehouse" }).click();
   await expect(page.getByRole("row").filter({ hasText: "Main Store" })).toBeVisible();
@@ -319,13 +319,14 @@ test("Arabic permission actions and print date use the selected locale", async (
 
 
 test("admin uses keyboard to create bilingual credit customer and supplier", async ({ page }) => {
+  const suffix = Date.now().toString(36);
   await page.goto("/");
   await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
   await page.getByLabel("Password").fill(password);
   await page.getByRole("button", { name: "Login" }).click();
 
   await page.getByRole("button", { name: "Customer Master" }).click();
-  await page.getByLabel("Code").fill("C-E2E");
+  await page.getByLabel("Code").fill(`C-${suffix}`);
   await page.getByLabel("Code").press("Enter");
   await expect(page.getByLabel("Company Name (English)")).toBeFocused();
   await page.getByLabel("Company Name (English)").fill("Credit Partner");
@@ -336,7 +337,7 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await expect(page.getByRole("row").filter({ hasText: "Credit Partner" })).toContainText("عميل تجريبي");
 
   await page.getByRole("button", { name: "Supplier Master" }).click();
-  await page.getByLabel("Code").fill("S-E2E");
+  await page.getByLabel("Code").fill(`S-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("First Supplier");
   await page.getByLabel("Opening Balance").fill("135.500");
   await page.getByRole("button", { name: "Save" }).click();
@@ -345,33 +346,34 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
 
 
 test("admin manages bilingual category hierarchy brand and unit", async ({ page }) => {
+  const suffix = Date.now().toString(36);
   await page.goto("/");
   await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
   await page.getByLabel("Password").fill(password);
   await page.getByRole("button", { name: "Login" }).click();
 
   await page.getByRole("button", { name: "Category Master" }).click();
-  await page.getByLabel("Code").fill("COMPUTER-E2E");
+  await page.getByLabel("Code").fill(`COMP-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("Computers");
   await page.getByLabel("اسم الشركة").fill("الحواسيب");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: "Computers" })).toBeVisible();
-  await page.getByLabel("Code").fill("LAPTOP-E2E");
+  await expect(page.getByRole("row").filter({ hasText: `COMP-${suffix}` })).toBeVisible();
+  await page.getByLabel("Code").fill(`LAP-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("Laptops");
   await page.getByLabel("Parent Category").selectOption({ label: "Computers" });
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: "LAPTOP-E2E" })).toContainText("Computers");
+  await expect(page.getByRole("row").filter({ hasText: `LAP-${suffix}` })).toContainText("Computers");
 
   await page.getByRole("button", { name: "Brand Master" }).click();
-  await page.getByLabel("Code").fill("DELL-E2E");
+  await page.getByLabel("Code").fill(`DELL-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("Dell");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: "Dell" })).toBeVisible();
+  await expect(page.getByRole("row").filter({ hasText: `DELL-${suffix}` })).toBeVisible();
 
   await page.getByRole("button", { name: "Unit Master" }).click();
-  await page.getByLabel("Code").fill("PCS-E2E");
+  await page.getByLabel("Code").fill(`PCS-${suffix}`);
   await page.getByLabel("Company Name (English)").fill("Pieces");
   await page.getByLabel("Decimal Places").fill("0");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: "Pieces" })).toBeVisible();
+  await expect(page.getByRole("row").filter({ hasText: `PCS-${suffix}` })).toBeVisible();
 });
