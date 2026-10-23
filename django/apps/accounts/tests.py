@@ -320,3 +320,59 @@ class PermissionPolicyTests(TestCase):
             self.client.put(f"/api/roles/{admin_role.pk}/permissions",
                             {"permissions": ["sales.reverse"]}, format="json").status_code, 400
         )
+
+
+class UserMasterTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            username="user-admin", email="user-admin@example.com", password="TestPass123!"
+        )
+        self.other = User.objects.create_user(
+            username="other", email="other-user@example.com", password="TestPass123!"
+        )
+        self.sales_role = Role.objects.create(name="Sales")
+        self.client = APIClient()
+        self.payload = {
+            "username": "salesone", "email": "salesone@example.com",
+            "fullName": "Sales One", "mobile": "1234567890",
+            "password": "StrongSalesPass123!", "isActive": True,
+            "roleIds": [self.sales_role.id],
+        }
+
+    def test_admin_creates_and_disables_user_without_exposing_password(self):
+        self.client.force_authenticate(user=self.admin)
+        created = self.client.post("/api/users", self.payload, format="json")
+        self.assertEqual(created.status_code, 201)
+        self.assertNotIn("password", created.data)
+        self.assertNotIn("passwordHash", created.data)
+        user = User.objects.get(pk=created.data["id"])
+        self.assertTrue(user.check_password(self.payload["password"]))
+        self.assertEqual(created.data["roleIds"], [self.sales_role.id])
+
+        update = {**self.payload, "isActive": False}
+        changed = self.client.put(f"/api/users/{user.pk}", update, format="json")
+        self.assertEqual(changed.status_code, 200)
+        self.client.force_authenticate(user=None)
+        self.assertEqual(self.client.post("/api/auth/login", {
+            "email": user.email, "password": self.payload["password"]
+        }, format="json").status_code, 401)
+
+    def test_employee_cannot_manage_users(self):
+        self.client.force_authenticate(user=self.other)
+        self.assertEqual(self.client.get("/api/users").status_code, 403)
+        self.assertEqual(self.client.post("/api/users", self.payload, format="json").status_code, 403)
+
+    def test_duplicate_and_orphan_role_are_rejected(self):
+        self.client.force_authenticate(user=self.admin)
+        self.assertEqual(self.client.post("/api/users", {
+            **self.payload, "roleIds": [999999999]
+        }, format="json").status_code, 400)
+        self.assertEqual(self.client.post("/api/users", self.payload, format="json").status_code, 201)
+        self.assertEqual(self.client.post("/api/users", self.payload, format="json").status_code, 400)
+
+    def test_admin_cannot_deactivate_self(self):
+        self.client.force_authenticate(user=self.admin)
+        payload = {**self.payload, "username": self.admin.username,
+                   "email": self.admin.email, "isActive": False}
+        self.assertEqual(self.client.put(f"/api/users/{self.admin.pk}",
+                         payload, format="json").status_code, 400)

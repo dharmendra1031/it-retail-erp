@@ -161,6 +161,34 @@ def check_api():
     )
     assert status == 200 and changed["name"] == "SQL Sales", "Role update failed"
 
+    status, created_user = request(
+        client, "/api/users", "POST",
+        {
+            "username": "sqlsales", "email": "sqlsales@example.test",
+            "fullName": "SQL Sales", "mobile": "9876543210",
+            "password": "StrongSalesPass123!", "roleIds": [role["id"]],
+            "isActive": True,
+        }, csrf,
+    )
+    assert status == 201 and created_user["roleIds"] == [role["id"]], "User with role creation failed"
+    assert "password" not in created_user and "passwordHash" not in created_user, "Password leaked"
+
+    status, deactivated = request(
+        client, f"/api/users/{created_user['id']}", "PUT",
+        {
+            "username": "sqlsales", "email": "sqlsales@example.test",
+            "fullName": "SQL Sales", "mobile": "9876543210",
+            "roleIds": [role["id"]], "isActive": False,
+        }, csrf,
+    )
+    assert status == 200 and deactivated["isActive"] is False, "User deactivation failed"
+    status, _ = request(
+        build_opener(HTTPCookieProcessor(CookieJar())),
+        "/api/auth/login", "POST",
+        {"email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False},
+    )
+    assert status in (400, 403, 401), "Disabled-user login unexpectedly permitted"
+
     status, company = request(
         client, "/api/companies", "POST",
         {"nameEn": "SQL Shop", "nameAr": "متجر اختبار", "isActive": "true"},
@@ -174,7 +202,7 @@ def check_api():
     status, _ = request(client, f"/api/companies/{company['id']}", "DELETE", csrf=csrf)
     assert status == 204, "Company delete failed"
     status, _ = request(client, f"/api/roles/{role['id']}", "DELETE", csrf=csrf)
-    assert status == 204, "Role delete failed"
+    assert status == 409, "Assigned role must remain protected"
     status, _ = request(client, "/api/auth/logout", "POST", csrf=csrf)
     assert status == 204, "Logout failed"
     status, _ = request(client, "/api/auth/me")

@@ -28,7 +28,7 @@ public sealed class AuthController(
     public async Task<IActionResult> Me()
     {
         var user = await userManager.GetUserAsync(User);
-        return user is null ? Unauthorized() : Ok(ToResponse(user, await userManager.IsInRoleAsync(user, "Admin")));
+        return user is null || !user.IsActive ? Unauthorized() : Ok(ToResponse(user, await userManager.IsInRoleAsync(user, "Admin")));
     }
 
     [HttpPost("login")]
@@ -37,7 +37,7 @@ public sealed class AuthController(
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var user = await userManager.FindByEmailAsync(request.Email.Trim());
-        if (user is null)
+        if (user is null || !user.IsActive)
         {
             return Unauthorized();
         }
