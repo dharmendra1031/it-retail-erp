@@ -442,3 +442,9 @@ Supplier numeric BIGINT identity, SQL unique normalized code, NVARCHAR, DECIMAL(
 Current Supplier CRUD covers code, bilingual names, contact details, paymentTermsDays, openingBalance and creditLimit; file list/upload/download are Admin-only. SRS §11 supplier statement/payables and first Purchase linkage cannot yet be executed—WP24/25/27/43 own them. Current no-store/nosniff protections are fixed; absent bulk pagination belongs WP48 and deep audit/retention WP46. No independent supplier-specific database migration is required.
 
 Existing BIGINT identity, unique Code, Unicode, decimal(18,3) and protected owner FKs unaffected; no schema migration or production SQL.
+
+## ERP-0244 — Supplier database scope
+
+Admin creates S-AR-001 with Arabic name المورد الرئيسي, English name Main Supplier, contact person, tax number, terms 14, openingBalance 135.500, creditLimit 800.500. Both ASP.NET/Django respond 201 with numeric BIGINT Id and exact decimals, list/detail round-trip and edit preserve Arabic. Shared React can save via keyboard and reload. Later link the same SupplierId to the first purchase order/invoice through WP24/25 and verify payable entry WP27; this downstream case is a test contract, not a claimed implementation.
+
+Existing BIGINT identity, unique Code, Unicode, decimal(18,3) and protected owner FKs unaffected; no schema migration or production SQL.
