@@ -24,6 +24,7 @@ class PartnerPermission(BasePermission):
 
 
 class PartnerSerializer(serializers.ModelSerializer):
+    code = serializers.CharField(max_length=30, validators=[])
     nameEn = serializers.CharField(source="name_en", max_length=200)
     nameAr = serializers.CharField(source="name_ar", max_length=200, required=False, allow_blank=True)
     addressEn = serializers.CharField(source="address_en", max_length=500, required=False, allow_blank=True)
