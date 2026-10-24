@@ -1,6 +1,7 @@
 """Disposable SQL Server smoke test for the ASP.NET Core API."""
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 import os
 import subprocess
 import tempfile
@@ -348,6 +349,22 @@ def check_api():
     }
     status, browser_supplier_response = request(client, "/api/suppliers", "POST", browser_supplier, csrf)
     assert status == 201, f"Browser-equivalent supplier payload rejected: {status} {browser_supplier_response}"
+
+    race_cases = (
+        ("/api/customers", {**customer_data, "code": "C-RACE"}),
+        ("/api/suppliers", {**supplier_data, "code": "S-RACE"}),
+        ("/api/categories", {"code": "CAT-RACE", "nameEn": "Race Category"}),
+        ("/api/brands", {"code": "BR-RACE", "nameEn": "Race Brand"}),
+        ("/api/units", {"code": "UN-RACE", "nameEn": "Race Unit", "decimalPlaces": 0}),
+    )
+    for path, payload in race_cases:
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            statuses = list(pool.map(
+                lambda _: request(client, path, "POST", payload, csrf)[0], range(2),
+            ))
+        assert sorted(statuses) == [201, 400], (
+            f"Concurrent duplicate write to {path} was not safely rejected: {statuses}"
+        )
 
     document_data = ("proof.pdf", "application/pdf", b"%PDF-1.4\\nprivate")
     status, document = request(client, f"/api/customers/{customer['id']}/documents", "POST", {
