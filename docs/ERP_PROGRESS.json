@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0208",
+  "nextStepId": "ERP-0209",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -215,7 +215,8 @@
     "ERP-0204",
     "ERP-0205",
     "ERP-0206",
-    "ERP-0207"
+    "ERP-0207",
+    "ERP-0208"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4700,6 +4701,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "No quotation/print completion claimed. No schema changes."
+    },
+    {
+      "stepId": "ERP-0208",
+      "status": "complete",
+      "scope": "ASP.NET Unicode entity/contract inspection",
+      "completionMode": "source-verified existing implementation; no owned runtime change needed",
+      "reviewedRepoCommit": "4f7a3ac5da4f14585200d4d4fbcef720a05ce29d",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Contracts/CompanyRequest.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "existing source/contracts reviewed",
+        "applicableSchemaChange": false,
+        "priorCi": "40050464255 success",
+        "newBuild": "not run for documentation review",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "ASP.NET CompanyRequest/PartnerRequest and Company/Customer/Supplier entities already carry separate EN/AR bounded strings. SQL Server uses nvarchar; long BIGINT identity unchanged. Existing controller validation returns language-neutral detail, and React now translates it. No WP11 ASP.NET schema or contract repair needed. Financial print contracts belong WP27/WP30/WP44."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

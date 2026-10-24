@@ -266,3 +266,7 @@ Inspected Company, Customer, Supplier, Category, Brand and Product Django models
 ## Review 030 — 2026-10-24 ERP-0207
 
 Existing models retain BIGINT auto-increment IDs, separate SQL Unicode EN/AR fields, DECIMAL(18,3) partner money, unchanged FK/index constraints and authorization. No new WP11 persistence, schema update, migration, SQL data write or physical printer test. Arabic diacritics and mixed-script round-trip regression authored (commit 80cd7c1); awaiting CI verification. UI rollback requires deployment rollback only, leaving stored Arabic rows unchanged. DB-001–DB-006 remain with existing owners.
+
+## ERP-0208 — Database source review
+
+ASP.NET CompanyRequest/PartnerRequest and Company/Customer/Supplier entities already carry separate EN/AR bounded strings. SQL Server uses nvarchar; long BIGINT identity unchanged. Existing controller validation returns language-neutral detail, and React now translates it. No WP11 ASP.NET schema or contract repair needed. Financial print contracts belong WP27/WP30/WP44. No new migration, FK/index, monetary precision or ID change. Existing BIGINT and DECIMAL rules retained, DB-001–DB-006 previously tracked. No production SQL data read or modified.
