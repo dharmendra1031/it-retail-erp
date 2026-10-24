@@ -119,3 +119,9 @@ CI 40060771866 completed five jobs successfully: Django, ASP.NET, frontend, SQL 
 Reviewed shared PartnerViewSet and React Partners module for unnecessary parallel code, ASP.NET PartnerValidation reuse, CSRF, duplicate unique index race, customer CivilId masking, Admin-only documents and security headers. Security fix commit 1773c7f prevents caching confidential customer/supplier downloads, and focused ASP.NET SQL smoke e0b0cd1 proves read-only employee cannot access CivilId/file or post. 5/5 successful CI run 40060771866 proves current customer acceptance. No schema/migration/regression remains blocking WP12. Still open by ownership: AR quotation/report physical printing WP28/WP44; customer ledger, payment/allocation and branch financial posting WP30/WP32/33; larger pagination WP48; advanced security audit/retention WP46. Do not claim these delivered.
 
 **Evidence:** CI [40060771866](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866) passed Django, ASP.NET, React, browser and SQL Server jobs on test environments. WP12 signoff applies only to existing customer master CRUD, permissions, validation and secured documents, not later invoices/payments/printing.
+
+## ERP-0241 — Supplier Master requirements and downstream ledger ownership
+
+SRS §§4,10,11,50,52,57: normalized Supplier code, bilingual EN/AR company names/address, contact person, telephone/mobile/email/tax number, 0–365 payment terms, three-decimal opening balance and credit limit, active state, protected attachment access and searchable CRUD. Supplier ledger, balance allocation, first purchase and payables belong WP24–WP27/WP43; no fake purchase link or stock/ledger posting in WP13.
+
+Evidence: `docs/SRS_BASELINE.md`, `docs/ERP_REQUIREMENTS_GAP_MATRIX.md`, `django/apps/partners/models.py`, `frontend/src/components/Partners.tsx`. SRS acceptance specification/source, not verification of supplier ledger, purchase or financial print.

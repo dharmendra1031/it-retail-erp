@@ -424,3 +424,9 @@ No schema change. Existing FK/restrict, unique normalized Code, decimal 18,3 and
 Reviewed shared PartnerViewSet and React Partners module for unnecessary parallel code, ASP.NET PartnerValidation reuse, CSRF, duplicate unique index race, customer CivilId masking, Admin-only documents and security headers. Security fix commit 1773c7f prevents caching confidential customer/supplier downloads, and focused ASP.NET SQL smoke e0b0cd1 proves read-only employee cannot access CivilId/file or post. 5/5 successful CI run 40060771866 proves current customer acceptance. No schema/migration/regression remains blocking WP12. Still open by ownership: AR quotation/report physical printing WP28/WP44; customer ledger, payment/allocation and branch financial posting WP30/WP32/33; larger pagination WP48; advanced security audit/retention WP46. Do not claim these delivered.
 
 Schema unchanged: BIGINT IDENTITY, unique Code, NVARCHAR bilingual values, DECIMAL(18,3), partner file owner check and FK restrictions; no production SQL.
+
+## ERP-0241 — Supplier DB/source review
+
+SRS §§4,10,11,50,52,57: normalized Supplier code, bilingual EN/AR company names/address, contact person, telephone/mobile/email/tax number, 0–365 payment terms, three-decimal opening balance and credit limit, active state, protected attachment access and searchable CRUD. Supplier ledger, balance allocation, first purchase and payables belong WP24–WP27/WP43; no fake purchase link or stock/ledger posting in WP13.
+
+Supplier numeric BIGINT identity, SQL unique normalized code, NVARCHAR, DECIMAL(18,3), binary doc exclusive-owner CHECK and restrictive FK from existing migrations. No schema or production database changes.

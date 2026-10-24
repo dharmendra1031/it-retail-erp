@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0241",
+  "nextStepId": "ERP-0242",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -248,7 +248,8 @@
     "ERP-0237",
     "ERP-0238",
     "ERP-0239",
-    "ERP-0240"
+    "ERP-0240",
+    "ERP-0241"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5444,6 +5445,26 @@
         "financialPosting": "deferred to owners"
       },
       "notes": "Reviewed shared PartnerViewSet and React Partners module for unnecessary parallel code, ASP.NET PartnerValidation reuse, CSRF, duplicate unique index race, customer CivilId masking, Admin-only documents and security headers. Security fix commit 1773c7f prevents caching confidential customer/supplier downloads, and focused ASP.NET SQL smoke e0b0cd1 proves read-only employee cannot access CivilId/file or post. 5/5 successful CI run 40060771866 proves current customer acceptance. No schema/migration/regression remains blocking WP12. Still open by ownership: AR quotation/report physical printing WP28/WP44; customer ledger, payment/allocation and branch financial posting WP30/WP32/33; larger pagination WP48; advanced security audit/retention WP46. Do not claim these delivered."
+    },
+    {
+      "stepId": "ERP-0241",
+      "status": "complete",
+      "scope": "Supplier Master requirements and downstream ledger ownership",
+      "completionMode": "SRS/source inventory only, explicitly deferred supplier ledger",
+      "reviewedRepoCommit": "35eb83b42630d798cd24fe65992f644299705065",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "docs/ERP_REQUIREMENTS_GAP_MATRIX.md",
+        "django/apps/partners/models.py",
+        "frontend/src/components/Partners.tsx"
+      ],
+      "verification": {
+        "kind": "SRS baseline and source review",
+        "baselineCi": "40060771866 5/5 SUCCESS",
+        "newTests": "not run (source/spec)",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "SRS §§4,10,11,50,52,57: normalized Supplier code, bilingual EN/AR company names/address, contact person, telephone/mobile/email/tax number, 0–365 payment terms, three-decimal opening balance and credit limit, active state, protected attachment access and searchable CRUD. Supplier ledger, balance allocation, first purchase and payables belong WP24–WP27/WP43; no fake purchase link or stock/ledger posting in WP13."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
