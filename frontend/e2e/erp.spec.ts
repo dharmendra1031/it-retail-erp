@@ -397,9 +397,12 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await page.getByLabel("Parent Category").selectOption({ label: "Computers" });
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `LAP-${suffix}` })).toContainText("Computers");
-  const hierarchy = await page.locator(".table-wrap tbody tr").allTextContents();
-  expect(hierarchy.findIndex(text => text.includes(`COMP-${suffix}`)))
-    .toBeLessThan(hierarchy.findIndex(text => text.includes(`LAP-${suffix}`)));
+  await expect(page.getByRole("row").filter({ hasText: `COMP-${suffix}` })).toBeVisible();
+  const hierarchy = await page.getByRole("row").allTextContents();
+  const rootIndex = hierarchy.findIndex(text => text.includes(`COMP-${suffix}`));
+  const childIndex = hierarchy.findIndex(text => text.includes(`LAP-${suffix}`));
+  expect(rootIndex).toBeGreaterThan(-1);
+  expect(childIndex).toBeGreaterThan(rootIndex);
 
   await page.getByRole("button", { name: "Brand Master" }).click();
   await page.getByLabel("Code").fill(`DELL-${suffix}`);
