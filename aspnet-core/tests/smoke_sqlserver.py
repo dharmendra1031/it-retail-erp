@@ -366,6 +366,15 @@ def check_api():
             f"Concurrent duplicate write to {path} was not safely rejected: {statuses}"
         )
 
+    status, _ = request(client, f"/api/suppliers/{supplier['id']}/documents", "POST", {
+        "file": ("fake.jpg", "application/pdf", b"%PDF-1.7\\nwrong extension"),
+    }, csrf, multipart=True)
+    assert status == 400, "Mismatched Supplier document extension accepted"
+    status, _ = request(client, f"/api/customers/{customer['id']}/documents", "POST", {
+        "file": ("fake.png", "application/pdf", b"%PDF-1.7\\nwrong extension"),
+    }, csrf, multipart=True)
+    assert status == 400, "Mismatched Customer document extension accepted"
+
     document_data = ("proof.pdf", "application/pdf", b"%PDF-1.4\\nprivate")
     status, document = request(client, f"/api/customers/{customer['id']}/documents", "POST", {
         "file": document_data,

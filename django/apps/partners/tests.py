@@ -191,7 +191,13 @@ class PartnerApiTests(TestCase):
         )}, format="multipart")
         self.assertEqual(upload.status_code, 201, upload.data)
         document_url = f"{url}/{upload.data['id']}"
-        self.assertEqual(self.client.get(document_url).content, b"%PDF-1.5\\ncontract")
+        downloaded = self.client.get(document_url)
+        self.assertEqual(downloaded.content, b"%PDF-1.5\\ncontract")
+        self.assertIn("contract.pdf", downloaded["Content-Disposition"])
+        mismatch = self.client.post(url, {"file": SimpleUploadedFile(
+            "wrong.jpg", b"%PDF-1.5\\ncontract", content_type="application/pdf"
+        )}, format="multipart")
+        self.assertEqual(mismatch.status_code, 400)
         self.assertEqual(self.client.delete(f"/api/suppliers/{created.data['id']}").status_code, 409)
 
         role = Role.objects.create(name="Supplier Reader")
@@ -214,6 +220,10 @@ class PartnerApiTests(TestCase):
             "bad.pdf", b"garbage", content_type="application/pdf"
         )}, format="multipart")
         self.assertEqual(bad.status_code, 400)
+        extension_mismatch = self.client.post(url, {"file": SimpleUploadedFile(
+            "fake.jpg", b"%PDF-1.4\\nprivate", content_type="application/pdf"
+        )}, format="multipart")
+        self.assertEqual(extension_mismatch.status_code, 400)
         good = self.client.post(url, {"file": SimpleUploadedFile(
             "civil.pdf", b"%PDF-1.4\nsecret", content_type="application/pdf"
         )}, format="multipart")

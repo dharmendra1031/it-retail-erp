@@ -3,6 +3,7 @@ from pathlib import Path
 
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse
+from django.utils.http import content_disposition_header
 from rest_framework import serializers
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import BasePermission, IsAuthenticated
@@ -144,8 +145,18 @@ class PartnerViewSet(ModelViewSet):
         file = request.FILES.get("file")
         if file is None or not 0 < file.size <= 5 * 1024 * 1024:
             return Response({"detail": "Invalid document."}, status=400)
-        sig = file.read(12)
+        name = Path(file.name.replace("\\", "/")).name
+        safe_name = "".join(c for c in name if c.isprintable() and c != '"')[:200]
         mime = file.content_type
+        allowed = {
+            "application/pdf": {".pdf"},
+            "image/png": {".png"},
+            "image/jpeg": {".jpg", ".jpeg"},
+        }
+        if not safe_name or Path(safe_name).suffix.lower() not in allowed.get(mime, set()):
+            return Response({"detail": "Invalid document."}, status=400)
+
+        sig = file.read(12)
         if not (
             mime == "application/pdf" and sig.startswith(b"%PDF-")
             or mime == "image/png" and sig.startswith(b"\x89PNG\r\n\x1a\n")
@@ -155,7 +166,7 @@ class PartnerViewSet(ModelViewSet):
         file.seek(0)
         document = PartnerDocument.objects.create(
             **{self.document_fk: partner},
-            file_name=Path(file.name).name[:200],
+            file_name=safe_name,
             content_type=mime,
             content=file.read(),
         )
@@ -189,6 +200,8 @@ def download_document(request, kind, partner_id, document_id):
     if document is None:
         return HttpResponse(status=404)
     response = HttpResponse(bytes(document.content), content_type=document.content_type)
-    response["Content-Disposition"] = 'attachment; filename="document"'
+    response["Content-Disposition"] = content_disposition_header(
+        as_attachment=True, filename=document.file_name
+    )
     response["X-Content-Type-Options"] = "nosniff"
     return response

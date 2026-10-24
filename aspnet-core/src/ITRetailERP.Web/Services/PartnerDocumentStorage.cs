@@ -9,6 +9,16 @@ public static class PartnerDocumentStorage
         if (file is null || file.Length == 0 || file.Length > MaximumBytes)
             return null;
 
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        var validExtension = file.ContentType switch
+        {
+            "application/pdf" => extension == ".pdf",
+            "image/png" => extension == ".png",
+            "image/jpeg" => extension is ".jpg" or ".jpeg",
+            _ => false,
+        };
+        if (!validExtension) return null;
+
         await using var stream = new MemoryStream();
         await file.CopyToAsync(stream);
         var content = stream.ToArray();
