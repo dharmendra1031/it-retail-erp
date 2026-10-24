@@ -96,7 +96,9 @@ class PartnerApiTests(TestCase):
         self.assertEqual(Supplier.objects.get(pk=response.data["id"]).opening_balance,
                          Decimal("135.500"))
         self.assertEqual(response.data["creditLimit"], "800.500")
-        self.assertEqual(self.client.post("/api/suppliers", self.supplier, format="json").status_code, 400)
+        duplicate = self.client.post("/api/suppliers", self.supplier, format="json")
+        self.assertEqual(duplicate.status_code, 400)
+        self.assertEqual(duplicate.data, {"detail": "Code already exists."})
         blank_email = self.client.post("/api/suppliers", {
             **self.supplier, "code": "S-EMPTY-EMAIL", "email": "",
         }, format="json")

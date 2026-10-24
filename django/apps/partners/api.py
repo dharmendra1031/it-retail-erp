@@ -113,14 +113,14 @@ class PartnerViewSet(ModelViewSet):
             with transaction.atomic():
                 return super().create(request, *args, **kwargs)
         except IntegrityError:
-            return Response({"detail": "Invalid request."}, status=400)
+            return Response({"detail": "Code already exists."}, status=400)
 
     def update(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
                 return super().update(request, *args, **kwargs)
         except IntegrityError:
-            return Response({"detail": "Invalid request."}, status=400)
+            return Response({"detail": "Code already exists."}, status=400)
 
     permission_classes = [IsAuthenticated, PartnerPermission]
     http_method_names = ["get", "post", "put", "delete", "head", "options"]
