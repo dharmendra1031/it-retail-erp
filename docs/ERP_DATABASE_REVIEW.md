@@ -488,3 +488,7 @@ No production migrations, changes to ID policy, user data or secrets. All future
 ## ERP-0250 — Final executable regression evidence (2026-10-24)
 
 The Supplier oversize rejection test commit `4d3a4a894c7b41a17b939174df9c8a32adb2c322` completed [CI run 40061566701](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40061566701): **5/5 PASS** (Django, ASP.NET Core, React, browser, disposable SQL Server). Both backend tests reject Supplier files larger than 5 MiB and verify rejected files are not saved. Confidential file responses retain no-store/nosniff and role protection. ERP-0250 marks Supplier schema/migration ownership reviewed; WP13 is **not yet complete** (ERP-0251–0260 remain). No production database or physical printing acceptance performed.
+
+## ERP-0251 — Supplier duplicate validator and response contract (2026-10-24)
+
+No schema migration. Existing Supplier Code unique index and BIGINT identity prevent duplicate committed inserts even during races. Both ASP.NET and Django return a normalized 400 duplicate-code error after the field-level validator fix, confirmed by CI 40070737989 5/5 PASS on disposable SQL Server. SQL DECIMAL(18,3) amounts remain string-serialized; NVARCHAR English/Arabic columns and protected documents' exclusive-owner CHECK/FKs remain unchanged. No production data or DB schema touched; purchase/payable FK ownership is downstream.

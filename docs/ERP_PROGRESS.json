@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0251",
+  "nextStepId": "ERP-0252",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -258,10 +258,11 @@
     "ERP-0247",
     "ERP-0248",
     "ERP-0249",
-    "ERP-0250"
+    "ERP-0250",
+    "ERP-0251"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "4d3a4a894c7b41a17b939174df9c8a32adb2c322",
+  "lastVerifiedCommit": "f0a14d50be8542ccf1b6bc6a4f77a0f910a8e365",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -5678,6 +5679,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Current 250/1000 completed step tracker reconciled to latest code CI; Supplier invoice/ledger/statement and full SRS E2E remain future-owned."
+    },
+    {
+      "stepId": "ERP-0251",
+      "status": "complete",
+      "scope": "Supplier ASP.NET/Django API and protected document response contract",
+      "completionMode": "real Django duplicate-code response parity fix, API documentation and executable backend tests",
+      "reviewedRepoCommit": "e794c3a0049e702db0e822162953621c69bd9775",
+      "evidence": [
+        "docs/ERP_0251_SUPPLIER_API_CONTRACT.md",
+        "django/config/exceptions.py",
+        "django/apps/partners/api.py",
+        "django/apps/partners/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "GitHub CI Django/ASP.NET/frontend/browser/disposable SQL",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40070737989",
+        "result": "5/5 SUCCESS",
+        "codeFixCommit": "f0a14d50be8542ccf1b6bc6a4f77a0f910a8e365",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Documented shared Supplier routes, uppercase ASCII code, exact DECIMAL(18,3) strings, admin-only protected files and normalized 400 errors. Django serializer now bypasses automatic uniqueness validator in favor of reviewed explicit duplicate handling. Code race is protected by unique SQL index; no new schema or financial posting."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
