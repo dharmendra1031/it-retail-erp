@@ -149,3 +149,9 @@ Source `docs/SRS_BASELINE.md`, `django/apps/partners/api.py`, `aspnet-core/src/I
 Customer/Supplier code policy is ASCII letters/digits/hyphen/underscore and normalizes upper-case in both backends; duplicate Supplier create/update and concurrent duplicate must return 400 without partial save. Reject negative or overprecision openingBalance/creditLimit and invalid optional email. Only Admin may list, upload or download Supplier files; readers with suppliers.view get 403. Reject MIME-signature/extension mismatch and >5 MB; content-disposition safe filename, nosniff and no-store. Wrong owner document id gets 404; linked files block Supplier delete with 409. No first-purchase posting claimed.
 
 Checked files: `django/apps/partners/tests.py`, `aspnet-core/tests/smoke_sqlserver.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `django/apps/partners/api.py`. Future purchase/ledger owner acceptance explicitly deferred.
+
+## ERP-0246 — Supplier schema, numeric IDs and DECIMAL persistence design
+
+Django Supplier/PartnerDocument BigAutoField and ASP.NET Supplier/PartnerDocument long ID mapped to SQL BIGINT IDENTITY. Unique Code index, separate NameEn/NameAr AddressEn/AddressAr NVARCHAR, terms int 0..365, OpeningBalance and CreditLimit DECIMAL(18,3), protected file binary content and exclusive CustomerId/SupplierId one-owner CHECK and restrictive FKs. Existing Django partners 0001/0002 and EF Partners/PartnerDetails migrations are sufficient. No new supplier-specific table or UUID; purchase FK belongs future module WP24/25.
+
+Checked files: `django/apps/partners/models.py`, `django/apps/partners/migrations/0002_partner_details.py`, `aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs`, `aspnet-core/src/ITRetailERP.Web/Migrations/20261023150000_PartnerDetails.cs`, `aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs`. Future purchase/ledger owner acceptance explicitly deferred.

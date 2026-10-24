@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0246",
+  "nextStepId": "ERP-0247",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -253,7 +253,8 @@
     "ERP-0242",
     "ERP-0243",
     "ERP-0244",
-    "ERP-0245"
+    "ERP-0245",
+    "ERP-0246"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5552,6 +5553,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Customer/Supplier code policy is ASCII letters/digits/hyphen/underscore and normalizes upper-case in both backends; duplicate Supplier create/update and concurrent duplicate must return 400 without partial save. Reject negative or overprecision openingBalance/creditLimit and invalid optional email. Only Admin may list, upload or download Supplier files; readers with suppliers.view get 403. Reject MIME-signature/extension mismatch and >5 MB; content-disposition safe filename, nosniff and no-store. Wrong owner document id gets 404; linked files block Supplier delete with 409. No first-purchase posting claimed."
+    },
+    {
+      "stepId": "ERP-0246",
+      "status": "complete",
+      "scope": "Supplier schema, numeric IDs and DECIMAL persistence design",
+      "completionMode": "specified negatives/data configuration with current code evidence",
+      "reviewedRepoCommit": "083bfdc2b5e8cee662d6f915d45660100f4d1784",
+      "evidence": [
+        "django/apps/partners/models.py",
+        "django/apps/partners/migrations/0002_partner_details.py",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023150000_PartnerDetails.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs"
+      ],
+      "verification": {
+        "kind": "SRS/code specification",
+        "baselineCi": "40060771866 SUCCESS",
+        "newTests": "not run in this spec stage",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django Supplier/PartnerDocument BigAutoField and ASP.NET Supplier/PartnerDocument long ID mapped to SQL BIGINT IDENTITY. Unique Code index, separate NameEn/NameAr AddressEn/AddressAr NVARCHAR, terms int 0..365, OpeningBalance and CreditLimit DECIMAL(18,3), protected file binary content and exclusive CustomerId/SupplierId one-owner CHECK and restrictive FKs. Existing Django partners 0001/0002 and EF Partners/PartnerDetails migrations are sufficient. No new supplier-specific table or UUID; purchase FK belongs future module WP24/25."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
