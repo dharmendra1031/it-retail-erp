@@ -357,7 +357,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0242** (02/20) Inspect Supplier models, APIs and secure document endpoints, Equivalent supplier serializers, models and document rules and Supplier CRUD and bilingual list; record actual files and current behavior.
 - [x] **ERP-0243** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [x] **ERP-0244** (04/20) Specify the happy-path acceptance: Create supplier and later link first purchase.
-- [ ] **ERP-0245** (05/20) Specify the negative/authorization case: Reject duplicate supplier code and unauthorized file access.
+- [x] **ERP-0245** (05/20) Specify the negative/authorization case: Reject duplicate supplier code and unauthorized file access.
 - [ ] **ERP-0246** (06/20) Design data, configuration and numeric BIGINT IDs for Supplier codes, bilingual names, contacts, terms, opening balances and files; record N/A with evidence if schema unchanged.
 - [ ] **ERP-0247** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Unique supplier code and secure supplier-document access.
 - [ ] **ERP-0248** (08/20) Implement or repair ASP.NET entities/configuration/contracts for Supplier models, APIs and secure document endpoints. Execute runtime changes only for surfaces owned by this package; otherwise record N/A/deferred downstream owner with code evidence and do not create placeholder implementation.

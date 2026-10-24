@@ -448,3 +448,9 @@ Existing BIGINT identity, unique Code, Unicode, decimal(18,3) and protected owne
 Admin creates S-AR-001 with Arabic name المورد الرئيسي, English name Main Supplier, contact person, tax number, terms 14, openingBalance 135.500, creditLimit 800.500. Both ASP.NET/Django respond 201 with numeric BIGINT Id and exact decimals, list/detail round-trip and edit preserve Arabic. Shared React can save via keyboard and reload. Later link the same SupplierId to the first purchase order/invoice through WP24/25 and verify payable entry WP27; this downstream case is a test contract, not a claimed implementation.
 
 Existing BIGINT identity, unique Code, Unicode, decimal(18,3) and protected owner FKs unaffected; no schema migration or production SQL.
+
+## ERP-0245 Supplier database review
+
+Customer/Supplier code policy is ASCII letters/digits/hyphen/underscore and normalizes upper-case in both backends; duplicate Supplier create/update and concurrent duplicate must return 400 without partial save. Reject negative or overprecision openingBalance/creditLimit and invalid optional email. Only Admin may list, upload or download Supplier files; readers with suppliers.view get 403. Reject MIME-signature/extension mismatch and >5 MB; content-disposition safe filename, nosniff and no-store. Wrong owner document id gets 404; linked files block Supplier delete with 409. No first-purchase posting claimed.
+
+No DDL or production SQL changed. Prior disposable CI 40060771866 green.

@@ -143,3 +143,9 @@ Source `docs/SRS_BASELINE.md`, `django/apps/partners/api.py`, `aspnet-core/src/I
 Admin creates S-AR-001 with Arabic name المورد الرئيسي, English name Main Supplier, contact person, tax number, terms 14, openingBalance 135.500, creditLimit 800.500. Both ASP.NET/Django respond 201 with numeric BIGINT Id and exact decimals, list/detail round-trip and edit preserve Arabic. Shared React can save via keyboard and reload. Later link the same SupplierId to the first purchase order/invoice through WP24/25 and verify payable entry WP27; this downstream case is a test contract, not a claimed implementation.
 
 Source `docs/SRS_BASELINE.md`, `django/apps/partners/api.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `frontend/src/components/Partners.tsx`, `aspnet-core/tests/smoke_sqlserver.py`. Current Supplier Master proof separate from later purchase/ledger posting.
+
+## ERP-0245 — Supplier duplicate-code, decimal and private-document negative acceptance
+
+Customer/Supplier code policy is ASCII letters/digits/hyphen/underscore and normalizes upper-case in both backends; duplicate Supplier create/update and concurrent duplicate must return 400 without partial save. Reject negative or overprecision openingBalance/creditLimit and invalid optional email. Only Admin may list, upload or download Supplier files; readers with suppliers.view get 403. Reject MIME-signature/extension mismatch and >5 MB; content-disposition safe filename, nosniff and no-store. Wrong owner document id gets 404; linked files block Supplier delete with 409. No first-purchase posting claimed.
+
+Checked files: `django/apps/partners/tests.py`, `aspnet-core/tests/smoke_sqlserver.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `django/apps/partners/api.py`. Future purchase/ledger owner acceptance explicitly deferred.

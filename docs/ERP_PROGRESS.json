@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0245",
+  "nextStepId": "ERP-0246",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -252,7 +252,8 @@
     "ERP-0241",
     "ERP-0242",
     "ERP-0243",
-    "ERP-0244"
+    "ERP-0244",
+    "ERP-0245"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5531,6 +5532,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Admin creates S-AR-001 with Arabic name المورد الرئيسي, English name Main Supplier, contact person, tax number, terms 14, openingBalance 135.500, creditLimit 800.500. Both ASP.NET/Django respond 201 with numeric BIGINT Id and exact decimals, list/detail round-trip and edit preserve Arabic. Shared React can save via keyboard and reload. Later link the same SupplierId to the first purchase order/invoice through WP24/25 and verify payable entry WP27; this downstream case is a test contract, not a claimed implementation."
+    },
+    {
+      "stepId": "ERP-0245",
+      "status": "complete",
+      "scope": "Supplier duplicate-code, decimal and private-document negative acceptance",
+      "completionMode": "specified negatives/data configuration with current code evidence",
+      "reviewedRepoCommit": "fe442ee56dd8ae4ab5a1c9cf3eec10be1e7bf847",
+      "evidence": [
+        "django/apps/partners/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs",
+        "django/apps/partners/api.py"
+      ],
+      "verification": {
+        "kind": "SRS/code specification",
+        "baselineCi": "40060771866 SUCCESS",
+        "newTests": "not run in this spec stage",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Customer/Supplier code policy is ASCII letters/digits/hyphen/underscore and normalizes upper-case in both backends; duplicate Supplier create/update and concurrent duplicate must return 400 without partial save. Reject negative or overprecision openingBalance/creditLimit and invalid optional email. Only Admin may list, upload or download Supplier files; readers with suppliers.view get 403. Reject MIME-signature/extension mismatch and >5 MB; content-disposition safe filename, nosniff and no-store. Wrong owner document id gets 404; linked files block Supplier delete with 409. No first-purchase posting claimed."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
