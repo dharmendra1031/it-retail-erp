@@ -330,7 +330,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0221** (01/20) Extract Customer Master and secured documents acceptance details from SRS §§4, 8, 9, 51, 52, 57; record assumptions and exclusions.
 - [x] **ERP-0222** (02/20) Inspect Customer model/API, uniqueness, attachment authorization, Equivalent customer model/serializer/API and protected media and Customer form, searchable list and secure attachment UI; record actual files and current behavior.
 - [x] **ERP-0223** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
-- [ ] **ERP-0224** (04/20) Specify the happy-path acceptance: Create credit customer with Arabic address and payment terms.
+- [x] **ERP-0224** (04/20) Specify the happy-path acceptance: Create credit customer with Arabic address and payment terms.
 - [ ] **ERP-0225** (05/20) Specify the negative/authorization case: Reject duplicate code, invalid limit and disallowed attachment.
 - [ ] **ERP-0226** (06/20) Design data, configuration and numeric BIGINT IDs for Customer code, bilingual names, ID, types, terms, credit and attachments; record N/A with evidence if schema unchanged.
 - [ ] **ERP-0227** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Unique customer code and no unauthorized access to civil ID/files.

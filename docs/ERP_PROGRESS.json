@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0224",
+  "nextStepId": "ERP-0225",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -231,7 +231,8 @@
     "ERP-0220",
     "ERP-0221",
     "ERP-0222",
-    "ERP-0223"
+    "ERP-0223",
+    "ERP-0224"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5080,6 +5081,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Source shows bilingual Customer API and form, normalized unique code, required Arabic name/mobile, CivilId read omission for nonadmins, documents admin-only and download protection. Remaining scope: full customer statement/receivable posting is WP32–WP33/WP43, quotation and printable output WP28/WP44; no API for these should be invented now. Current customer browsing is in-memory filtering, pagination owner WP48, full file threat scanning is downstream security WP46."
+    },
+    {
+      "stepId": "ERP-0224",
+      "status": "complete",
+      "scope": "Customer positive acceptance specification",
+      "completionMode": "source-evidenced gap/acceptance specification",
+      "reviewedRepoCommit": "93f7ccdbbe1ee172fd9e3d0789de45016937473c",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "frontend/src/components/Partners.tsx",
+        "django/apps/partners/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "documented acceptance",
+        "codeCi": "40060339256 success (disposable SQL Server and browser)",
+        "newTests": "not required for specification-only step",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Create authenticated admin Customer with code C-RTL-001, NameEn Retail, NameAr متجر الكويت, Arabic address, mobile, CreditLimit 2500.750, OpeningBalance 15.250, paymentTermsDays 30, type credit. Expect 201 numeric BIGINT ID, case-normalized code, exact Unicode and decimal string round-trip in GET/list/edit and shared React. New source must not alter monetary figures on UI locale switch. Ledger/quotation cannot be certified before business owners."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

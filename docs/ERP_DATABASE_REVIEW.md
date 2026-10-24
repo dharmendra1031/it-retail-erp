@@ -324,3 +324,9 @@ Existing Customer and PartnerDocument use auto-increment BIGINT, nvarchar/Unicod
 Source shows bilingual Customer API and form, normalized unique code, required Arabic name/mobile, CivilId read omission for nonadmins, documents admin-only and download protection. Remaining scope: full customer statement/receivable posting is WP32–WP33/WP43, quotation and printable output WP28/WP44; no API for these should be invented now. Current customer browsing is in-memory filtering, pagination owner WP48, full file threat scanning is downstream security WP46.
 
 Existing BIGINT IDENTITY/BigAutoField, NVARCHAR, DECIMAL(18,3) unique code and exclusive customer/supplier document ownership remain. No new migration or production DB operation.
+
+## ERP-0224 — Customer data integrity review
+
+Create authenticated admin Customer with code C-RTL-001, NameEn Retail, NameAr متجر الكويت, Arabic address, mobile, CreditLimit 2500.750, OpeningBalance 15.250, paymentTermsDays 30, type credit. Expect 201 numeric BIGINT ID, case-normalized code, exact Unicode and decimal string round-trip in GET/list/edit and shared React. New source must not alter monetary figures on UI locale switch. Ledger/quotation cannot be certified before business owners.
+
+Existing BIGINT IDENTITY/BigAutoField, NVARCHAR, DECIMAL(18,3) unique code and exclusive customer/supplier document ownership remain. No new migration or production DB operation.
