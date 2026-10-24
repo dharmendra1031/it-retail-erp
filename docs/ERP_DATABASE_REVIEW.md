@@ -364,3 +364,9 @@ Existing BIGINT PK, code unique index, EN/AR NVARCHAR, DECIMAL(18,3) and exclusi
 Reviewed existing EF Partners (Customer, PartnerDocument) and PartnerDetails migrations against Django partners 0001/0002 and current models. Both map numeric BIGINT identity, unique code, Unicode fields, decimal(18,3), PartnerDocument owner-check and restrictive FKs. No current WP12 schema delta; creating a dummy migration would be wrong. Existing CI 40056434243 tested disposable SQL migrations; down/up safety for previous migrations was verified in earlier baseline WP03. No destructive production rollback. Post-migration non-null fields are additive with defaults.
 
 Existing BIGINT, unique Code, DECIMAL(18,3), NVARCHAR, restrictive FK/owner CHECK unchanged. No production SQL operation or new migration.
+
+## ERP-0231 — DB review
+
+ASP.NET/Django both expose GET/POST /api/customers, GET/PUT/DELETE /api/customers/{numeric id}, GET/POST /api/customers/{id}/documents, GET /api/customers/{id}/documents/{documentId}. JSON properties camelCase nameEn/nameAr/addressEn/addressAr/civilId/customerType/paymentTermsDays/creditLimit/openingBalance. Money is invariant 3-place string and numeric id safe JSON integer. 201 create, 200 read/update, 204 delete, 400 invalid/duplicate, 403 denied, 404 wrong owner, 409 linked files. Django exception handler normalizes validation to detail Invalid request; CivilId must be omitted for non-admin. Actual protected documents are binary responses, not JSON. No future ledger endpoints claimed.
+
+Existing BIGINT, unique Code, DECIMAL(18,3), NVARCHAR, restrictive FK/owner CHECK unchanged. No production SQL operation or new migration.
