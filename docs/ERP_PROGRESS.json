@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0202",
+  "nextStepId": "ERP-0203",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -209,7 +209,8 @@
     "ERP-0198",
     "ERP-0199",
     "ERP-0200",
-    "ERP-0201"
+    "ERP-0201",
+    "ERP-0202"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4548,6 +4549,34 @@
         "productionDatabase": "not accessed"
       },
       "deferredAcceptance": "WP27 quotation, WP30 invoice, and WP44 report/print owners must separately implement and verify EN/AR/bilingual documents, A4/A5/thermal and printer acceptance. WP11 alone cannot certify full SRS Test 10."
+    },
+    {
+      "stepId": "ERP-0202",
+      "status": "complete",
+      "scope": "WP11 localization source inspection and existing runtime-behavior inventory",
+      "completionMode": "read-only source and existing CI evidence; source-inspection step, not WP11 signoff",
+      "reviewedRepoCommit": "b8d966147840c4e4a92ea3f5ec3b9f88dcc71b51",
+      "evidence": [
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "frontend/src/i18n.tsx",
+        "frontend/src/locale.ts",
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/components/Companies.tsx",
+        "frontend/e2e/erp.spec.ts",
+        "django/apps/companies/serializers.py",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs"
+      ],
+      "verification": {
+        "kind": "source code inventory and observed CI; no runtime change in this step",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40002127807",
+        "codeCi": "5/5 jobs PASS at b8d96614; Django 72 tests on disposable SQL Server; 4 ASP.NET xUnit; Django browser 16 and ASP.NET browser 14 tests PASS",
+        "finding": "Verified language picker and document lang/dir, typed bilingual labels, Arabic permission captions, bilingual master API fields, print identity preview, responsive breakpoint and keyboard browser coverage. Recorded unmapped errors and future print owners.",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "ERP-0203 will compare all source requirements and gaps. Complete Arabic quotations/invoices/reports, A4/A5/thermal layouts, physical printer and translated document transactions belong to WP27/WP30/WP44."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
