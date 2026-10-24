@@ -77,3 +77,9 @@ CustomersApiController POST/PUT applies normalized uppercase code once, checks c
 PartnerViewSet uses transaction.atomic for create/update and catches integrity races with standardized safe 400; CustomerSerializer validates normalized code, mandatory Arabic name/mobile, decimal values and optional email. Detailed/list representation masks CivilId unless admin; independent document CRUD uses protected FK. There is no WP12 financial posting/retry workflow; account receivables belong WP32/33. Django and ASP.NET create/update are semantically equivalent for the current master.
 
 **Source:** `django/apps/partners/api.py`, `django/apps/partners/tests.py`, `django/config/exceptions.py`. Baseline SQL/browser CI 40060339256 PASS; future receivable posting not claimed.
+
+## ERP-0234 — Customer server-side permission and confidential-field acceptance
+
+ASP.NET policies gate customer read/add/edit/delete; only role Admin can list/upload/download secured attachments; non-admin customers.view can read customer rows but CivilId is omitted from both list/detail. Verified as SQL+API negative checks at CI 40060771866, including read-only inability to POST customer or get private file. Django has corresponding role-based read CivilId suppression and admin-only binary endpoints. Whole-system financial transaction branch scope/audit is owned by WP46/financial owners, not duplicated.
+
+**Evidence:** `aspnet-core/tests/smoke_sqlserver.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`, `django/apps/partners/tests.py`, `django/apps/partners/api.py`; 5/5 CI 40060771866 PASS. This does not certify ledger or audit events in later financial modules.

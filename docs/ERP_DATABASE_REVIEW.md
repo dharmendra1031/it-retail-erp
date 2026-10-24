@@ -382,3 +382,9 @@ SQL BIGINT auto-increment IDs, unique Code, decimal(18,3), nvarchar and protecte
 PartnerViewSet uses transaction.atomic for create/update and catches integrity races with standardized safe 400; CustomerSerializer validates normalized code, mandatory Arabic name/mobile, decimal values and optional email. Detailed/list representation masks CivilId unless admin; independent document CRUD uses protected FK. There is no WP12 financial posting/retry workflow; account receivables belong WP32/33. Django and ASP.NET create/update are semantically equivalent for the current master.
 
 SQL BIGINT auto-increment IDs, unique Code, decimal(18,3), nvarchar and protected FK/owner CHECK remain. No new migration needed.
+
+## ERP-0234 — Customer DB/security review
+
+ASP.NET policies gate customer read/add/edit/delete; only role Admin can list/upload/download secured attachments; non-admin customers.view can read customer rows but CivilId is omitted from both list/detail. Verified as SQL+API negative checks at CI 40060771866, including read-only inability to POST customer or get private file. Django has corresponding role-based read CivilId suppression and admin-only binary endpoints. Whole-system financial transaction branch scope/audit is owned by WP46/financial owners, not duplicated.
+
+No PK/FK/index, decimal precision or schema change; audited real SQL CI 40060771866 (disposable DB only).

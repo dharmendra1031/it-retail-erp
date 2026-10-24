@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0234",
+  "nextStepId": "ERP-0235",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -241,7 +241,8 @@
     "ERP-0230",
     "ERP-0231",
     "ERP-0232",
-    "ERP-0233"
+    "ERP-0233",
+    "ERP-0234"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5292,6 +5293,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "PartnerViewSet uses transaction.atomic for create/update and catches integrity races with standardized safe 400; CustomerSerializer validates normalized code, mandatory Arabic name/mobile, decimal values and optional email. Detailed/list representation masks CivilId unless admin; independent document CRUD uses protected FK. There is no WP12 financial posting/retry workflow; account receivables belong WP32/33. Django and ASP.NET create/update are semantically equivalent for the current master."
+    },
+    {
+      "stepId": "ERP-0234",
+      "status": "complete",
+      "scope": "Customer server-side permission and confidential-field acceptance",
+      "completionMode": "verified current implementation and security regression",
+      "reviewedRepoCommit": "f8504bc19937b7485170f60947d5e025502c10c6",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "django/apps/partners/tests.py",
+        "django/apps/partners/api.py"
+      ],
+      "verification": {
+        "kind": "source plus successful SQL/browser integration tests",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866",
+        "result": "5/5 PASS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "ASP.NET policies gate customer read/add/edit/delete; only role Admin can list/upload/download secured attachments; non-admin customers.view can read customer rows but CivilId is omitted from both list/detail. Verified as SQL+API negative checks at CI 40060771866, including read-only inability to POST customer or get private file. Django has corresponding role-based read CivilId suppression and admin-only binary endpoints. Whole-system financial transaction branch scope/audit is owned by WP46/financial owners, not duplicated."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
