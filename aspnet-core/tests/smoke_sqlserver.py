@@ -370,6 +370,12 @@ def check_api():
         "file": ("fake.jpg", "application/pdf", b"%PDF-1.7\\nwrong extension"),
     }, csrf, multipart=True)
     assert status == 400, "Mismatched Supplier document extension accepted"
+    status, _ = request(client, f"/api/suppliers/{supplier['id']}/documents", "POST", {
+        "file": ("oversized.pdf", "application/pdf", b"%PDF-" + b"x" * (5 * 1024 * 1024)),
+    }, csrf, multipart=True)
+    assert status == 400, "Supplier oversized document accepted"
+    status, supplier_files = request(client, f"/api/suppliers/{supplier['id']}/documents")
+    assert status == 200 and supplier_files == [], "Rejected upload saved a Supplier file"
     status, _ = request(client, f"/api/customers/{customer['id']}/documents", "POST", {
         "file": ("fake.png", "application/pdf", b"%PDF-1.7\\nwrong extension"),
     }, csrf, multipart=True)

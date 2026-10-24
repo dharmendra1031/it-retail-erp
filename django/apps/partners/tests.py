@@ -199,6 +199,12 @@ class PartnerApiTests(TestCase):
             "wrong.jpg", b"%PDF-1.5\\ncontract", content_type="application/pdf"
         )}, format="multipart")
         self.assertEqual(mismatch.status_code, 400)
+        oversized = self.client.post(url, {"file": SimpleUploadedFile(
+            "oversized.pdf", b"%PDF-" + b"x" * (5 * 1024 * 1024),
+            content_type="application/pdf"
+        )}, format="multipart")
+        self.assertEqual(oversized.status_code, 400)
+        self.assertEqual(PartnerDocument.objects.filter(supplier_id=created.data["id"]).count(), 1)
         self.assertEqual(self.client.delete(f"/api/suppliers/{created.data['id']}").status_code, 409)
 
         role = Role.objects.create(name="Supplier Reader")
