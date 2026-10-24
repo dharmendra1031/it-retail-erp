@@ -65,3 +65,9 @@ Evidence: `django/apps/partners/migrations/0001_initial.py`, `django/apps/partne
 ASP.NET/Django both expose GET/POST /api/customers, GET/PUT/DELETE /api/customers/{numeric id}, GET/POST /api/customers/{id}/documents, GET /api/customers/{id}/documents/{documentId}. JSON properties camelCase nameEn/nameAr/addressEn/addressAr/civilId/customerType/paymentTermsDays/creditLimit/openingBalance. Money is invariant 3-place string and numeric id safe JSON integer. 201 create, 200 read/update, 204 delete, 400 invalid/duplicate, 403 denied, 404 wrong owner, 409 linked files. Django exception handler normalizes validation to detail Invalid request; CivilId must be omitted for non-admin. Actual protected documents are binary responses, not JSON. No future ledger endpoints claimed.
 
 Evidence: `django/apps/partners/api.py`, `django/config/exceptions.py`, `aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`, `frontend/src/api/partners.ts`. Existing 5/5 CI 40056434243; no new runtime code needed for this review.
+
+## ERP-0232 — Customer ASP.NET CRUD and duplicate-post correctness
+
+CustomersApiController POST/PUT applies normalized uppercase code once, checks collisions before insert and catches SQL unique-index race as HTTP 400. Validation precedes writes. DB assigns BIGINT Id; detail/create responses use exact decimal strings. DELETE refuses records with protected attachments (409). Each request is a single ORM save, no stock/ledger posting. Customer financial posting and approval idempotency are future WP30–33.
+
+**Source:** `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`, `aspnet-core/src/ITRetailERP.Web/Services/SqlConstraintErrors.cs`, `aspnet-core/tests/smoke_sqlserver.py`. Baseline SQL/browser CI 40060339256 PASS; future receivable posting not claimed.

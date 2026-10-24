@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0232",
+  "nextStepId": "ERP-0233",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -239,7 +239,8 @@
     "ERP-0228",
     "ERP-0229",
     "ERP-0230",
-    "ERP-0231"
+    "ERP-0231",
+    "ERP-0232"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5252,6 +5253,25 @@
         "productionDatabase": "not accessed"
       },
       "notes": "ASP.NET/Django both expose GET/POST /api/customers, GET/PUT/DELETE /api/customers/{numeric id}, GET/POST /api/customers/{id}/documents, GET /api/customers/{id}/documents/{documentId}. JSON properties camelCase nameEn/nameAr/addressEn/addressAr/civilId/customerType/paymentTermsDays/creditLimit/openingBalance. Money is invariant 3-place string and numeric id safe JSON integer. 201 create, 200 read/update, 204 delete, 400 invalid/duplicate, 403 denied, 404 wrong owner, 409 linked files. Django exception handler normalizes validation to detail Invalid request; CivilId must be omitted for non-admin. Actual protected documents are binary responses, not JSON. No future ledger endpoints claimed."
+    },
+    {
+      "stepId": "ERP-0232",
+      "status": "complete",
+      "scope": "Customer ASP.NET CRUD and duplicate-post correctness",
+      "completionMode": "existing master CRUD/transaction logic reviewed and validated by baseline CI",
+      "reviewedRepoCommit": "1962b640eda839a750a41c0c76fc8d9fd12a0164",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Services/SqlConstraintErrors.cs",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "source review + already successful integration suite",
+        "baselineCi": "40060339256 success",
+        "newNonAdminSmoke": "e0b0cd1 pending independent verification",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "CustomersApiController POST/PUT applies normalized uppercase code once, checks collisions before insert and catches SQL unique-index race as HTTP 400. Validation precedes writes. DB assigns BIGINT Id; detail/create responses use exact decimal strings. DELETE refuses records with protected attachments (409). Each request is a single ORM save, no stock/ledger posting. Customer financial posting and approval idempotency are future WP30–33."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

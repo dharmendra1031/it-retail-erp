@@ -370,3 +370,9 @@ Existing BIGINT, unique Code, DECIMAL(18,3), NVARCHAR, restrictive FK/owner CHEC
 ASP.NET/Django both expose GET/POST /api/customers, GET/PUT/DELETE /api/customers/{numeric id}, GET/POST /api/customers/{id}/documents, GET /api/customers/{id}/documents/{documentId}. JSON properties camelCase nameEn/nameAr/addressEn/addressAr/civilId/customerType/paymentTermsDays/creditLimit/openingBalance. Money is invariant 3-place string and numeric id safe JSON integer. 201 create, 200 read/update, 204 delete, 400 invalid/duplicate, 403 denied, 404 wrong owner, 409 linked files. Django exception handler normalizes validation to detail Invalid request; CivilId must be omitted for non-admin. Actual protected documents are binary responses, not JSON. No future ledger endpoints claimed.
 
 Existing BIGINT, unique Code, DECIMAL(18,3), NVARCHAR, restrictive FK/owner CHECK unchanged. No production SQL operation or new migration.
+
+## ERP-0232 — Customer consistency review
+
+CustomersApiController POST/PUT applies normalized uppercase code once, checks collisions before insert and catches SQL unique-index race as HTTP 400. Validation precedes writes. DB assigns BIGINT Id; detail/create responses use exact decimal strings. DELETE refuses records with protected attachments (409). Each request is a single ORM save, no stock/ledger posting. Customer financial posting and approval idempotency are future WP30–33.
+
+SQL BIGINT auto-increment IDs, unique Code, decimal(18,3), nvarchar and protected FK/owner CHECK remain. No new migration needed.
