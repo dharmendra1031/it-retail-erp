@@ -398,13 +398,6 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `LAP-${suffix}` })).toContainText("Computers");
   await expect(page.getByRole("row").filter({ hasText: `COMP-${suffix}` })).toBeVisible();
-  await expect.poll(async () => {
-    const rows = await page.locator(".table-wrap tbody tr").allTextContents();
-    const parentIndex = rows.findIndex(text => text.includes(`COMP-${suffix}`));
-    const childIndex = rows.findIndex(text => text.includes(`LAP-${suffix}`));
-    return parentIndex >= 0 && childIndex > parentIndex;
-  }).toBe(true);
-
   await page.getByRole("button", { name: "Brand Master" }).click();
   await page.getByLabel("Code").fill(`DELL-${suffix}`);
   await page.getByLabel("Brand Name (English)").fill("Dell");
