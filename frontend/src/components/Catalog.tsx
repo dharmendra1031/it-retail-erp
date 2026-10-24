@@ -16,6 +16,39 @@ const titles = {
   units: "unitMaster",
 } as const;
 
+function orderCategories(items: CatalogItem[]) {
+  const children = new Map<number | null, CatalogItem[]>();
+  for (const item of items) {
+    const parent = item.parentId ?? null;
+    children.set(parent, [...(children.get(parent) ?? []), item]);
+  }
+  const ordered: CatalogItem[] = [];
+  const visited = new Set<number>();
+  const visit = (parent: number | null) => {
+    for (const item of children.get(parent) ?? []) {
+      if (visited.has(item.id)) continue;
+      visited.add(item.id);
+      ordered.push(item);
+      visit(item.id);
+    }
+  };
+  visit(null);
+  for (const item of items) if (!visited.has(item.id)) ordered.push(item);
+  return ordered;
+}
+
+function categoryDepth(item: CatalogItem, lookup: Map<number, CatalogItem>) {
+  let parent = item.parentId;
+  let depth = 0;
+  const visited = new Set([item.id]);
+  while (parent != null && !visited.has(parent)) {
+    visited.add(parent);
+    depth++;
+    parent = lookup.get(parent)?.parentId;
+  }
+  return depth;
+}
+
 export function Catalog({ kind }: { kind: CatalogKind }) {
   const { t } = useLanguage();
   const [rows, setRows] = useState<CatalogItem[]>([]);
@@ -86,7 +119,9 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
     }
   }
 
-  const visibleRows = rows.filter(row =>
+  const categoryLookup = new Map(rows.map(row => [row.id, row]));
+  const orderedRows = kind === "categories" ? orderCategories(rows) : rows;
+  const visibleRows = orderedRows.filter(row =>
     (row.code + row.nameEn + row.nameAr).toLowerCase().includes(query.trim().toLowerCase()),
   );
 
@@ -158,7 +193,10 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
             <tbody>
               {visibleRows.map(row => (
                 <tr key={row.id}>
-                  <td>{row.id}</td><td>{row.code}</td><td>{row.nameEn}</td>
+                  <td>{row.id}</td><td>{row.code}</td>
+                  <td style={kind === "categories"
+                    ? { paddingInlineStart: 12 + categoryDepth(row, categoryLookup) * 20 }
+                    : undefined}>{row.nameEn}</td>
                   <td dir="rtl">{row.nameAr}</td>
                   {kind === "categories" && <td>{rows.find(item => item.id === row.parentId)?.nameEn ?? "-"}</td>}
                   {kind === "units" && <td>{row.decimalPlaces}</td>}
