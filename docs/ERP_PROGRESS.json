@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0259",
+  "nextStepId": "ERP-0260",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -266,7 +266,8 @@
     "ERP-0255",
     "ERP-0256",
     "ERP-0257",
-    "ERP-0258"
+    "ERP-0258",
+    "ERP-0259"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "a6f1550e03b17c0cce0f9fabf5099f74fabc2bc8",
@@ -5842,6 +5843,25 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Django PartnerApiTests test_supplier_balance_and_duplicate asserts 201 create and exact decimal/Unicode, duplicate 400 with Code already exists., invalid optional email and updates. test_supplier_optional_details_update_round_trip rejects negative credit and keeps previously saved values; test_supplier_document_access_requires_admin_even_with_view_grant verifies non-admin 403 on list/download/upload, file MIME/extension mismatch 400, oversized 5MiB rejection, no partial file, 409 protected delete, no-store protected download. The explicit code-field validator and IntegrityError fallback preserve SQL unique consistency under races. CI 40071424326 passed both Django unit and disposable SQL Server jobs, no real production data."
+    },
+    {
+      "stepId": "ERP-0259",
+      "status": "complete",
+      "scope": "Supplier SQL Server, concurrency and shared browser E2E acceptance",
+      "completionMode": "full 5/5 CI proven against disposable SQL Server",
+      "reviewedRepoCommit": "3bf1018f5e473af8cab4356914e85ee0ea427966",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/partners/tests.py",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "run": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40071424326",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Full real CI 40071424326 PASS across Django, ASP.NET Core, React frontend, browser, and disposable SQL Server. ASP smoke verifies Supplier create/update/detail persisted DECIMAL(18,3), normalized-code concurrency [201,400], Admin-only download, rejected wrong MIME/oversize and protected-delete conflict. Django tests cover invalid duplicate and no partial writes; shared React Playwright creates a supplier and sees its row (both Django-backed and ASP.NET-backed browser job); Arabic mixed-direction Supplier test passes at 768/1024 responsive baseline. Purchase invoice/payables/first-purchase stock movement remains later WP24–WP27 and is not reported as tested. Production SQL Server and physical print tests were not run."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
