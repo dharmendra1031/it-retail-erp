@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0249",
+  "nextStepId": "ERP-0250",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -256,7 +256,8 @@
     "ERP-0245",
     "ERP-0246",
     "ERP-0247",
-    "ERP-0248"
+    "ERP-0248",
+    "ERP-0249"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5616,6 +5617,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "ASP.NET SupplierRequest/Supplier entity has long Id, email optional, bilingual Unicode names/addresses, ContactPerson, Telephone, Remarks, PaymentTermsDays, OpeningBalance and CreditLimit. SuppliersApiController implements CRUD with named add/view/edit/delete policies, CSRF, normalized Code, 400 for duplicate concurrency, admin-only document binary endpoints with MIME validation/5MB max, nosniff/no-store and safe filename. Existing SQL/browser 40060771866 verifies Supplier CRUD and file security. New oversize regression 4d3a4a89 is pending CI and is not claimed passed here."
+    },
+    {
+      "stepId": "ERP-0249",
+      "status": "complete",
+      "scope": "Django Supplier serializer/API/protected-document implementation verified",
+      "completionMode": "already implemented current source with baseline 5/5 CI",
+      "reviewedRepoCommit": "57656ca72b606409fbdad4a1d87f53b2c7629292",
+      "evidence": [
+        "django/apps/partners/models.py",
+        "django/apps/partners/api.py",
+        "django/apps/partners/tests.py",
+        "django/config/exceptions.py"
+      ],
+      "verification": {
+        "kind": "code source and established SQL/browsers",
+        "baselineCi": "40060771866 PASS",
+        "newOversizeTest": "4d3a4a89 pending",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django Supplier model and SupplierSerializer already provide normalized Code, bilingual Unicode, optional email, contact/phone/tax/remarks, paymentTermsDays, decimal(18,3) credit/opening balances. PartnerViewSet create/update wraps DB changes in atomic transaction and returns safe 400 for invalid/duplicate writes. Supplier documents require admin, validate file extension/MIME/signature, max 5MB; download Content-Disposition is safe and no-store/nosniff prevents caching and sniffing. Django PartnerApiTests covers duplicate Supplier, optional email, decimal update, unauthorized file access. Full baseline SQL and browser tests 40060771866 PASS. New oversized-file test commit 4d3a4a89 is awaiting CI signoff."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

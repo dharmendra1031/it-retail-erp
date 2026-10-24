@@ -167,3 +167,9 @@ Source `django/apps/partners/models.py`, `aspnet-core/src/ITRetailERP.Web/Data/A
 ASP.NET SupplierRequest/Supplier entity has long Id, email optional, bilingual Unicode names/addresses, ContactPerson, Telephone, Remarks, PaymentTermsDays, OpeningBalance and CreditLimit. SuppliersApiController implements CRUD with named add/view/edit/delete policies, CSRF, normalized Code, 400 for duplicate concurrency, admin-only document binary endpoints with MIME validation/5MB max, nosniff/no-store and safe filename. Existing SQL/browser 40060771866 verifies Supplier CRUD and file security. New oversize regression 4d3a4a89 is pending CI and is not claimed passed here.
 
 Source `aspnet-core/src/ITRetailERP.Web/Models/Supplier.cs`, `aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `aspnet-core/tests/smoke_sqlserver.py`. Baseline CI 40060771866 passed; new oversize regression will require its own green run.
+
+## ERP-0249 — Django Supplier backend acceptance
+
+Django Supplier model and SupplierSerializer already provide normalized Code, bilingual Unicode, optional email, contact/phone/tax/remarks, paymentTermsDays, decimal(18,3) credit/opening balances. PartnerViewSet create/update wraps DB changes in atomic transaction and returns safe 400 for invalid/duplicate writes. Supplier documents require admin, validate file extension/MIME/signature, max 5MB; download Content-Disposition is safe and no-store/nosniff prevents caching and sniffing. Django PartnerApiTests covers duplicate Supplier, optional email, decimal update, unauthorized file access. Full baseline SQL and browser tests 40060771866 PASS. New oversized-file test commit 4d3a4a89 is awaiting CI signoff.
+
+No new table, schema or API duplication; future Supplier first purchase and supplier payable belongs to WP24/WP27 and later tests.
