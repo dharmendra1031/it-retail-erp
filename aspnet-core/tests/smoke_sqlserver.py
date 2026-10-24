@@ -382,6 +382,7 @@ def check_api():
     assert status == 201 and document["fileName"] == "proof.pdf", "Private customer upload failed"
     with client.open(URL + f"/api/customers/{customer['id']}/documents/{document['id']}") as downloaded:
         assert downloaded.read() == b"%PDF-1.4\\nprivate", "Customer document changed"
+        assert downloaded.headers.get("X-Content-Type-Options") == "nosniff", "Customer download allows MIME sniffing"
     status, _ = request(client, f"/api/customers/{customer['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Customer with protected documents must not delete"
 
@@ -394,6 +395,11 @@ def check_api():
     )
     with client.open(URL + f"/api/suppliers/{supplier['id']}/documents/{supplier_file['id']}") as response:
         assert response.read() == supplier_document[2], "Supplier document bytes changed"
+        assert response.headers.get("X-Content-Type-Options") == "nosniff", "Supplier download allows MIME sniffing"
+    status, _ = request(client, f"/api/customers/{customer['id']}/documents/{supplier_file['id']}")
+    assert status == 404, "Supplier document leaked through Customer endpoint"
+    status, _ = request(client, f"/api/suppliers/{supplier['id']}/documents/{document['id']}")
+    assert status == 404, "Customer document leaked through Supplier endpoint"
     status, _ = request(client, f"/api/suppliers/{supplier['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Supplier with secured documents must not delete"
 

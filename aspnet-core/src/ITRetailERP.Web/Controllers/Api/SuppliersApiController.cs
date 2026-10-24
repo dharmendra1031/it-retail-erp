@@ -129,8 +129,9 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
     {
         var document = await db.PartnerDocuments.AsNoTracking()
             .FirstOrDefaultAsync(x => x.SupplierId == id && x.Id == documentId);
-        return document is null ? NotFound() :
-            File(document.Content, document.ContentType, document.FileName);
+        if (document is null) return NotFound();
+        Response.Headers.XContentTypeOptions = "nosniff";
+        return File(document.Content, document.ContentType, document.FileName);
     }
 
     private static bool Valid(SupplierRequest request) =>
