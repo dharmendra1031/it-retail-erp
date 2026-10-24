@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0256",
+  "nextStepId": "ERP-0257",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -263,10 +263,11 @@
     "ERP-0252",
     "ERP-0253",
     "ERP-0254",
-    "ERP-0255"
+    "ERP-0255",
+    "ERP-0256"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "f0a14d50be8542ccf1b6bc6a4f77a0f910a8e365",
+  "lastVerifiedCommit": "a6f1550e03b17c0cce0f9fabf5099f74fabc2bc8",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -5783,6 +5784,25 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Shared React frontend/src/components/Partners.tsx already has Supplier create/edit/delete, bilingual fields, native keyboard-friendly form, payment terms 0..365, 3-decimal non-floating text amounts, client-side Supplier code/name search and Admin-only documents via existing API. Its save/upload failures use centralized translated languageError. frontend/src/api/partners.ts posts camelCase JSON and multipart private document files. Playwright `admin uses keyboard to create bilingual credit customer and supplier` verifies Supplier POST 201 and visible row on both backends in CI 40070737989. This step adds no separate Supplier screen or CSS overrides. List pagination and financial documents remain WP48 and future purchasing modules."
+    },
+    {
+      "stepId": "ERP-0256",
+      "status": "complete",
+      "scope": "Supplier bilingual Unicode, LTR/RTL and responsive UI acceptance",
+      "completionMode": "React field direction fix with successful SQL/browser CI",
+      "reviewedRepoCommit": "a6f1550e03b17c0cce0f9fabf5099f74fabc2bc8",
+      "evidence": [
+        "frontend/src/components/Partners.tsx",
+        "frontend/e2e/erp.spec.ts",
+        "frontend/src/i18n.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40071424326",
+        "result": "5/5 SUCCESS",
+        "fixCommit": "a6f1550e03b17c0cce0f9fabf5099f74fabc2bc8",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Supplier EN/AR inputs preserve value direction: English name/address and machine-readable Code/email/tax/DECIMAL LTR, Arabic name/address RTL. Minimal field-level `dir` attributes only, with no long CSS or overrides. Existing 768/1024 RTL viewport/keyboard smoke and the new Supplier-specific Arabic direction checks passed browser CI 40071424326. Django, React, ASP.NET and disposable SQL Server jobs also passed (5/5). Exact Arabic amounts remain server-owned decimal strings. Real screen-reader certification and bilingual purchase/statement print belong WP49/WP44."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

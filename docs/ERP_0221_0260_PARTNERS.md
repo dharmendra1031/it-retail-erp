@@ -203,3 +203,7 @@ ASP.NET Supplier GET/POST/PUT/DELETE use named granular policies, Django Partner
 ## ERP-0255 — React Supplier UI acceptance
 
 Shared React frontend/src/components/Partners.tsx already has Supplier create/edit/delete, bilingual fields, native keyboard-friendly form, payment terms 0..365, 3-decimal non-floating text amounts, client-side Supplier code/name search and Admin-only documents via existing API. Its save/upload failures use centralized translated languageError. frontend/src/api/partners.ts posts camelCase JSON and multipart private document files. Playwright `admin uses keyboard to create bilingual credit customer and supplier` verifies Supplier POST 201 and visible row on both backends in CI 40070737989. This step adds no separate Supplier screen or CSS overrides. List pagination and financial documents remain WP48 and future purchasing modules.
+
+## ERP-0256 — Supplier bilingual UI verification
+
+Supplier EN/AR inputs preserve value direction: English name/address and machine-readable Code/email/tax/DECIMAL LTR, Arabic name/address RTL. Minimal field-level `dir` attributes only, with no long CSS or overrides. Existing 768/1024 RTL viewport/keyboard smoke and the new Supplier-specific Arabic direction checks passed browser CI 40071424326. Django, React, ASP.NET and disposable SQL Server jobs also passed (5/5). Exact Arabic amounts remain server-owned decimal strings. Real screen-reader certification and bilingual purchase/statement print belong WP49/WP44.
