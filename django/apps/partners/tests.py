@@ -96,6 +96,22 @@ class PartnerApiTests(TestCase):
         }, format="json")
         self.assertEqual(invalid_email.status_code, 400)
 
+
+    def test_partner_codes_use_the_same_ascii_policy_as_aspnet(self):
+        self.client.force_authenticate(user=self.admin)
+        for path, payload in (
+            ("/api/customers", self.customer),
+            ("/api/suppliers", self.supplier),
+        ):
+            with self.subTest(path=path):
+                response = self.client.post(path, {
+                    **payload,
+                    "code": "رمز-١",
+                    "nameAr": "المورّد",
+                }, format="json")
+                self.assertEqual(response.status_code, 400)
+                self.assertIn("code", response.data)
+
     def test_customer_optional_details_update_round_trip(self):
         self.client.force_authenticate(user=self.admin)
         created = self.client.post("/api/customers", self.customer, format="json")

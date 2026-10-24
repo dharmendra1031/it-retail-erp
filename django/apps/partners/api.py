@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from django.http import HttpResponse
@@ -32,9 +33,10 @@ class PartnerSerializer(serializers.ModelSerializer):
     remarks = serializers.CharField(max_length=1000, required=False, allow_blank=True)
 
     def validate_code(self, value):
-        code = value.strip().upper()
-        if not code or not code.replace("_", "").replace("-", "").isalnum():
+        code = value.strip()
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,30}", code):
             raise serializers.ValidationError("Invalid code.")
+        code = code.upper()
         if self.Meta.model.objects.filter(code__iexact=code).exclude(
             pk=getattr(self.instance, "pk", None)
         ).exists():
