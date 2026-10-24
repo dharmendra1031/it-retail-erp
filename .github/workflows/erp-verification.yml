@@ -146,6 +146,10 @@ jobs:
           python manage.py migrate --noinput
           python manage.py migrate core zero --noinput
           python manage.py migrate core --noinput
+          python manage.py migrate partners 0001 --noinput
+          python manage.py migrate partners --noinput
+          python manage.py migrate catalog 0001 --noinput
+          python manage.py migrate catalog --noinput
           python manage.py test apps.core apps.accounts apps.companies apps.partners apps.catalog --verbosity 2
 
       - uses: actions/setup-dotnet@v4
