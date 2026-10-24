@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0250",
+  "nextStepId": "ERP-0251",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -257,7 +257,8 @@
     "ERP-0246",
     "ERP-0247",
     "ERP-0248",
-    "ERP-0249"
+    "ERP-0249",
+    "ERP-0250"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5637,6 +5638,29 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Django Supplier model and SupplierSerializer already provide normalized Code, bilingual Unicode, optional email, contact/phone/tax/remarks, paymentTermsDays, decimal(18,3) credit/opening balances. PartnerViewSet create/update wraps DB changes in atomic transaction and returns safe 400 for invalid/duplicate writes. Supplier documents require admin, validate file extension/MIME/signature, max 5MB; download Content-Disposition is safe and no-store/nosniff prevents caching and sniffing. Django PartnerApiTests covers duplicate Supplier, optional email, decimal update, unauthorized file access. Full baseline SQL and browser tests 40060771866 PASS. New oversized-file test commit 4d3a4a89 is awaiting CI signoff."
+    },
+    {
+      "stepId": "ERP-0250",
+      "status": "complete",
+      "scope": "Supplier migration/index source review with existing SQL upgrade/rollback evidence",
+      "completionMode": "current migrations already cover WP13; no schema change required for ERP-0250",
+      "reviewedRepoCommit": "a7f353f8c0c4c0d10a7fdbaffc274a352e195367",
+      "evidence": [
+        "django/apps/partners/migrations/0001_initial.py",
+        "django/apps/partners/migrations/0002_partner_details.py",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023150000_PartnerDetails.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "kind": "migration source review + prior verified disposable SQL Server migration rollback/reapply",
+        "ci": "40060771866 SUCCESS",
+        "latestOversizedSupplierCI": "40061566701 SQL integration pending, not claimed passed",
+        "newSchema": false,
+        "productionDB": "not accessed"
+      },
+      "notes": "Reviewed Django partners.0001_initial/0002_partner_details and EF 20261023120000_Partners/20261023150000_PartnerDetails along with ApplicationDbContext and .github/workflows/erp-verification.yml. Both Supplier entities use BIGINT IDENTITY/BigAutoField, unique Code, NVARCHAR bilingual names/contact, DECIMAL(18,3) opening balance/credit, PartnerDocument exclusive-owner CHECK, restrictive customer/supplier FKs and owner indexes. Existing 5/5 CI 40060771866 executed real disposable SQL Server migration and API/browser suites; CI workflow explicitly replays Django partners 0001->latest and EF initial->latest. No new schema for WP13 steps through ERP-0250; migration generation and additional rollback are N/A. Rolling back existing PartnerDetails columns on production would lose data; not authorized. Newly added oversized-file regression has Django/frontend/ASP.NET/browser CI PASS and SQL integration result pending; do not claim the latest test is green until confirmed. Future purchase link/payable FKs belong WP24–WP27."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
