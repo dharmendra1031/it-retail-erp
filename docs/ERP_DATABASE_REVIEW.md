@@ -274,3 +274,7 @@ ASP.NET CompanyRequest/PartnerRequest and Company/Customer/Supplier entities alr
 ## ERP-0209 — Database source review
 
 Django CompanySerializer, PartnerSerializer and catalog NamedSerializer expose independent source-mapped English/Arabic fields with appropriate lengths. DRF emits field-error objects on 400; shared React now maps unmatched errors to localized safe invalidRequest. No locale-specific serializer or database table should be added. Product quotation/print flows belong later modules. No new migration, FK/index, monetary precision or ID change. Existing BIGINT and DECIMAL rules retained, DB-001–DB-006 previously tracked. No production SQL data read or modified.
+
+## Review 031 — ERP-0210 migration decision
+
+No new schema for React translations, document lang/dir or localized presentation. Existing Django/EF Company/Partner/Catalog Unicode columns, BIGINT identity, DECIMAL(18,3), indexes and FKs remain. No migration, live SQL, rollback or data modifications executed. DB-001–DB-006 retained.

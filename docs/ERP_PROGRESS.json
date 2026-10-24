@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0210",
+  "nextStepId": "ERP-0211",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -217,7 +217,8 @@
     "ERP-0206",
     "ERP-0207",
     "ERP-0208",
-    "ERP-0209"
+    "ERP-0209",
+    "ERP-0210"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4746,6 +4747,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Django CompanySerializer, PartnerSerializer and catalog NamedSerializer expose independent source-mapped English/Arabic fields with appropriate lengths. DRF emits field-error objects on 400; shared React now maps unmatched errors to localized safe invalidRequest. No locale-specific serializer or database table should be added. Product quotation/print flows belong later modules."
+    },
+    {
+      "stepId": "ERP-0210",
+      "status": "complete",
+      "scope": "Inspect migrations for WP11 localization without placeholder schema",
+      "completionMode": "N/A: no owned schema change",
+      "reviewedRepoCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023130000_CatalogMasters.cs",
+        "django/apps/partners/migrations/0002_partner_details.py",
+        "frontend/src/i18n.tsx",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "schema/config source review",
+        "migrationAdded": false,
+        "upgradeRollback": "not applicable: no schema change",
+        "sqlExecution": "not run",
+        "productionDatabase": "not accessed"
+      }
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

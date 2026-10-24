@@ -132,3 +132,7 @@ Evidence: `aspnet-core/src/ITRetailERP.Web/Contracts/CompanyRequest.cs`, `aspnet
 Django CompanySerializer, PartnerSerializer and catalog NamedSerializer expose independent source-mapped English/Arabic fields with appropriate lengths. DRF emits field-error objects on 400; shared React now maps unmatched errors to localized safe invalidRequest. No locale-specific serializer or database table should be added. Product quotation/print flows belong later modules.
 
 Evidence: `django/apps/companies/serializers.py`, `django/apps/partners/api.py`, `django/apps/catalog/api.py`, `frontend/src/api/client.ts`. Runtime implementation is already present; no duplicate localization or persistence layer has been created. New executable acceptance for future quotations and printing is not claimed.
+
+## ERP-0210 — SQL Server migrations
+
+The language toggle uses browser state. Company/Partner/Catalog bilingual fields already exist in prior migrations. The current ASP.NET `Partners`, `CatalogMasters` and `PartnerDetails` and Django partner models use existing Unicode fields and BIGINT identities. No WP11 language setting or print table is necessary; migration/reversal is N/A (schema unchanged). Future document-print migrations belong to WP27/WP30/WP44. No new SQL integration or production write was done in this review.
