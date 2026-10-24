@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0247",
+  "nextStepId": "ERP-0248",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -254,7 +254,8 @@
     "ERP-0243",
     "ERP-0244",
     "ERP-0245",
-    "ERP-0246"
+    "ERP-0246",
+    "ERP-0247"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5574,6 +5575,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Django Supplier/PartnerDocument BigAutoField and ASP.NET Supplier/PartnerDocument long ID mapped to SQL BIGINT IDENTITY. Unique Code index, separate NameEn/NameAr AddressEn/AddressAr NVARCHAR, terms int 0..365, OpeningBalance and CreditLimit DECIMAL(18,3), protected file binary content and exclusive CustomerId/SupplierId one-owner CHECK and restrictive FKs. Existing Django partners 0001/0002 and EF Partners/PartnerDetails migrations are sufficient. No new supplier-specific table or UUID; purchase FK belongs future module WP24/25."
+    },
+    {
+      "stepId": "ERP-0247",
+      "status": "complete",
+      "scope": "Supplier Unicode, code uniqueness, attachments and rollback invariants",
+      "completionMode": "source/design verified with existing CI; new oversize test pending",
+      "reviewedRepoCommit": "4d3a4a894c7b41a17b939174df9c8a32adb2c322",
+      "evidence": [
+        "django/apps/partners/models.py",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Services/PartnerDocumentStorage.cs"
+      ],
+      "verification": {
+        "kind": "existing implementation review or data constraints",
+        "priorCi": "40060771866 PASS",
+        "pendingNewTest": "4d3a4a89 not yet run",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Persist Supplier NameEn/NameAr and addresses in separate SQL Unicode text without truncation, normalize ASCII 1–30 character Code to uppercase and enforce SQL unique index under concurrent inserts. Limit terms 0..365 and nonnegative DECIMAL(18,3) monetary fields; do not recompute balances in React. File attachment has exactly one owner, max 5 MB, PDF/PNG/JPEG signature/type/extension validated, admin-only, no-store/nosniff, and FK prevents deleting referenced Supplier. Any failed create/upload must leave no partial row. Existing migrations remain: reversing PartnerDetails on production drops valued columns, so do not run destructive down there; only disposable SQL CI rehearse."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

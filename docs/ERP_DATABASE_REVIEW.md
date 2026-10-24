@@ -460,3 +460,9 @@ No DDL or production SQL changed. Prior disposable CI 40060771866 green.
 Django Supplier/PartnerDocument BigAutoField and ASP.NET Supplier/PartnerDocument long ID mapped to SQL BIGINT IDENTITY. Unique Code index, separate NameEn/NameAr AddressEn/AddressAr NVARCHAR, terms int 0..365, OpeningBalance and CreditLimit DECIMAL(18,3), protected file binary content and exclusive CustomerId/SupplierId one-owner CHECK and restrictive FKs. Existing Django partners 0001/0002 and EF Partners/PartnerDetails migrations are sufficient. No new supplier-specific table or UUID; purchase FK belongs future module WP24/25.
 
 No DDL or production SQL changed. Prior disposable CI 40060771866 green.
+
+## ERP-0247 — Supplier integrity review
+
+Persist Supplier NameEn/NameAr and addresses in separate SQL Unicode text without truncation, normalize ASCII 1–30 character Code to uppercase and enforce SQL unique index under concurrent inserts. Limit terms 0..365 and nonnegative DECIMAL(18,3) monetary fields; do not recompute balances in React. File attachment has exactly one owner, max 5 MB, PDF/PNG/JPEG signature/type/extension validated, admin-only, no-store/nosniff, and FK prevents deleting referenced Supplier. Any failed create/upload must leave no partial row. Existing migrations remain: reversing PartnerDetails on production drops valued columns, so do not run destructive down there; only disposable SQL CI rehearse.
+
+No added tables, UUIDs, FKs, indices, migration or production SQL writes; existing BIGINT/NVARCHAR/DECIMAL(18,3) and DB unique code preserved.
