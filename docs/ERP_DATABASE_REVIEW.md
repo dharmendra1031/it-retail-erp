@@ -492,3 +492,7 @@ The Supplier oversize rejection test commit `4d3a4a894c7b41a17b939174df9c8a32adb
 ## ERP-0251 — Supplier duplicate validator and response contract (2026-10-24)
 
 No schema migration. Existing Supplier Code unique index and BIGINT identity prevent duplicate committed inserts even during races. Both ASP.NET and Django return a normalized 400 duplicate-code error after the field-level validator fix, confirmed by CI 40070737989 5/5 PASS on disposable SQL Server. SQL DECIMAL(18,3) amounts remain string-serialized; NVARCHAR English/Arabic columns and protected documents' exclusive-owner CHECK/FKs remain unchanged. No production data or DB schema touched; purchase/payable FK ownership is downstream.
+
+## ERP-0252 — Supplier SQL constraints and idempotent CRUD
+
+ASP.NET Supplier POST/PUT normalizes the ASCII Code, validates 0-365 terms, optional email and DECIMAL(18,3) credit/opening values. A SQL unique Code index and SqlConstraintErrors.IsDuplicate catch racing duplicate inserts/updates and yield 400 without a second row. ASP SQL integration smoke proves update/reload and two concurrent duplicate POSTs [201,400]. Supplier DELETE returns 409 while referenced documents exist. Only Admin accesses document contents. No purchase/payable posting currently belongs to WP13; downstream WP24-27 owns transaction idempotency. No new business endpoint or schema needed. Existing BIGINT identity, NVARCHAR, DECIMAL and unique Code index unchanged; migration N/A, production data untouched.

@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0252",
+  "nextStepId": "ERP-0253",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -259,7 +259,8 @@
     "ERP-0248",
     "ERP-0249",
     "ERP-0250",
-    "ERP-0251"
+    "ERP-0251",
+    "ERP-0252"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "f0a14d50be8542ccf1b6bc6a4f77a0f910a8e365",
@@ -5701,6 +5702,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Documented shared Supplier routes, uppercase ASCII code, exact DECIMAL(18,3) strings, admin-only protected files and normalized 400 errors. Django serializer now bypasses automatic uniqueness validator in favor of reviewed explicit duplicate handling. Code race is protected by unique SQL index; no new schema or financial posting."
+    },
+    {
+      "stepId": "ERP-0252",
+      "status": "complete",
+      "scope": "ASP.NET Supplier duplicate-safe CRUD business operations",
+      "completionMode": "existing code and 5/5 SQL/browser CI",
+      "reviewedRepoCommit": "fdf8156d04445fcd1381048cfcadedb7c4508f98",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "source and integration test",
+        "ciRun": "40070737989",
+        "result": "SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "ASP.NET Supplier POST/PUT normalizes the ASCII Code, validates 0-365 terms, optional email and DECIMAL(18,3) credit/opening values. A SQL unique Code index and SqlConstraintErrors.IsDuplicate catch racing duplicate inserts/updates and yield 400 without a second row. ASP SQL integration smoke proves update/reload and two concurrent duplicate POSTs [201,400]. Supplier DELETE returns 409 while referenced documents exist. Only Admin accesses document contents. No purchase/payable posting currently belongs to WP13; downstream WP24-27 owns transaction idempotency. No new business endpoint or schema needed."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
