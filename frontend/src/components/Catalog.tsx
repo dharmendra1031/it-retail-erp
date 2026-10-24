@@ -128,6 +128,17 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
   }
 
   const categoryLookup = new Map(rows.map(row => [row.id, row]));
+  const availableParents = rows.filter(row => {
+    if (editingId === null) return true;
+    const visited = new Set<number>();
+    let current: CatalogItem | undefined = row;
+    while (current && !visited.has(current.id)) {
+      if (current.id === editingId) return false;
+      visited.add(current.id);
+      current = current.parentId == null ? undefined : categoryLookup.get(current.parentId);
+    }
+    return true;
+  });
   const orderedRows = kind === "categories" ? orderCategories(rows) : rows;
   const visibleRows = orderedRows.filter(row =>
     (row.code + row.nameEn + row.nameAr).toLowerCase().includes(query.trim().toLowerCase()),
@@ -160,7 +171,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
               <select value={values.parentId ?? ""} onChange={event =>
                 change("parentId", event.target.value ? Number(event.target.value) : null)}>
                 <option value="">{t("noParentCategory")}</option>
-                {rows.filter(row => row.id !== editingId).map(row => (
+                {availableParents.map(row => (
                   <option key={row.id} value={row.id}>{row.nameEn}</option>
                 ))}
               </select>
