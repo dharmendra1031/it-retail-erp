@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0227",
+  "nextStepId": "ERP-0228",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -234,7 +234,8 @@
     "ERP-0223",
     "ERP-0224",
     "ERP-0225",
-    "ERP-0226"
+    "ERP-0226",
+    "ERP-0227"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5146,6 +5147,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Customer/PartnerDocument already use BIGINT IDENTITY/BigAutoField, unique normalized ASCII code, separately stored EN/AR Unicode name/address, positive decimal(18,3) credit and opening balance. PartnerDocument is binary + MIME + 200-char name with exclusive owner CHECK and restrictive FKs. Existing EF Partners/PartnerDetails and Django partners 0001/0002 migration cover all WP12 owned fields; do not add redundant columns or UUIDs. No live data migration warranted at this design step."
+    },
+    {
+      "stepId": "ERP-0227",
+      "status": "complete",
+      "scope": "Customer constraints, Unicode, transaction and rollback safety",
+      "completionMode": "source-grounded invariant/rollback plan",
+      "reviewedRepoCommit": "efb09198edd8155b36fcc07ab41b78c8fc0f0856",
+      "evidence": [
+        "django/apps/partners/models.py",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "design review",
+        "baselineCi": "40060339256 PASS",
+        "productionMigration": "not executed",
+        "newTests": "not needed for constraint specification"
+      },
+      "notes": "Customer code must normalize to ASCII uppercase, use a DB unique index plus clean 400 on duplicate/concurrent writes; names and Arabic address must preserve Unicode; mandatory NameEn/NameAr/Mobile, 0–365 payment term days, nonnegative DECIMAL(18,3) amounts, no HTML/locale parsing of money. Customer inactive state must remain explicit; no silent deletion if PartnerDocument rows exist. FK PROTECT + check constraint prevent cross-owner or orphan attachment. Downgrade PartnerDetails migration is potentially destructive on existing data, so do not run on production; on disposable SQL CI test migrations and rollback rehearsal, with pre-upgrade backup required for real deployment. No new DDL for step."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
