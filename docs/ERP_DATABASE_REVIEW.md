@@ -352,3 +352,9 @@ Customer code must normalize to ASCII uppercase, use a DB unique index plus clea
 Existing Customer long ID, bounded EN/AR strings, mandatory NameAr/Mobile server validation, ASCII uppercase code, decimal(18,3), optional email. CustomersApiController policy-gated CRUD catches concurrent unique errors and restricts CivilId/documents to admins; file checks and private no-store/nosniff downloads in place. No extra model or API is necessary.
 
 Existing BIGINT PK, code unique index, EN/AR NVARCHAR, DECIMAL(18,3) and exclusive document FKs unchanged. No new DDL or production SQL.
+
+## ERP-0229 — Customer database/API review
+
+CustomerSerializer mandates Arabic name/mobile and normalized unique code, preserves three-decimal money and suppresses CivilId for non-admin. PartnerViewSet handles database unique failures inside transaction.atomic, enforces admin-only documents and validates extension/MIME/signature. Download response has no-store/nosniff. No WP12 Django schema additions needed.
+
+Existing BIGINT PK, code unique index, EN/AR NVARCHAR, DECIMAL(18,3) and exclusive document FKs unchanged. No new DDL or production SQL.

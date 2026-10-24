@@ -47,3 +47,9 @@ Customer code must normalize to ASCII uppercase, use a DB unique index plus clea
 Existing Customer long ID, bounded EN/AR strings, mandatory NameAr/Mobile server validation, ASCII uppercase code, decimal(18,3), optional email. CustomersApiController policy-gated CRUD catches concurrent unique errors and restricts CivilId/documents to admins; file checks and private no-store/nosniff downloads in place. No extra model or API is necessary.
 
 Source: `aspnet-core/src/ITRetailERP.Web/Models/Customer.cs`, `aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`. Existing security fix CI 40060339256 PASS; added non-admin smoke pending and is not yet a success claim.
+
+## ERP-0229 — Django customer serializer and protected-file acceptance
+
+CustomerSerializer mandates Arabic name/mobile and normalized unique code, preserves three-decimal money and suppresses CivilId for non-admin. PartnerViewSet handles database unique failures inside transaction.atomic, enforces admin-only documents and validates extension/MIME/signature. Download response has no-store/nosniff. No WP12 Django schema additions needed.
+
+Source: `django/apps/partners/models.py`, `django/apps/partners/api.py`, `django/apps/partners/tests.py`, `django/config/exceptions.py`. Existing security fix CI 40060339256 PASS; added non-admin smoke pending and is not yet a success claim.
