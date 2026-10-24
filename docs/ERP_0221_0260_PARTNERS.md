@@ -211,3 +211,7 @@ Supplier EN/AR inputs preserve value direction: English name/address and machine
 ## ERP-0257 — ASP.NET Supplier tests
 
 Current ASP.NET SQL smoke creates Supplier with bilingual name, terms, contact, 3-decimal opening balance and credit; PUT reuses the same numeric ID and reloads exact values. Invalid email, duplicate code and concurrent [201,400] duplicate attempts are rejected; protected-document upload/download/delete guards are checked. .NET LocalizationContractTests exercises shared PartnerValidation and invariant decimal formatting. CI 40071424326 completed ASP.NET tests and disposable SQL Server integration (all 5 jobs PASS). Linking first purchase and supplier payable is future WP24–WP27, so it is an executable downstream acceptance contract, not a claimed test here.
+
+## ERP-0258 — Django Supplier negative tests
+
+Django PartnerApiTests test_supplier_balance_and_duplicate asserts 201 create and exact decimal/Unicode, duplicate 400 with Code already exists., invalid optional email and updates. test_supplier_optional_details_update_round_trip rejects negative credit and keeps previously saved values; test_supplier_document_access_requires_admin_even_with_view_grant verifies non-admin 403 on list/download/upload, file MIME/extension mismatch 400, oversized 5MiB rejection, no partial file, 409 protected delete, no-store protected download. The explicit code-field validator and IntegrityError fallback preserve SQL unique consistency under races. CI 40071424326 passed both Django unit and disposable SQL Server jobs, no real production data.
