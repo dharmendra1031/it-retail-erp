@@ -332,7 +332,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0223** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [x] **ERP-0224** (04/20) Specify the happy-path acceptance: Create credit customer with Arabic address and payment terms.
 - [x] **ERP-0225** (05/20) Specify the negative/authorization case: Reject duplicate code, invalid limit and disallowed attachment.
-- [ ] **ERP-0226** (06/20) Design data, configuration and numeric BIGINT IDs for Customer code, bilingual names, ID, types, terms, credit and attachments; record N/A with evidence if schema unchanged.
+- [x] **ERP-0226** (06/20) Design data, configuration and numeric BIGINT IDs for Customer code, bilingual names, ID, types, terms, credit and attachments; record N/A with evidence if schema unchanged.
 - [ ] **ERP-0227** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Unique customer code and no unauthorized access to civil ID/files.
 - [ ] **ERP-0228** (08/20) Implement or repair ASP.NET entities/configuration/contracts for Customer model/API, uniqueness, attachment authorization. Execute runtime changes only for surfaces owned by this package; otherwise record N/A/deferred downstream owner with code evidence and do not create placeholder implementation.
 - [ ] **ERP-0229** (09/20) Implement or repair Django models/serializers/configuration for Equivalent customer model/serializer/API and protected media. Execute runtime changes only for surfaces owned by this package; otherwise record N/A/deferred downstream owner with code evidence and do not create placeholder implementation.

@@ -336,3 +336,9 @@ Existing BIGINT IDENTITY/BigAutoField, NVARCHAR, DECIMAL(18,3) unique code and e
 Reject duplicate case-insensitive code and simultaneous duplicates with HTTP 400; reject blank Arabic name/mobile, invalid credit/decimal/email without saved mutation; deny employee CivilId details, admin-only file upload/list/download and cross-owner document access; reject MIME/extension mismatch; existing protected documents block delete with 409 and private downloads return no-store/nosniff. File scanning and attachment retention policy are WP46.
 
 Existing DECIMAL(18,3), indexed code, BIGINT identities, restricted foreign keys and one-owner check unchanged. No schema migration executed.
+
+## ERP-0226 — Customer database review
+
+Customer/PartnerDocument already use BIGINT IDENTITY/BigAutoField, unique normalized ASCII code, separately stored EN/AR Unicode name/address, positive decimal(18,3) credit and opening balance. PartnerDocument is binary + MIME + 200-char name with exclusive owner CHECK and restrictive FKs. Existing EF Partners/PartnerDetails and Django partners 0001/0002 migration cover all WP12 owned fields; do not add redundant columns or UUIDs. No live data migration warranted at this design step.
+
+Existing DECIMAL(18,3), indexed code, BIGINT identities, restricted foreign keys and one-owner check unchanged. No schema migration executed.

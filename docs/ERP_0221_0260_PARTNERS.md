@@ -31,3 +31,9 @@ Create authenticated admin Customer with code C-RTL-001, NameEn Retail, NameAr Ù
 Reject duplicate case-insensitive code and simultaneous duplicates with HTTP 400; reject blank Arabic name/mobile, invalid credit/decimal/email without saved mutation; deny employee CivilId details, admin-only file upload/list/download and cross-owner document access; reject MIME/extension mismatch; existing protected documents block delete with 409 and private downloads return no-store/nosniff. File scanning and attachment retention policy are WP46.
 
 **Checked source:** `django/apps/partners/tests.py`, `aspnet-core/tests/smoke_sqlserver.py`, `django/apps/partners/api.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`. **Evidence:** existing SQL/browser CI 40060339256, no new feature claimed from documentation alone.
+
+## ERP-0226 â€” Customer BIGINT and decimal schema design
+
+Customer/PartnerDocument already use BIGINT IDENTITY/BigAutoField, unique normalized ASCII code, separately stored EN/AR Unicode name/address, positive decimal(18,3) credit and opening balance. PartnerDocument is binary + MIME + 200-char name with exclusive owner CHECK and restrictive FKs. Existing EF Partners/PartnerDetails and Django partners 0001/0002 migration cover all WP12 owned fields; do not add redundant columns or UUIDs. No live data migration warranted at this design step.
+
+**Checked source:** `django/apps/partners/models.py`, `django/apps/partners/migrations/0001_initial.py`, `django/apps/partners/migrations/0002_partner_details.py`, `aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs`, `aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs`. **Evidence:** existing SQL/browser CI 40060339256, no new feature claimed from documentation alone.
