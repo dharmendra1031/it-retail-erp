@@ -338,8 +338,10 @@ def check_api():
     assert status == 200 and supplier_updated["creditLimit"] == "955.125", f"Supplier update failed: {status} {supplier_updated}"
     status, reloaded_supplier = request(client, f"/api/suppliers/{supplier['id']}")
     assert status == 200 and reloaded_supplier["contactPerson"] == "Sara", "Supplier update was not persisted"
-    status, _ = request(client, "/api/suppliers", "POST", supplier_data, csrf)
-    assert status == 400, "Duplicate supplier code accepted"
+    status, duplicate_supplier = request(client, "/api/suppliers", "POST", supplier_data, csrf)
+    assert status == 400 and duplicate_supplier == {"detail": "Code already exists."}, (
+        f"Duplicate supplier error contract changed: {status} {duplicate_supplier}"
+    )
 
     browser_supplier = {
         "code": "S-BROWSER", "nameEn": "First Supplier", "nameAr": "",
