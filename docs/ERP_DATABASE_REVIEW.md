@@ -286,3 +286,7 @@ API language is independent of stored schema and PK. ASP.NET/Django expose exist
 ## ERP-0212 — Database ownership review
 
 CompaniesApiController CRUD persists EN/AR values without server locale conversion; Customers/Suppliers APIs retain binary permission codes and numeric IDs. No WP11 business transaction or locale-specific idempotency token is needed. Financial quotation/printing transactions and retry safety remain WP27/WP30/WP44. Existing BIGINT, EN/AR NVARCHAR and monetary DECIMAL precision remain. No migration/schema/index changes or production SQL operations.
+
+## ERP-0213 — Database ownership review
+
+CompanySerializer already wraps logo save and DB mutation in atomic transaction; PartnerSerializer and Catalog serializers store bilingual values directly. Choosing Arabic never creates a separate server transaction, document or sequence. Cross-backend retry semantics for future quotations belong WP27; existing serializers require no additional WP11 operation. Existing BIGINT, EN/AR NVARCHAR and monetary DECIMAL precision remain. No migration/schema/index changes or production SQL operations.

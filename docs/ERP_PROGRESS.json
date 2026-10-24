@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0213",
+  "nextStepId": "ERP-0214",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -220,7 +220,8 @@
     "ERP-0209",
     "ERP-0210",
     "ERP-0211",
-    "ERP-0212"
+    "ERP-0212",
+    "ERP-0213"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
@@ -4814,6 +4815,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "CompaniesApiController CRUD persists EN/AR values without server locale conversion; Customers/Suppliers APIs retain binary permission codes and numeric IDs. No WP11 business transaction or locale-specific idempotency token is needed. Financial quotation/printing transactions and retry safety remain WP27/WP30/WP44."
+    },
+    {
+      "stepId": "ERP-0213",
+      "status": "complete",
+      "scope": "Django localization/transaction review",
+      "completionMode": "verified existing source and deferred non-WP11 operations",
+      "reviewedRepoCommit": "a9ec146d14c6250c50f1404a7a151780210cd13b",
+      "evidence": [
+        "django/apps/companies/serializers.py",
+        "django/apps/partners/api.py",
+        "django/apps/catalog/api.py",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "read-only source ownership review",
+        "priorCi": "40050867366 PASS",
+        "runtimeChange": "not applicable for WP11",
+        "newTests": "not run (source review)",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "CompanySerializer already wraps logo save and DB mutation in atomic transaction; PartnerSerializer and Catalog serializers store bilingual values directly. Choosing Arabic never creates a separate server transaction, document or sequence. Cross-backend retry semantics for future quotations belong WP27; existing serializers require no additional WP11 operation."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

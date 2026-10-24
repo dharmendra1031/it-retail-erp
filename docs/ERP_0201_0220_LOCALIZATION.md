@@ -155,3 +155,9 @@ The language toggle uses browser state. Company/Partner/Catalog bilingual fields
 CompaniesApiController CRUD persists EN/AR values without server locale conversion; Customers/Suppliers APIs retain binary permission codes and numeric IDs. No WP11 business transaction or locale-specific idempotency token is needed. Financial quotation/printing transactions and retry safety remain WP27/WP30/WP44.
 
 Source paths: `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs`; `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`; `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`. No new server endpoint, report, SQL table or placeholder financial posting was introduced.
+
+## ERP-0213 — Django localization/transaction review
+
+CompanySerializer already wraps logo save and DB mutation in atomic transaction; PartnerSerializer and Catalog serializers store bilingual values directly. Choosing Arabic never creates a separate server transaction, document or sequence. Cross-backend retry semantics for future quotations belong WP27; existing serializers require no additional WP11 operation.
+
+Source paths: `django/apps/companies/serializers.py`; `django/apps/partners/api.py`; `django/apps/catalog/api.py`. No new server endpoint, report, SQL table or placeholder financial posting was introduced.
