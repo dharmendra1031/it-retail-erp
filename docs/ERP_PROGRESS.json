@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0204",
+  "nextStepId": "ERP-0205",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -211,7 +211,8 @@
     "ERP-0200",
     "ERP-0201",
     "ERP-0202",
-    "ERP-0203"
+    "ERP-0203",
+    "ERP-0204"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4603,6 +4604,30 @@
         "productionDatabase": "not accessed"
       },
       "deferredAcceptance": "Localized validation to be repaired/tested in due WP11 steps; code policy WP12/13; financial bilingual printed documents WP27/WP30/WP44."
+    },
+    {
+      "stepId": "ERP-0204",
+      "status": "complete",
+      "scope": "WP11 Arabic quotation happy-path acceptance specification",
+      "completionMode": "acceptance contract and targeted localization fix; financial document not implemented",
+      "reviewedRepoCommit": "80850293ce260cda267b4d94396dc3cfe03449a3",
+      "evidence": [
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "frontend/src/i18n.tsx",
+        "frontend/src/api/client.ts",
+        "frontend/e2e/erp.spec.ts",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "source-grounded acceptance specification",
+        "runtimeQuotation": "not available (WP27/WP44)",
+        "actualFinancialPrint": "not run",
+        "codeChanges": "DRF field-error 400 fallback and unknown English detail localization; Playwright negative regression added",
+        "tests": "new CI not yet run; previous successful run 40002127807 does not cover new code",
+        "databaseMigration": "N/A, no DB model changed",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "ERP-0205 negative-case acceptance next. WP27/WP30/WP44 own quotation, invoices and physical printing."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

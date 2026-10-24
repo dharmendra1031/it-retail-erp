@@ -297,5 +297,5 @@ const errorKeys: Record<string, TranslationKey> = {
 
 export function languageError(message: string, t: (key: TranslationKey) => string) {
   const key = errorKeys[message];
-  return key ? t(key) : message;
+  return t(key ?? "invalidRequest");
 }

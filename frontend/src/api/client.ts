@@ -54,8 +54,9 @@ export async function apiRequest<T>(
   if (!response.ok) {
     const contentType = response.headers.get("content-type") ?? "";
     if (contentType.includes("application/json")) {
-      const data = (await response.json()) as { detail?: string };
-      throw new Error(data.detail || "Request failed.");
+      const data = (await response.json()) as { detail?: unknown };
+      const detail = typeof data?.detail === "string" ? data.detail : "";
+      throw new Error(detail || (response.status === 400 ? "Invalid request." : "Request failed."));
     }
 
     throw new Error("Request failed.");

@@ -410,3 +410,28 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `PCS-${suffix}` })).toBeVisible();
 });
+
+test("Arabic form errors remain localized for field validation failures", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Language").selectOption("ar");
+  await page.getByLabel("البريد الإلكتروني").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("كلمة المرور").fill(password);
+  await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+  await expect(page.getByRole("heading", { name: "بيانات الشركة" })).toBeVisible();
+
+  await page.route("**/api/companies", async route => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+
+    await route.fulfill({
+      status: 400,
+      contentType: "application/json",
+      body: JSON.stringify({ nameEn: ["This field may not be blank."] }),
+    });
+  });
+  await page.getByLabel("اسم الشركة (بالإنجليزية)").fill("Invalid Arabic Entry");
+  await page.getByRole("button", { name: "حفظ الشركة" }).click();
+  await expect(page.getByRole("alert")).toContainText("البيانات المدخلة غير صحيحة.");
+});

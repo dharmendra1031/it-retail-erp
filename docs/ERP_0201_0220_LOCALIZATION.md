@@ -65,3 +65,23 @@ No database schema or source runtime modification was required to *inspect* thes
 **Priority for WP11:** P0: localized handling for bad-data errors and RTL browser negative test; P1: mixed-direction focus and tablet accessibility checks; P2: remove duplicate stylistic RTL CSS only if non-regressive. Downstream document and business-code discrepancies remain attached to their owners above. The previously observed [5/5 green CI 40002127807](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40002127807) is a baseline build/integration suite, **not** exhaustive validation translation or thermal printing certification.
 
 **ERP-0203 completed item:** comparison, named source evidence, severity and owner recorded. This step introduced no runtime endpoint, DB schema, migration or business transaction.
+
+## ERP-0204 — Arabic quotation positive acceptance contract (2026-10-24)
+
+**Nature:** Specification-only for quotation. WP11 owns EN/AR interface and RTL foundation; WP27 owns quotation transactions; WP44 owns the real A4/A5/thermal document renderer; WP49 owns full SRS Test 10. There is no quotation UI/transaction/print artifact to certify in this step.
+
+**Preconditions:** Authenticated user with the existing Company and future quotation permissions; Company/Customer/Product Unicode bilingual names saved and retrieved from disposable SQL Server through both ASP.NET and Django APIs. Monetary amounts come from SQL DECIMAL, and quotation creation uses the future transaction/sequence rules rather than client-side rounded numbers.
+
+| Gate | Happy-path action | Required expected result | Execution owner |
+| --- | --- | --- | --- |
+| HP-11-01 | Start in English, choose العربية in the current language selector | Persistent `erp.language=ar`, document `lang=ar` and `dir=rtl`; no permission or record identity changes | WP11, existing browser smoke |
+| HP-11-02 | Create/reload Company, Customer and Product with Arabic names | Arabic saved and returned byte-for-byte as Unicode (not transliterated/truncated) in both implementations | WP10/WP12/WP16 SQL integration |
+| HP-11-03 | Open a valid quotation using bilingual records | Arabic labels and chosen language visible; codes, SKUs, tax registration and amounts retain their exact data meaning | WP27 when built |
+| HP-11-04 | Preview/print the same quotation in EN, AR and bilingual mode | Correct mixed LTR/RTL alignment, page breaks and non-corrupted Arabic glyphs; tax, quantities and grand total identical in all languages | WP27/WP44 |
+| HP-11-05 | Reload the document and switch the UI back to English | Stored bilingual data, quotation ID, numeric amounts and permission checks stay unchanged | WP27/WP49 |
+
+**Present evidence:** `frontend/src/i18n.tsx` persists the language, updates HTML lang/dir and defines typed dictionary keys; `AppShell.tsx` hosts a native language select; `Companies.tsx` supplies only a Company identity preview. Previous [CI 40002127807](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40002127807) covered existing master and RTL smoke tests on disposable SQL Server. These are prerequisites, not proof that HP-11-03/04/05 ran.
+
+**Release/acceptance rule:** Do not count business quotation rendering, report printing or SRS Test 10 as complete until the owning modules exist and executable SQL/browser/printer evidence is attached. RTL direction must not reverse machine-readable code, email or amount values. Missing translations and mixed-direction negative cases belong to ERP-0205.
+
+**ERP-0204 implementation addendum:** Improved existing frontend fallback so a Django field-error dictionary returning HTTP 400 produces the localized `invalidRequest` message, and unknown backend `detail` text is not surfaced to Arabic users. Added a Playwright negative-case regression. This small WP11 hardening does not implement financial printing. New CI has not yet been run/verified.
