@@ -306,3 +306,9 @@ React-only presentation/error changes. Existing numeric BIGINT IDs, Unicode and 
 ## Review ERP-0217–0220 — WP11 localization closeout
 
 At `dd5ad231`, [CI 40051691145](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145) passed 5/5 on disposable SQL Server and browser E2E. No new localization tables/migrations. Existing Company/Partner/Catalog `NVARCHAR` and Django bilingual fields preserve Unicode; PKs are BIGINT, money is decimal(18,3), permissions are language-neutral. Currency display uses Intl only; financial posting and physical print layout are future-owned. Production databases untouched.
+
+## ERP-0221 — Customer DB review
+
+SRS §§4,8,9,51,52,57 require Customer code, English/Arabic names/address, mobile, civil ID access controls, type, payment terms, opening balance, credit limit, searchable master and confidential attachments. Actual ledger/receivables belong WP32–WP33/WP43; posted invoice rules not owned by WP12. Current SRS baseline AT-02 spans quotation/print owners and cannot pass in WP12.
+
+Existing Customer and PartnerDocument use auto-increment BIGINT, nvarchar/Unicode, CreditLimit/OpeningBalance decimal(18,3), unique code, exclusive owner CHECK, restricted FKs. No migration/production SQL changes in this step.
