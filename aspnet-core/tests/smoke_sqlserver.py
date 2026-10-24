@@ -385,6 +385,18 @@ def check_api():
     status, _ = request(client, f"/api/customers/{customer['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Customer with protected documents must not delete"
 
+    supplier_document = ("supply.pdf", "application/pdf", b"%PDF-1.7\\nsupply agreement")
+    status, supplier_file = request(client, f"/api/suppliers/{supplier['id']}/documents", "POST", {
+        "file": supplier_document,
+    }, csrf, multipart=True)
+    assert status == 201 and supplier_file["fileName"] == "supply.pdf", (
+        f"Supplier document upload failed: {status} {supplier_file}"
+    )
+    with client.open(URL + f"/api/suppliers/{supplier['id']}/documents/{supplier_file['id']}") as response:
+        assert response.read() == supplier_document[2], "Supplier document bytes changed"
+    status, _ = request(client, f"/api/suppliers/{supplier['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "Supplier with secured documents must not delete"
+
     status, company = request(
         client, "/api/companies", "POST",
         {"nameEn": "SQL Shop", "nameAr": "متجر اختبار", "isActive": "true"},
@@ -438,6 +450,8 @@ def check_api():
         "email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False,
     }, employee_csrf["csrfToken"])
     assert status == 200 and not session["isAdmin"], "Branch employee login failed"
+    status, _ = request(employee, f"/api/suppliers/{supplier['id']}/documents/{supplier_file['id']}")
+    assert status == 403, "Non-Admin accessed Supplier private document"
     status, visible_branches = request(employee, "/api/branches")
     assert status == 200 and [item["id"] for item in visible_branches] == [branch["id"]], "Cross-branch list leaked"
     status, visible_warehouses = request(employee, "/api/warehouses")
