@@ -99,3 +99,20 @@ Current WP11 contract (source: SRS §§3,4,62,65; React language selector, Compa
 | NG-11-05 | Future quotation contains Arabic title plus LTR SKU/email/amount | Printed document cannot reverse SKU or change numeric totals/approval; no replacement glyphs | WP27/WP44/WP49 — NOT executable in this step |
 
 **Evidence authored:** browser mock 400 negative test (ERP-0204 commit) and Playwright DOM direction test (this step), existing selected-language persistence smoke. Explicit `dir=ltr` on machine-readable/English fields is a presentation correction; does not restrict bilingual stored names. Tests are not reported PASS until CI finishes. No unauthorized document, quotation or printing placeholder has been added. Missing translation keys are compile-time constrained by typed dictionaries. Final full keyboard/IME and responsive audit is separate downstream acceptance.
+
+## ERP-0206 — Locale and bilingual persistence data/configuration design (2026-10-24)
+
+**Scope determination:** The existing React language context stores a UI preference as `erp.language` in the browser and switches `<html lang>`/`<html dir>`; it does not need a SQL language table, user preference column, custom permission table, or language-specific primary keys. Current `frontend/src/locale.ts` formats dates/currency for display only. Full quotation/invoice persistence and print configurations are future work packages and are not created here.
+
+| Data/configuration | Current authoritative store | Design / invariant |
+| --- | --- | --- |
+| Interface language | Browser localStorage; typed `en/ar` dictionaries | Always choose from two supported values; Arabic `dir=rtl`, English `dir=ltr`; security permission codes independent of locale |
+| Company / Customer / Supplier bilingual identity | Existing Django + ASP.NET Company/Partner string columns | Separate `name_en/name_ar` and `address_en/address_ar`; SQL Server Unicode `nvarchar`, existing length limits 200/500; no translation of entered business data |
+| Category / Brand / Product names | Existing catalog bilingual columns | Preserve Unicode, relationships and independent Arabic values; code/SKU identifiers retain their canonical business rules |
+| Primary and related IDs | Django `BigAutoField` inherited from core, ASP.NET `long`, SQL Server `BIGINT IDENTITY` | Never introduce UUID/GUID or client-generated record IDs |
+| Monetary values | Existing Partner decimal(18,3) and future financial models | Locale must affect display only; SQL DECIMAL and exact server-side arithmetic for posting; do not add currency conversions |
+| Print language/layout | Future quotation / invoice and print modules WP27/WP30/WP44 | Language and paper size are document/print configuration concerns only when actual module exists; no placeholder schema or invoice template in WP11 |
+
+**Migrations:** N/A for WP11 existing language toggle and bilingual fields. Reuse current numeric keys, existing FK/unique indexes and transactional ownership. WP27/WP30/WP44 must design their own persistence/layout migration and rollback according to actual document requirements.
+
+**Evidence:** `django/apps/{companies,partners,catalog}/models.py`, `aspnet-core/src/ITRetailERP.Web/Models/{Company,Customer,Supplier,Category}.cs`, `frontend/src/i18n.tsx`, `frontend/src/locale.ts`. ERP-0206 is a data/config review, not a SQL execution or quotation-print acceptance.

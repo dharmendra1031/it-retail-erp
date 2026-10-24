@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0206",
+  "nextStepId": "ERP-0207",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -213,7 +213,8 @@
     "ERP-0202",
     "ERP-0203",
     "ERP-0204",
-    "ERP-0205"
+    "ERP-0205",
+    "ERP-0206"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4653,6 +4654,32 @@
         "productionDatabase": "not accessed"
       },
       "deferredAcceptance": "Production quotation RTL/print negative acceptance WP27/WP44; screen-reader/device audit remains ERP-0216/49"
+    },
+    {
+      "stepId": "ERP-0206",
+      "status": "complete",
+      "scope": "WP11 locale, Unicode, RTL, locale date and bilingual printing storage/config design",
+      "completionMode": "source-evidenced design; N/A schema changes",
+      "reviewedRepoCommit": "8ed47a5dba9768af00fc991b2dbe0a00375239ce",
+      "evidence": [
+        "frontend/src/i18n.tsx",
+        "frontend/src/locale.ts",
+        "django/apps/companies/models.py",
+        "django/apps/partners/models.py",
+        "django/apps/catalog/models.py",
+        "aspnet-core/src/ITRetailERP.Web/Models/Company.cs",
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "model/configuration design review",
+        "localeStorage": "browser key erp.language, no persisted user setting",
+        "databaseDesign": "reuse existing EN/AR nvarchar columns; long/BIGINT identity; decimal monetary columns",
+        "schemaChange": false,
+        "tests": "not run (design-only step)",
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "WP27/WP30 business document models; WP44 physical print layouts; WP49 full end-to-end"
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
