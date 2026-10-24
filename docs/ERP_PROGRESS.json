@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0253",
+  "nextStepId": "ERP-0254",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -260,7 +260,8 @@
     "ERP-0249",
     "ERP-0250",
     "ERP-0251",
-    "ERP-0252"
+    "ERP-0252",
+    "ERP-0253"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "f0a14d50be8542ccf1b6bc6a4f77a0f910a8e365",
@@ -5722,6 +5723,24 @@
         "productionDatabase": "not accessed"
       },
       "notes": "ASP.NET Supplier POST/PUT normalizes the ASCII Code, validates 0-365 terms, optional email and DECIMAL(18,3) credit/opening values. A SQL unique Code index and SqlConstraintErrors.IsDuplicate catch racing duplicate inserts/updates and yield 400 without a second row. ASP SQL integration smoke proves update/reload and two concurrent duplicate POSTs [201,400]. Supplier DELETE returns 409 while referenced documents exist. Only Admin accesses document contents. No purchase/payable posting currently belongs to WP13; downstream WP24-27 owns transaction idempotency. No new business endpoint or schema needed."
+    },
+    {
+      "stepId": "ERP-0253",
+      "status": "complete",
+      "scope": "Django Supplier transaction and parity",
+      "completionMode": "existing implementation and real green SQL/test CI",
+      "reviewedRepoCommit": "fd138abdd2281d9c6f768ef7ec0035ed5e0ebe8b",
+      "evidence": [
+        "django/apps/partners/api.py",
+        "django/apps/partners/tests.py",
+        "django/config/exceptions.py"
+      ],
+      "verification": {
+        "run": "40070737989",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django PartnerViewSet wraps Supplier POST/PUT in transaction.atomic and catches IntegrityError; SupplierSerializer explicitly validates uppercase ASCII Code, unique normalized identifier and exact DECIMAL(18,3) balances. Existing SQL unique index prevents concurrent duplicate Supplier inserts. The recent response-parity fix routes duplicate code to a known 400 envelope; SQL tests and the other four jobs passed CI 40070737989. Existing protected Supplier documents require admin and reject unsafe content. Purchase/payable/stock idempotent postings are owned by later packages; this step creates no placeholder transaction."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

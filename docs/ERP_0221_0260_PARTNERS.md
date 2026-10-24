@@ -191,3 +191,7 @@ Added the real shared endpoint and response contract in `docs/ERP_0251_SUPPLIER_
 ## ERP-0252 — ASP.NET Supplier business operations
 
 ASP.NET Supplier POST/PUT normalizes the ASCII Code, validates 0-365 terms, optional email and DECIMAL(18,3) credit/opening values. A SQL unique Code index and SqlConstraintErrors.IsDuplicate catch racing duplicate inserts/updates and yield 400 without a second row. ASP SQL integration smoke proves update/reload and two concurrent duplicate POSTs [201,400]. Supplier DELETE returns 409 while referenced documents exist. Only Admin accesses document contents. No purchase/payable posting currently belongs to WP13; downstream WP24-27 owns transaction idempotency. No new business endpoint or schema needed. Full verified CI: https://github.com/dharmendra1031/it-retail-erp/actions/runs/40070737989.
+
+## ERP-0253 — Django Supplier transaction and parity
+
+Django PartnerViewSet wraps Supplier POST/PUT in transaction.atomic and catches IntegrityError; SupplierSerializer explicitly validates uppercase ASCII Code, unique normalized identifier and exact DECIMAL(18,3) balances. Existing SQL unique index prevents concurrent duplicate Supplier inserts. The recent response-parity fix routes duplicate code to a known 400 envelope; SQL tests and the other four jobs passed CI 40070737989. Existing protected Supplier documents require admin and reject unsafe content. Purchase/payable/stock idempotent postings are owned by later packages; this step creates no placeholder transaction.
