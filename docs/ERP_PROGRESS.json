@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0237",
+  "nextStepId": "ERP-0238",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -244,7 +244,8 @@
     "ERP-0233",
     "ERP-0234",
     "ERP-0235",
-    "ERP-0236"
+    "ERP-0236",
+    "ERP-0237"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5356,6 +5357,26 @@
         "deferred": "full financial print, physical a11y"
       },
       "notes": "Existing Playwright verifies AR root lang/dir, Arabic Customer input dir=rtl and LTR code/email/credit, 375px navigation and 768/1024px tablet browser layout. Credit Customer keyboard-first flow creates and reloads bilingual values. Original language picker changes only UI labels; SQL decimal strings unchanged. Generic test suite does not certify real assistive screen-reader usage or financial document printing; those are WP49/WP44. Current SQL/browser CI 40060771866 green."
+    },
+    {
+      "stepId": "ERP-0237",
+      "status": "complete",
+      "scope": "Customer ASP.NET validation and credit Customer runtime tests",
+      "completionMode": "CI verified available WP12 current customer surfaces",
+      "reviewedRepoCommit": "b20a1ae1efd8a16da14a9a2bc516b6e84465fae3",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/LocalizationContractTests.cs",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs"
+      ],
+      "verification": {
+        "kind": "current SQL/browser/xUnit matrix",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866",
+        "result": "5/5 PASS",
+        "productionDatabase": "not accessed",
+        "deferred": "full financial print, physical a11y"
+      },
+      "notes": "`LocalizationContractTests` checks EN/AR DTO length and invariant money, and `aspnet-core/tests/smoke_sqlserver.py` exercises real SQL Server credit customer POST/PUT/GET, mandatory Arabic/mobile, duplicate code race, 3-decimal amounts, invalid email/credit and protected customer documents. The latest 5/5 workflow 40060771866 ran .NET unit tests and API+browser SQL smoke. Full customer ledger posting/quotation conversion tests are future WP28/30/32."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

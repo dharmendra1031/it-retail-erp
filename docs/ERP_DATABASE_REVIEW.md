@@ -400,3 +400,9 @@ No PK/FK/index, decimal precision or schema change; audited real SQL CI 40060771
 Existing Playwright verifies AR root lang/dir, Arabic Customer input dir=rtl and LTR code/email/credit, 375px navigation and 768/1024px tablet browser layout. Credit Customer keyboard-first flow creates and reloads bilingual values. Original language picker changes only UI labels; SQL decimal strings unchanged. Generic test suite does not certify real assistive screen-reader usage or financial document printing; those are WP49/WP44. Current SQL/browser CI 40060771866 green.
 
 SQL disposable integration confirmed at CI 40060771866; BIGINT IDs, decimal 18,3 and Unicode remain. No production data touched.
+
+## ERP-0237 — Database and Unicode verification
+
+`LocalizationContractTests` checks EN/AR DTO length and invariant money, and `aspnet-core/tests/smoke_sqlserver.py` exercises real SQL Server credit customer POST/PUT/GET, mandatory Arabic/mobile, duplicate code race, 3-decimal amounts, invalid email/credit and protected customer documents. The latest 5/5 workflow 40060771866 ran .NET unit tests and API+browser SQL smoke. Full customer ledger posting/quotation conversion tests are future WP28/30/32.
+
+SQL disposable integration confirmed at CI 40060771866; BIGINT IDs, decimal 18,3 and Unicode remain. No production data touched.
