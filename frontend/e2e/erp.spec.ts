@@ -461,6 +461,12 @@ test("Arabic master forms preserve LTR codes and RTL names", async ({ page }) =>
   await expect(page.getByLabel("الرمز")).toHaveAttribute("dir", "ltr");
   await expect(page.getByLabel("البريد الإلكتروني")).toHaveAttribute("dir", "ltr");
   await expect(page.getByLabel("اسم العميل", { exact: true })).toHaveAttribute("dir", "rtl");
+
+  await page.getByRole("button", { name: "إدارة الموردين" }).click();
+  await expect(page.getByLabel("اسم المورد (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByLabel("اسم المورد", { exact: true })).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("الرمز")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByLabel("العنوان (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
 });
 
 test("RTL tablet layout keeps keyboard fields accessible", async ({ page }) => {

@@ -132,7 +132,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               onChange={event => change("code", event.target.value)} />
           </label>
           <label>{t(isCustomer ? "customerNameEnglish" : "supplierNameEnglish")}
-            <input required maxLength={200} value={values.nameEn}
+            <input dir="ltr" required maxLength={200} value={values.nameEn}
               onChange={event => change("nameEn", event.target.value)} />
           </label>
           <label>{t(isCustomer ? "customerNameArabic" : "supplierNameArabic")}
@@ -140,7 +140,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               onChange={event => change("nameAr", event.target.value)} />
           </label>
           <label>{t("addressEnglish")}
-            <textarea maxLength={500} value={values.addressEn}
+            <textarea dir="ltr" maxLength={500} value={values.addressEn}
               onChange={event => change("addressEn", event.target.value)} />
           </label>
           <label>{t("addressArabic")}
