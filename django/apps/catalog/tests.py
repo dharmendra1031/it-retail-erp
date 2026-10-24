@@ -36,6 +36,19 @@ class CatalogApiTests(TestCase):
         self.assertEqual(cycle.status_code, 400)
         self.assertEqual(self.client.delete(f"/api/categories/{root.data['id']}").status_code, 409)
 
+    def test_reparenting_does_not_create_a_deep_category_cycle(self):
+        root = Category.objects.create(code="ROOT", name_en="Root")
+        child = Category.objects.create(code="CHILD", name_en="Child", parent=root)
+        grandchild = Category.objects.create(code="LEAF", name_en="Leaf", parent=child)
+
+        update = self.client.put(f"/api/categories/{root.pk}", {
+            "code": "ROOT", "nameEn": "Root", "parentId": grandchild.pk,
+        }, format="json")
+        self.assertEqual(update.status_code, 400)
+        root.refresh_from_db()
+        self.assertIsNone(root.parent_id)
+        self.assertEqual(Category.objects.count(), 3)
+
     def test_brand_and_unit_uniqueness_and_precision(self):
         brand = {"code": "dell", "nameEn": "Dell", "nameAr": "ديل"}
         self.assertEqual(self.client.post("/api/brands", brand, format="json").status_code, 201)
