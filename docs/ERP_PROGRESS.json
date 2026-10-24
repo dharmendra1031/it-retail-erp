@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0230",
+  "nextStepId": "ERP-0231",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -237,7 +237,8 @@
     "ERP-0226",
     "ERP-0227",
     "ERP-0228",
-    "ERP-0229"
+    "ERP-0229",
+    "ERP-0230"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5209,6 +5210,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "CustomerSerializer mandates Arabic name/mobile and normalized unique code, preserves three-decimal money and suppresses CivilId for non-admin. PartnerViewSet handles database unique failures inside transaction.atomic, enforces admin-only documents and validates extension/MIME/signature. Download response has no-store/nosniff. No WP12 Django schema additions needed."
+    },
+    {
+      "stepId": "ERP-0230",
+      "status": "complete",
+      "scope": "Customer existing SQL schema/migration acceptance",
+      "completionMode": "migration review N/A new schema / documented source API contracts",
+      "reviewedRepoCommit": "ebab5d4165a3692a638b13ef867bb4522631741c",
+      "evidence": [
+        "django/apps/partners/migrations/0001_initial.py",
+        "django/apps/partners/migrations/0002_partner_details.py",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023150000_PartnerDetails.cs"
+      ],
+      "verification": {
+        "kind": "static migration/API contract comparison",
+        "baselineCi": "40056434243 success",
+        "currentSchemaChange": false,
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reviewed existing EF Partners (Customer, PartnerDocument) and PartnerDetails migrations against Django partners 0001/0002 and current models. Both map numeric BIGINT identity, unique code, Unicode fields, decimal(18,3), PartnerDocument owner-check and restrictive FKs. No current WP12 schema delta; creating a dummy migration would be wrong. Existing CI 40056434243 tested disposable SQL migrations; down/up safety for previous migrations was verified in earlier baseline WP03. No destructive production rollback. Post-migration non-null fields are additive with defaults."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

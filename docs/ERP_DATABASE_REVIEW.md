@@ -358,3 +358,9 @@ Existing BIGINT PK, code unique index, EN/AR NVARCHAR, DECIMAL(18,3) and exclusi
 CustomerSerializer mandates Arabic name/mobile and normalized unique code, preserves three-decimal money and suppresses CivilId for non-admin. PartnerViewSet handles database unique failures inside transaction.atomic, enforces admin-only documents and validates extension/MIME/signature. Download response has no-store/nosniff. No WP12 Django schema additions needed.
 
 Existing BIGINT PK, code unique index, EN/AR NVARCHAR, DECIMAL(18,3) and exclusive document FKs unchanged. No new DDL or production SQL.
+
+## ERP-0230 — DB review
+
+Reviewed existing EF Partners (Customer, PartnerDocument) and PartnerDetails migrations against Django partners 0001/0002 and current models. Both map numeric BIGINT identity, unique code, Unicode fields, decimal(18,3), PartnerDocument owner-check and restrictive FKs. No current WP12 schema delta; creating a dummy migration would be wrong. Existing CI 40056434243 tested disposable SQL migrations; down/up safety for previous migrations was verified in earlier baseline WP03. No destructive production rollback. Post-migration non-null fields are additive with defaults.
+
+Existing BIGINT, unique Code, DECIMAL(18,3), NVARCHAR, restrictive FK/owner CHECK unchanged. No production SQL operation or new migration.

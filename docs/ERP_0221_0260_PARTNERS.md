@@ -53,3 +53,9 @@ Source: `aspnet-core/src/ITRetailERP.Web/Models/Customer.cs`, `aspnet-core/src/I
 CustomerSerializer mandates Arabic name/mobile and normalized unique code, preserves three-decimal money and suppresses CivilId for non-admin. PartnerViewSet handles database unique failures inside transaction.atomic, enforces admin-only documents and validates extension/MIME/signature. Download response has no-store/nosniff. No WP12 Django schema additions needed.
 
 Source: `django/apps/partners/models.py`, `django/apps/partners/api.py`, `django/apps/partners/tests.py`, `django/config/exceptions.py`. Existing security fix CI 40060339256 PASS; added non-admin smoke pending and is not yet a success claim.
+
+## ERP-0230 — Customer existing SQL schema/migration acceptance
+
+Reviewed existing EF Partners (Customer, PartnerDocument) and PartnerDetails migrations against Django partners 0001/0002 and current models. Both map numeric BIGINT identity, unique code, Unicode fields, decimal(18,3), PartnerDocument owner-check and restrictive FKs. No current WP12 schema delta; creating a dummy migration would be wrong. Existing CI 40056434243 tested disposable SQL migrations; down/up safety for previous migrations was verified in earlier baseline WP03. No destructive production rollback. Post-migration non-null fields are additive with defaults.
+
+Evidence: `django/apps/partners/migrations/0001_initial.py`, `django/apps/partners/migrations/0002_partner_details.py`, `aspnet-core/src/ITRetailERP.Web/Migrations/20261023120000_Partners.cs`, `aspnet-core/src/ITRetailERP.Web/Migrations/20261023150000_PartnerDetails.cs`. Existing 5/5 CI 40056434243; no new runtime code needed for this review.
