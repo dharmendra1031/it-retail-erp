@@ -195,3 +195,7 @@ ASP.NET Supplier POST/PUT normalizes the ASCII Code, validates 0-365 terms, opti
 ## ERP-0253 — Django Supplier transaction and parity
 
 Django PartnerViewSet wraps Supplier POST/PUT in transaction.atomic and catches IntegrityError; SupplierSerializer explicitly validates uppercase ASCII Code, unique normalized identifier and exact DECIMAL(18,3) balances. Existing SQL unique index prevents concurrent duplicate Supplier inserts. The recent response-parity fix routes duplicate code to a known 400 envelope; SQL tests and the other four jobs passed CI 40070737989. Existing protected Supplier documents require admin and reject unsafe content. Purchase/payable/stock idempotent postings are owned by later packages; this step creates no placeholder transaction.
+
+## ERP-0254 — Supplier security and audit ownership
+
+ASP.NET Supplier GET/POST/PUT/DELETE use named granular policies, Django PartnerPermission uses server-side supplier action codes; both restrict list/upload/download of documents to Admin. ASP mutation requires CSRF and Django session CSRF. CI 40070737989 contains SQL negative security tests. Supplier is currently a global master with no BranchId, so no arbitrary new branch filter is added. Persistent audit events belong WP46; file reference restricts Supplier delete. Financial-posting branch access belongs future procurement owners.
