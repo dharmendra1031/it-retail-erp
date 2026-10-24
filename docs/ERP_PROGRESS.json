@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0239",
+  "nextStepId": "ERP-0240",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -246,7 +246,8 @@
     "ERP-0235",
     "ERP-0236",
     "ERP-0237",
-    "ERP-0238"
+    "ERP-0238",
+    "ERP-0239"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5398,6 +5399,27 @@
         "pending": "Customer ledger and printing future modules"
       },
       "notes": "Django PartnerApiTests covers Customer Arabic/mobile required, duplicate normalized code (and Unicode identifier rejection), invalid email/negative 3-decimal credit, rejected update leaves previous details unchanged, CivilId admin-only, restricted documents, bad MIME/extension signatures and delete conflict. Django and SQL Server jobs passed CI 40060771866. Test database disposable; no real customer data changed."
+    },
+    {
+      "stepId": "ERP-0239",
+      "status": "complete",
+      "scope": "Customer SQL, concurrency and shared React E2E acceptance",
+      "completionMode": "verified current available master functionality, downstream owners explicit",
+      "reviewedRepoCommit": "3d0f3857b6fe704e47311b8b168a48969bb62290",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "frontend/e2e/erp.spec.ts",
+        ".github/workflows/erp-verification.yml",
+        "django/apps/partners/tests.py"
+      ],
+      "verification": {
+        "kind": "executed GitHub Actions disposable SQL/test matrix",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866",
+        "jobs": "django, aspnet, frontend, sqlserver, browser all SUCCESS",
+        "productionDatabase": "not accessed",
+        "pending": "Customer ledger and printing future modules"
+      },
+      "notes": "CI 40060771866 completed five jobs successfully: Django, ASP.NET, frontend, SQL Server integration and browser. ASP smoke checks DB BIGINT, Customer create/update/get Unicode/credit, 2 concurrent duplicate writes [201,400], forbidden private document retrieval, Customer protected-delete conflict, no-store and no-sniff. Shared React Playwright checks valid credit customer submit and Supplier after it. Cross-backend financial ledger/printed quotation not yet built and cannot be certified."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

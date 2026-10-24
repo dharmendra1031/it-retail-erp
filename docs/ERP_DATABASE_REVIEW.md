@@ -412,3 +412,9 @@ SQL disposable integration confirmed at CI 40060771866; BIGINT IDs, decimal 18,3
 Django PartnerApiTests covers Customer Arabic/mobile required, duplicate normalized code (and Unicode identifier rejection), invalid email/negative 3-decimal credit, rejected update leaves previous details unchanged, CivilId admin-only, restricted documents, bad MIME/extension signatures and delete conflict. Django and SQL Server jobs passed CI 40060771866. Test database disposable; no real customer data changed.
 
 No schema change. Existing FK/restrict, unique normalized Code, decimal 18,3 and BIGINT keys tested in disposable environment; production data not accessed.
+
+## ERP-0239 — SQL and data integrity evidence
+
+CI 40060771866 completed five jobs successfully: Django, ASP.NET, frontend, SQL Server integration and browser. ASP smoke checks DB BIGINT, Customer create/update/get Unicode/credit, 2 concurrent duplicate writes [201,400], forbidden private document retrieval, Customer protected-delete conflict, no-store and no-sniff. Shared React Playwright checks valid credit customer submit and Supplier after it. Cross-backend financial ledger/printed quotation not yet built and cannot be certified.
+
+No schema change. Existing FK/restrict, unique normalized Code, decimal 18,3 and BIGINT keys tested in disposable environment; production data not accessed.
