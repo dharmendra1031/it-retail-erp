@@ -108,6 +108,7 @@ export function CompanyForm({
           label={t("companyNameEnglish")}
           value={values.nameEn}
           onChange={(value) => onChange("nameEn", value)}
+          dir="ltr"
           required
         />
         <TextField
@@ -120,6 +121,7 @@ export function CompanyForm({
           label={t("addressEnglish")}
           value={values.addressEn}
           onChange={(value) => onChange("addressEn", value)}
+          dir="ltr"
         />
         <TextArea
           label={t("addressArabic")}
@@ -141,23 +143,27 @@ export function CompanyForm({
           label={t("email")}
           value={values.email}
           onChange={(value) => onChange("email", value)}
+          dir="ltr"
           type="email"
         />
         <TextField
           label={t("website")}
           value={values.website}
           onChange={(value) => onChange("website", value)}
+          dir="ltr"
           type="url"
         />
         <TextField
           label={t("taxNumber")}
           value={values.taxNumber}
           onChange={(value) => onChange("taxNumber", value)}
+          dir="ltr"
         />
         <TextField
           label={t("commercialRegistration")}
           value={values.commercialRegistrationNumber}
           onChange={(value) => onChange("commercialRegistrationNumber", value)}
+          dir="ltr"
         />
 
         <label className="full-width">

@@ -85,3 +85,17 @@ No database schema or source runtime modification was required to *inspect* thes
 **Release/acceptance rule:** Do not count business quotation rendering, report printing or SRS Test 10 as complete until the owning modules exist and executable SQL/browser/printer evidence is attached. RTL direction must not reverse machine-readable code, email or amount values. Missing translations and mixed-direction negative cases belong to ERP-0205.
 
 **ERP-0204 implementation addendum:** Improved existing frontend fallback so a Django field-error dictionary returning HTTP 400 produces the localized `invalidRequest` message, and unknown backend `detail` text is not surfaced to Arabic users. Added a Playwright negative-case regression. This small WP11 hardening does not implement financial printing. New CI has not yet been run/verified.
+
+## ERP-0205 — Negative acceptance (2026-10-24)
+
+Current WP11 contract (source: SRS §§3,4,62,65; React language selector, Company/Partner/Catalog forms and API client):
+
+| Gate | Negative scenario | Expected result and failure signal | Owner |
+| --- | --- | --- | --- |
+| NG-11-01 | Arabic selected but Django sends field-keyed HTTP 400 JSON without `detail` | Visible safe Arabic `invalidRequest`; never raw English validation or stack details; no new record | WP11 — frontend API/error translator |
+| NG-11-02 | Backend sends an unknown plain-English error `detail` | Arabic generic error fallback rather than unreviewed English server text | WP11 — i18n error fallback |
+| NG-11-03 | Arabic form edits an LTR customer code/email/decimal and an RTL Arabic name | LTR fields keep `dir=ltr`, Arabic fields keep `dir=rtl`; Unicode values must be preserved verbatim; no reordered code or number | WP11 — Partner/Catalog/Company forms |
+| NG-11-04 | Operator switches AR->EN->AR with keyboard, narrow viewport and persisted form data | No inaccessible controls, focus trap, horizontal clipping or lost form values; unchanged permission identifiers | WP11/WP49 — browser/a11y follow-on |
+| NG-11-05 | Future quotation contains Arabic title plus LTR SKU/email/amount | Printed document cannot reverse SKU or change numeric totals/approval; no replacement glyphs | WP27/WP44/WP49 — NOT executable in this step |
+
+**Evidence authored:** browser mock 400 negative test (ERP-0204 commit) and Playwright DOM direction test (this step), existing selected-language persistence smoke. Explicit `dir=ltr` on machine-readable/English fields is a presentation correction; does not restrict bilingual stored names. Tests are not reported PASS until CI finishes. No unauthorized document, quotation or printing placeholder has been added. Missing translation keys are compile-time constrained by typed dictionaries. Final full keyboard/IME and responsive audit is separate downstream acceptance.

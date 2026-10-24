@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0205",
+  "nextStepId": "ERP-0206",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -212,7 +212,8 @@
     "ERP-0201",
     "ERP-0202",
     "ERP-0203",
-    "ERP-0204"
+    "ERP-0204",
+    "ERP-0205"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4628,6 +4629,30 @@
         "productionDatabase": "not accessed"
       },
       "deferredAcceptance": "ERP-0205 negative-case acceptance next. WP27/WP30/WP44 own quotation, invoices and physical printing."
+    },
+    {
+      "stepId": "ERP-0205",
+      "status": "complete",
+      "scope": "Specify and harden mixed-direction and missing-translation negative acceptance",
+      "completionMode": "source-grounded negative acceptance, narrow UI direction corrections",
+      "reviewedRepoCommit": "d7ce79f4009433da2df5815cd5a265e637326db5",
+      "evidence": [
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "frontend/src/components/Partners.tsx",
+        "frontend/src/components/Catalog.tsx",
+        "frontend/src/components/CompanyForm.tsx",
+        "frontend/e2e/erp.spec.ts",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "negative-case specification and browser regression authored",
+        "negativeScenarios": 5,
+        "behavior": "explicit LTR on codes, emails, decimals, English company fields within Arabic RTL forms",
+        "testRun": "new CI pending; not claiming browser PASS",
+        "schemaChange": false,
+        "productionDatabase": "not accessed"
+      },
+      "deferredAcceptance": "Production quotation RTL/print negative acceptance WP27/WP44; screen-reader/device audit remains ERP-0216/49"
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

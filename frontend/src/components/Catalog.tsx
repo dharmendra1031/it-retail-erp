@@ -101,7 +101,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
         </div>
         <form className="company-form" onSubmit={save} onKeyDown={advanceOnEnter}>
           <label>{t("code")}
-            <input ref={codeRef} required maxLength={30} value={values.code}
+            <input ref={codeRef} dir="ltr" required maxLength={30} value={values.code}
               onChange={event => change("code", event.target.value)} />
           </label>
           <label>{t("companyNameEnglish")}

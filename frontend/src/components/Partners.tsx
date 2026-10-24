@@ -128,7 +128,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
         </div>
         <form className="company-form" onSubmit={save} onKeyDown={advanceOnEnter}>
           <label>{t("code")}
-            <input ref={codeInput} required maxLength={30} value={values.code}
+            <input ref={codeInput} dir="ltr" required maxLength={30} value={values.code}
               onChange={event => change("code", event.target.value)} />
           </label>
           <label>{t("companyNameEnglish")}
@@ -184,20 +184,20 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               </label>
 
               <label>{t("email")}
-                <input type="email" maxLength={200} value={values.email}
+                <input type="email" dir="ltr" maxLength={200} value={values.email}
                   onChange={event => change("email", event.target.value)} />
               </label>
               <label>{t("taxNumber")}
-                <input maxLength={100} value={values.taxNumber}
+                <input dir="ltr" maxLength={100} value={values.taxNumber}
                   onChange={event => change("taxNumber", event.target.value)} />
               </label>
               <label>{t("openingBalance")}
-                <input required inputMode="decimal" value={values.openingBalance}
+                <input required dir="ltr" inputMode="decimal" value={values.openingBalance}
                   pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("openingBalance", event.target.value)} />
               </label>
               <label>{t("creditLimit")}
-                <input required inputMode="decimal" value={values.creditLimit}
+                <input required dir="ltr" inputMode="decimal" value={values.creditLimit}
                   pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("creditLimit", event.target.value)} />
               </label>
@@ -205,20 +205,20 @@ export function Partners({ kind }: { kind: PartnerKind }) {
           ) : (
             <>
               <label>{t("email")}
-                <input type="email" maxLength={200} value={values.email}
+                <input type="email" dir="ltr" maxLength={200} value={values.email}
                   onChange={event => change("email", event.target.value)} />
               </label>
               <label>{t("taxNumber")}
-                <input maxLength={100} value={values.taxNumber}
+                <input dir="ltr" maxLength={100} value={values.taxNumber}
                   onChange={event => change("taxNumber", event.target.value)} />
               </label>
               <label>{t("openingBalance")}
-                <input required inputMode="decimal" value={values.openingBalance}
+                <input required dir="ltr" inputMode="decimal" value={values.openingBalance}
                   pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("openingBalance", event.target.value)} />
               </label>
               <label>{t("creditLimit")}
-                <input required inputMode="decimal" value={values.creditLimit}
+                <input required dir="ltr" inputMode="decimal" value={values.creditLimit}
                   pattern="[0-9]+(\.[0-9]{1,3})?"
                   onChange={event => change("creditLimit", event.target.value)} />
               </label>

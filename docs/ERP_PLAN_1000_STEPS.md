@@ -305,7 +305,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0202** (02/20) Inspect Localized validation, Unicode persistence and translated document data, Localized serializer errors, Unicode and translated document data and Language switch, RTL-aware UI and accessible responsive navigation; record actual files and current behavior.
 - [x] **ERP-0203** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [x] **ERP-0204** (04/20) Specify the happy-path acceptance: Switch language and render an Arabic quotation correctly.
-- [ ] **ERP-0205** (05/20) Specify the negative/authorization case: Catch mixed-direction and missing-translation defects.
+- [x] **ERP-0205** (05/20) Specify the negative/authorization case: Catch mixed-direction and missing-translation defects.
 - [ ] **ERP-0206** (06/20) Design data, configuration and numeric BIGINT IDs for Language toggle, Unicode data, RTL layout, locale dates and bilingual printing; record N/A with evidence if schema unchanged.
 - [ ] **ERP-0207** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Arabic survives save/search/print without replacement or truncation.
 - [ ] **ERP-0208** (08/20) Implement or repair ASP.NET entities/configuration/contracts for Localized validation, Unicode persistence and translated document data. Execute runtime changes only for surfaces owned by this package; otherwise record N/A/deferred downstream owner with code evidence and do not create placeholder implementation.

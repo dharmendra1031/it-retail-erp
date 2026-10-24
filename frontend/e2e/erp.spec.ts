@@ -435,3 +435,18 @@ test("Arabic form errors remain localized for field validation failures", async 
   await page.getByRole("button", { name: "حفظ الشركة" }).click();
   await expect(page.getByRole("alert")).toContainText("البيانات المدخلة غير صحيحة.");
 });
+
+test("Arabic master forms preserve LTR codes and RTL names", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Language").selectOption("ar");
+  await page.getByLabel("البريد الإلكتروني").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("كلمة المرور").fill(password);
+  await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+  await expect(page.getByLabel("اسم الشركة (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByLabel("اسم الشركة")).toHaveAttribute("dir", "rtl");
+
+  await page.getByRole("button", { name: "إدارة العملاء" }).click();
+  await expect(page.getByLabel("الرمز")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByLabel("البريد الإلكتروني")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByLabel("اسم الشركة")).toHaveAttribute("dir", "rtl");
+});
