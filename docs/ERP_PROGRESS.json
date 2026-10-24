@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0222",
+  "nextStepId": "ERP-0223",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -229,7 +229,8 @@
     "ERP-0218",
     "ERP-0219",
     "ERP-0220",
-    "ERP-0221"
+    "ERP-0221",
+    "ERP-0222"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5035,6 +5036,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "SRS §§4,8,9,51,52,57 require Customer code, English/Arabic names/address, mobile, civil ID access controls, type, payment terms, opening balance, credit limit, searchable master and confidential attachments. Actual ledger/receivables belong WP32–WP33/WP43; posted invoice rules not owned by WP12. Current SRS baseline AT-02 spans quotation/print owners and cannot pass in WP12."
+    },
+    {
+      "stepId": "ERP-0222",
+      "status": "complete",
+      "scope": "Customer source/backend/frontend inventory",
+      "completionMode": "SRS/source review, no new runtime schema",
+      "reviewedRepoCommit": "06e95169dd9de19915d5531548b0ffc58af73de1",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "django/apps/partners/api.py",
+        "frontend/src/components/Partners.tsx",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/partners/tests.py"
+      ],
+      "verification": {
+        "kind": "documentation source review",
+        "baselineCi": "40056434243 5/5 success",
+        "newTests": "not run for this specification step",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "ASP.NET Customer long PK, normalized ASCII code, nullable optional email, BIGINT FK-protected binary documents, server-side civilId omission for non-admin; Django CustomerSerializer mirrors bilingual fields, validates mandatory Arabic name/mobile, protects files; React Partners form handles bilingual CRUD/search, optional email, 3-place decimal strings, admin document upload/download. Existing full CI 40056434243 PASSED 5/5; file presence alone does not pass AT-02."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

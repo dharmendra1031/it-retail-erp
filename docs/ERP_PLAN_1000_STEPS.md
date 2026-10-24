@@ -328,7 +328,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 **Happy-path proof:** Create credit customer with Arabic address and payment terms. **Negative proof:** Reject duplicate code, invalid limit and disallowed attachment.
 
 - [x] **ERP-0221** (01/20) Extract Customer Master and secured documents acceptance details from SRS §§4, 8, 9, 51, 52, 57; record assumptions and exclusions.
-- [ ] **ERP-0222** (02/20) Inspect Customer model/API, uniqueness, attachment authorization, Equivalent customer model/serializer/API and protected media and Customer form, searchable list and secure attachment UI; record actual files and current behavior.
+- [x] **ERP-0222** (02/20) Inspect Customer model/API, uniqueness, attachment authorization, Equivalent customer model/serializer/API and protected media and Customer form, searchable list and secure attachment UI; record actual files and current behavior.
 - [ ] **ERP-0223** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [ ] **ERP-0224** (04/20) Specify the happy-path acceptance: Create credit customer with Arabic address and payment terms.
 - [ ] **ERP-0225** (05/20) Specify the negative/authorization case: Reject duplicate code, invalid limit and disallowed attachment.

@@ -312,3 +312,9 @@ At `dd5ad231`, [CI 40051691145](https://github.com/dharmendra1031/it-retail-erp/
 SRS §§4,8,9,51,52,57 require Customer code, English/Arabic names/address, mobile, civil ID access controls, type, payment terms, opening balance, credit limit, searchable master and confidential attachments. Actual ledger/receivables belong WP32–WP33/WP43; posted invoice rules not owned by WP12. Current SRS baseline AT-02 spans quotation/print owners and cannot pass in WP12.
 
 Existing Customer and PartnerDocument use auto-increment BIGINT, nvarchar/Unicode, CreditLimit/OpeningBalance decimal(18,3), unique code, exclusive owner CHECK, restricted FKs. No migration/production SQL changes in this step.
+
+## ERP-0222 — Customer DB review
+
+ASP.NET Customer long PK, normalized ASCII code, nullable optional email, BIGINT FK-protected binary documents, server-side civilId omission for non-admin; Django CustomerSerializer mirrors bilingual fields, validates mandatory Arabic name/mobile, protects files; React Partners form handles bilingual CRUD/search, optional email, 3-place decimal strings, admin document upload/download. Existing full CI 40056434243 PASSED 5/5; file presence alone does not pass AT-02.
+
+Existing Customer and PartnerDocument use auto-increment BIGINT, nvarchar/Unicode, CreditLimit/OpeningBalance decimal(18,3), unique code, exclusive owner CHECK, restricted FKs. No migration/production SQL changes in this step.
