@@ -336,6 +336,7 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByLabel("اسم الشركة").fill("عميل تجريبي");
   await page.getByLabel("Credit Limit").fill("2500.750");
   await page.getByLabel("Company Name", { exact: true }).fill("Credit Shop LLC");
+  await page.getByLabel("Mobile").fill("96599887766");
   await page.getByLabel("Contact Person").fill("Ali");
   await page.getByLabel("Opening Balance").fill("15.250");
   await page.getByLabel("Payment Terms (days)").fill("30");

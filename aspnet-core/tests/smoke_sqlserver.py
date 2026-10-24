@@ -250,7 +250,7 @@ def check_api():
 
     customer_data = {
         "code": "C-001", "nameEn": "Credit Shop", "nameAr": "عميل الائتمان",
-        "addressAr": "الكويت", "customerType": "corporate",
+        "addressAr": "الكويت", "mobile": "96599887766", "customerType": "corporate",
         "paymentTermsDays": 30, "creditLimit": "2500.750", "civilId": "123456",
         "companyName": "Credit Shop LLC", "contactPerson": "Ahmed",
         "telephone": "22221111", "email": "credit@example.test",
@@ -275,6 +275,11 @@ def check_api():
     assert customer_updated["openingBalance"] == "60.375", "Customer opening balance update lost decimal precision"
     status, reloaded_customer = request(client, f"/api/customers/{customer['id']}")
     assert status == 200 and reloaded_customer["companyName"] == "Credit Shop Updated", "Customer update was not persisted"
+    for field in ("mobile", "nameAr"):
+        status, rejected = request(client, "/api/customers", "POST", {
+            **customer_data, field: "",
+        }, csrf)
+        assert status == 400, f"Required Customer {field} accepted: {status} {rejected}"
     status, duplicate_customer = request(client, "/api/customers", "POST", customer_data, csrf)
     assert status == 400, "Duplicate customer code accepted"
     status, invalid_credit = request(client, "/api/customers", "POST", {
@@ -284,7 +289,7 @@ def check_api():
 
     browser_customer = {
         "code": "C-BROWSER", "nameEn": "Credit Partner", "nameAr": "عميل تجريبي",
-        "addressEn": "", "addressAr": "", "mobile": "", "contactPerson": "Ali",
+        "addressEn": "", "addressAr": "", "mobile": "96599887766", "contactPerson": "Ali",
         "telephone": "", "remarks": "", "paymentTermsDays": 30, "isActive": True,
         "companyName": "Credit Shop LLC", "civilId": "", "customerType": "retail",
         "creditLimit": "2500.750", "email": "", "taxNumber": "",

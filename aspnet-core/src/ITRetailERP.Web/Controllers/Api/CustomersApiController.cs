@@ -121,6 +121,8 @@ public sealed class CustomersApiController(ApplicationDbContext db) : Controller
 
     private static bool Valid(CustomerRequest request) =>
         PartnerValidation.IsValid(request) &&
+        !string.IsNullOrWhiteSpace(request.NameAr) &&
+        !string.IsNullOrWhiteSpace(request.Mobile) &&
         PartnerValidation.Amount(request.CreditLimit) &&
         PartnerValidation.Amount(request.OpeningBalance) &&
         PartnerValidation.OptionalEmail(request.Email) &&

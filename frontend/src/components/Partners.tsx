@@ -136,7 +136,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               onChange={event => change("nameEn", event.target.value)} />
           </label>
           <label>{t("companyNameArabic")}
-            <input dir="rtl" maxLength={200} value={values.nameAr}
+            <input dir="rtl" required={isCustomer} maxLength={200} value={values.nameAr}
               onChange={event => change("nameAr", event.target.value)} />
           </label>
           <label>{t("addressEnglish")}
@@ -148,7 +148,7 @@ export function Partners({ kind }: { kind: PartnerKind }) {
               onChange={event => change("addressAr", event.target.value)} />
           </label>
           <label>{t("mobile")}
-            <input maxLength={30} value={values.mobile}
+            <input required={isCustomer} maxLength={30} value={values.mobile}
               onChange={event => change("mobile", event.target.value)} />
           </label>
           <label>{t("telephone")}

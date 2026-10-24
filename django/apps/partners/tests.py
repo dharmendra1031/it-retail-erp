@@ -19,7 +19,7 @@ class PartnerApiTests(TestCase):
         self.client = APIClient()
         self.customer = {
             "code": "c-001", "nameEn": "Al Noor", "nameAr": "النور",
-            "addressAr": "مدينة الكويت", "customerType": "corporate",
+            "addressAr": "مدينة الكويت", "mobile": "96599887766", "customerType": "corporate",
             "paymentTermsDays": 30, "creditLimit": "2500.750", "civilId": "123456",
             "companyName": "Al Noor IT", "contactPerson": "Ali", "telephone": "22223333",
             "email": "sales@example.test", "taxNumber": "VAT-123",
@@ -52,6 +52,16 @@ class PartnerApiTests(TestCase):
         self.assertEqual(detail.data["nameAr"], name_ar)
         self.assertEqual(detail.data["addressAr"], address_ar)
         self.assertEqual(detail.data["creditLimit"], "1234.375")
+
+    def test_customer_required_arabic_name_and_mobile(self):
+        self.client.force_authenticate(user=self.admin)
+        for changes in ({"nameAr": ""}, {"nameAr": "  "}, {"mobile": ""}, {"mobile": "  "}):
+            with self.subTest(changes=changes):
+                result = self.client.post("/api/customers", {
+                    **self.customer, **changes,
+                }, format="json")
+                self.assertEqual(result.status_code, 400, result.data)
+        self.assertFalse(Customer.objects.exists())
 
     def test_customer_credit_duplicate_and_validation(self):
         self.client.force_authenticate(user=self.admin)

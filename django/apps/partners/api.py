@@ -50,6 +50,8 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(PartnerSerializer):
+    nameAr = serializers.CharField(source="name_ar", max_length=200, allow_blank=False)
+    mobile = serializers.CharField(max_length=30, allow_blank=False)
     civilId = serializers.CharField(source="civil_id", max_length=30, required=False, allow_blank=True)
     companyName = serializers.CharField(source="company_name", max_length=200, required=False, allow_blank=True)
     email = serializers.EmailField(max_length=200, required=False, allow_blank=True)
@@ -59,6 +61,16 @@ class CustomerSerializer(PartnerSerializer):
         key for key, _ in Customer.TYPES
     ])
     creditLimit = serializers.DecimalField(source="credit_limit", max_digits=18, decimal_places=3, min_value=0)
+
+    def validate_nameAr(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Arabic name required.")
+        return value.strip()
+
+    def validate_mobile(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Mobile required.")
+        return value.strip()
 
     class Meta:
         model = Customer
