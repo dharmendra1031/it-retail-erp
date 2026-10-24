@@ -83,3 +83,9 @@ PartnerViewSet uses transaction.atomic for create/update and catches integrity r
 ASP.NET policies gate customer read/add/edit/delete; only role Admin can list/upload/download secured attachments; non-admin customers.view can read customer rows but CivilId is omitted from both list/detail. Verified as SQL+API negative checks at CI 40060771866, including read-only inability to POST customer or get private file. Django has corresponding role-based read CivilId suppression and admin-only binary endpoints. Whole-system financial transaction branch scope/audit is owned by WP46/financial owners, not duplicated.
 
 **Evidence:** `aspnet-core/tests/smoke_sqlserver.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`, `django/apps/partners/tests.py`, `django/apps/partners/api.py`; 5/5 CI 40060771866 PASS. This does not certify ledger or audit events in later financial modules.
+
+## ERP-0235 — Customer React form, list, validation and private documents
+
+Shared Partners.tsx renders Customer create/update/delete, EN/AR names/address, required Arabic name/mobile, type list, tax ID, civil ID, terms, 3-decimal opening balance and credit; search by code/name; keyboard Enter behavior; editing loads secured file list and allows admin to upload PDF/JPEG/PNG. The sidebar permits only admin to open Customer Master, but backend remains authority. API code uses decimal strings, not JS floats. Current customer/supplier Playwright and SQL smoke verified in CI 40060771866. Pagination/huge catalog performance remains WP48.
+
+**Evidence:** `frontend/src/components/Partners.tsx`, `frontend/src/api/partners.ts`, `frontend/e2e/erp.spec.ts`, `frontend/src/components/AppShell.tsx`; 5/5 CI 40060771866 PASS. This does not certify ledger or audit events in later financial modules.

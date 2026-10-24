@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0235",
+  "nextStepId": "ERP-0236",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -242,7 +242,8 @@
     "ERP-0231",
     "ERP-0232",
     "ERP-0233",
-    "ERP-0234"
+    "ERP-0234",
+    "ERP-0235"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5313,6 +5314,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "ASP.NET policies gate customer read/add/edit/delete; only role Admin can list/upload/download secured attachments; non-admin customers.view can read customer rows but CivilId is omitted from both list/detail. Verified as SQL+API negative checks at CI 40060771866, including read-only inability to POST customer or get private file. Django has corresponding role-based read CivilId suppression and admin-only binary endpoints. Whole-system financial transaction branch scope/audit is owned by WP46/financial owners, not duplicated."
+    },
+    {
+      "stepId": "ERP-0235",
+      "status": "complete",
+      "scope": "Customer React form, list, validation and private documents",
+      "completionMode": "verified current implementation and security regression",
+      "reviewedRepoCommit": "23860a97b6624318a59df1d934ac29534b268e43",
+      "evidence": [
+        "frontend/src/components/Partners.tsx",
+        "frontend/src/api/partners.ts",
+        "frontend/e2e/erp.spec.ts",
+        "frontend/src/components/AppShell.tsx"
+      ],
+      "verification": {
+        "kind": "source plus successful SQL/browser integration tests",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866",
+        "result": "5/5 PASS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Shared Partners.tsx renders Customer create/update/delete, EN/AR names/address, required Arabic name/mobile, type list, tax ID, civil ID, terms, 3-decimal opening balance and credit; search by code/name; keyboard Enter behavior; editing loads secured file list and allows admin to upload PDF/JPEG/PNG. The sidebar permits only admin to open Customer Master, but backend remains authority. API code uses decimal strings, not JS floats. Current customer/supplier Playwright and SQL smoke verified in CI 40060771866. Pagination/huge catalog performance remains WP48."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

@@ -388,3 +388,9 @@ SQL BIGINT auto-increment IDs, unique Code, decimal(18,3), nvarchar and protecte
 ASP.NET policies gate customer read/add/edit/delete; only role Admin can list/upload/download secured attachments; non-admin customers.view can read customer rows but CivilId is omitted from both list/detail. Verified as SQL+API negative checks at CI 40060771866, including read-only inability to POST customer or get private file. Django has corresponding role-based read CivilId suppression and admin-only binary endpoints. Whole-system financial transaction branch scope/audit is owned by WP46/financial owners, not duplicated.
 
 No PK/FK/index, decimal precision or schema change; audited real SQL CI 40060771866 (disposable DB only).
+
+## ERP-0235 — Customer DB/security review
+
+Shared Partners.tsx renders Customer create/update/delete, EN/AR names/address, required Arabic name/mobile, type list, tax ID, civil ID, terms, 3-decimal opening balance and credit; search by code/name; keyboard Enter behavior; editing loads secured file list and allows admin to upload PDF/JPEG/PNG. The sidebar permits only admin to open Customer Master, but backend remains authority. API code uses decimal strings, not JS floats. Current customer/supplier Playwright and SQL smoke verified in CI 40060771866. Pagination/huge catalog performance remains WP48.
+
+No PK/FK/index, decimal precision or schema change; audited real SQL CI 40060771866 (disposable DB only).
