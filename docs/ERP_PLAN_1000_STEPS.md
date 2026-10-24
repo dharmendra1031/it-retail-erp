@@ -354,7 +354,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 **Happy-path proof:** Create supplier and later link first purchase. **Negative proof:** Reject duplicate supplier code and unauthorized file access.
 
 - [x] **ERP-0241** (01/20) Extract Supplier Master and secured documents acceptance details from SRS §§4, 10, 11, 50, 52, 57; record assumptions and exclusions.
-- [ ] **ERP-0242** (02/20) Inspect Supplier models, APIs and secure document endpoints, Equivalent supplier serializers, models and document rules and Supplier CRUD and bilingual list; record actual files and current behavior.
+- [x] **ERP-0242** (02/20) Inspect Supplier models, APIs and secure document endpoints, Equivalent supplier serializers, models and document rules and Supplier CRUD and bilingual list; record actual files and current behavior.
 - [ ] **ERP-0243** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [ ] **ERP-0244** (04/20) Specify the happy-path acceptance: Create supplier and later link first purchase.
 - [ ] **ERP-0245** (05/20) Specify the negative/authorization case: Reject duplicate supplier code and unauthorized file access.

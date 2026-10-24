@@ -125,3 +125,9 @@ Reviewed shared PartnerViewSet and React Partners module for unnecessary paralle
 SRS §§4,10,11,50,52,57: normalized Supplier code, bilingual EN/AR company names/address, contact person, telephone/mobile/email/tax number, 0–365 payment terms, three-decimal opening balance and credit limit, active state, protected attachment access and searchable CRUD. Supplier ledger, balance allocation, first purchase and payables belong WP24–WP27/WP43; no fake purchase link or stock/ledger posting in WP13.
 
 Evidence: `docs/SRS_BASELINE.md`, `docs/ERP_REQUIREMENTS_GAP_MATRIX.md`, `django/apps/partners/models.py`, `frontend/src/components/Partners.tsx`. SRS acceptance specification/source, not verification of supplier ledger, purchase or financial print.
+
+## ERP-0242 — Supplier ASP.NET/Django/React source inspection
+
+SupplierRequest/Supplier long entity and SuppliesApiController present GET/POST/PUT/DELETE with bounded validation, unique code and amount/email checks. Django SupplierSerializer/PartnerViewSet and PartnerDocument APIs match; React Partners handles Supplier bilingual fields, saved decimals and admin file picker. ASP/Django files use numeric BIGINT IDs and contract-consistent supplier routes. Baseline CI 40060771866 passed SQL + frontend and browser, but not an actual purchase/ledger acceptance.
+
+Evidence: `aspnet-core/src/ITRetailERP.Web/Models/Supplier.cs`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `django/apps/partners/api.py`, `django/apps/partners/models.py`, `frontend/src/components/Partners.tsx`. SRS acceptance specification/source, not verification of supplier ledger, purchase or financial print.

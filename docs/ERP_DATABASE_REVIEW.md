@@ -430,3 +430,9 @@ Schema unchanged: BIGINT IDENTITY, unique Code, NVARCHAR bilingual values, DECIM
 SRS §§4,10,11,50,52,57: normalized Supplier code, bilingual EN/AR company names/address, contact person, telephone/mobile/email/tax number, 0–365 payment terms, three-decimal opening balance and credit limit, active state, protected attachment access and searchable CRUD. Supplier ledger, balance allocation, first purchase and payables belong WP24–WP27/WP43; no fake purchase link or stock/ledger posting in WP13.
 
 Supplier numeric BIGINT identity, SQL unique normalized code, NVARCHAR, DECIMAL(18,3), binary doc exclusive-owner CHECK and restrictive FK from existing migrations. No schema or production database changes.
+
+## ERP-0242 — Supplier DB/source review
+
+SupplierRequest/Supplier long entity and SuppliesApiController present GET/POST/PUT/DELETE with bounded validation, unique code and amount/email checks. Django SupplierSerializer/PartnerViewSet and PartnerDocument APIs match; React Partners handles Supplier bilingual fields, saved decimals and admin file picker. ASP/Django files use numeric BIGINT IDs and contract-consistent supplier routes. Baseline CI 40060771866 passed SQL + frontend and browser, but not an actual purchase/ledger acceptance.
+
+Supplier numeric BIGINT identity, SQL unique normalized code, NVARCHAR, DECIMAL(18,3), binary doc exclusive-owner CHECK and restrictive FK from existing migrations. No schema or production database changes.

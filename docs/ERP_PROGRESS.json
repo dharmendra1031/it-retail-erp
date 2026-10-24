@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0242",
+  "nextStepId": "ERP-0243",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -249,7 +249,8 @@
     "ERP-0238",
     "ERP-0239",
     "ERP-0240",
-    "ERP-0241"
+    "ERP-0241",
+    "ERP-0242"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5465,6 +5466,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "SRS §§4,10,11,50,52,57: normalized Supplier code, bilingual EN/AR company names/address, contact person, telephone/mobile/email/tax number, 0–365 payment terms, three-decimal opening balance and credit limit, active state, protected attachment access and searchable CRUD. Supplier ledger, balance allocation, first purchase and payables belong WP24–WP27/WP43; no fake purchase link or stock/ledger posting in WP13."
+    },
+    {
+      "stepId": "ERP-0242",
+      "status": "complete",
+      "scope": "Supplier ASP.NET/Django/React source inspection",
+      "completionMode": "SRS/source inventory only, explicitly deferred supplier ledger",
+      "reviewedRepoCommit": "2ec27a335aca1f6305691fee6edcb4330355736a",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Models/Supplier.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs",
+        "django/apps/partners/api.py",
+        "django/apps/partners/models.py",
+        "frontend/src/components/Partners.tsx"
+      ],
+      "verification": {
+        "kind": "SRS baseline and source review",
+        "baselineCi": "40060771866 5/5 SUCCESS",
+        "newTests": "not run (source/spec)",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "SupplierRequest/Supplier long entity and SuppliesApiController present GET/POST/PUT/DELETE with bounded validation, unique code and amount/email checks. Django SupplierSerializer/PartnerViewSet and PartnerDocument APIs match; React Partners handles Supplier bilingual fields, saved decimals and admin file picker. ASP/Django files use numeric BIGINT IDs and contract-consistent supplier routes. Baseline CI 40060771866 passed SQL + frontend and browser, but not an actual purchase/ledger acceptance."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
