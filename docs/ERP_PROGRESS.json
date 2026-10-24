@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0207",
+  "nextStepId": "ERP-0208",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -214,7 +214,8 @@
     "ERP-0203",
     "ERP-0204",
     "ERP-0205",
-    "ERP-0206"
+    "ERP-0206",
+    "ERP-0207"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
@@ -4680,6 +4681,25 @@
         "productionDatabase": "not accessed"
       },
       "deferredAcceptance": "WP27/WP30 business document models; WP44 physical print layouts; WP49 full end-to-end"
+    },
+    {
+      "stepId": "ERP-0207",
+      "status": "complete",
+      "completionMode": "Unicode/decimal/rollback invariant design",
+      "reviewedRepoCommit": "80cd7c1dd5f494f98c291855b6abe31ca50dfa03",
+      "evidence": [
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "django/apps/partners/tests.py",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "source-based constraints; Arabic Unicode regression authored",
+        "newTestCommit": "80cd7c1dd5f494f98c291855b6abe31ca50dfa03",
+        "ci": "pending",
+        "databaseMigration": "not applicable",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "No quotation/print completion claimed. No schema changes."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

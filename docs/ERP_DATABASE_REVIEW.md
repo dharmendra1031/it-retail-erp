@@ -262,3 +262,7 @@ Source review of React Company/Partner/Catalog forms found English identifiers a
 ## Review 029 — 2026-10-24, ERP-0206 localization/config schema decision
 
 Inspected Company, Customer, Supplier, Category, Brand and Product Django models and their ASP.NET counterparts, plus `frontend/src/i18n.tsx` and locale formatting. The persisted bilingual data has separate Unicode English/Arabic columns and existing numeric BIGINT identities; existing partner monetary columns are decimal(18,3). Language selection is browser state, not a new database entity. No WP11 schema migration or additional index/FK is warranted. DB-001–DB-006 remain with their recorded owners; no production database touched, no SQL runtime test/rollback performed (design-only task). Future quotation/document printing designs remain WP27/WP30/WP44, where migrations and printable template configuration must be designed against real entities.
+
+## Review 030 — 2026-10-24 ERP-0207
+
+Existing models retain BIGINT auto-increment IDs, separate SQL Unicode EN/AR fields, DECIMAL(18,3) partner money, unchanged FK/index constraints and authorization. No new WP11 persistence, schema update, migration, SQL data write or physical printer test. Arabic diacritics and mixed-script round-trip regression authored (commit 80cd7c1); awaiting CI verification. UI rollback requires deployment rollback only, leaving stored Arabic rows unchanged. DB-001–DB-006 remain with existing owners.
