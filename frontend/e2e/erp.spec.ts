@@ -388,12 +388,12 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
 
   await page.getByRole("button", { name: "Category Master" }).click();
   await page.getByLabel("Code").fill(`COMP-${suffix}`);
-  await page.getByLabel("Company Name (English)").fill("Computers");
-  await page.getByLabel("اسم الشركة").fill("الحواسيب");
+  await page.getByLabel("Category Name (English)").fill("Computers");
+  await page.getByLabel("Category Name (Arabic)").fill("الحواسيب");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `COMP-${suffix}` })).toBeVisible();
   await page.getByLabel("Code").fill(`LAP-${suffix}`);
-  await page.getByLabel("Company Name (English)").fill("Laptops");
+  await page.getByLabel("Category Name (English)").fill("Laptops");
   await page.getByLabel("Parent Category").selectOption({ label: "Computers" });
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `LAP-${suffix}` })).toContainText("Computers");
@@ -406,19 +406,19 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
 
   await page.getByRole("button", { name: "Brand Master" }).click();
   await page.getByLabel("Code").fill(`DELL-${suffix}`);
-  await page.getByLabel("Company Name (English)").fill("Dell");
+  await page.getByLabel("Brand Name (English)").fill("Dell");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `DELL-${suffix}` })).toBeVisible();
 
   await page.getByRole("button", { name: "Unit Master" }).click();
   await page.getByLabel("Code").fill(`PCS-${suffix}`);
-  await page.getByLabel("Company Name (English)").fill("Pieces");
+  await page.getByLabel("Unit Name (English)").fill("Pieces");
   await page.getByLabel("Decimal Places").fill("0");
   await page.getByRole("button", { name: "Save" }).click();
   const unitRow = page.getByRole("row").filter({ hasText: `PCS-${suffix}` });
   await expect(unitRow).toBeVisible();
   await unitRow.getByRole("button", { name: "Edit" }).click();
-  await page.getByLabel("Company Name (English)").fill("Pieces updated");
+  await page.getByLabel("Unit Name (English)").fill("Pieces updated");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(unitRow).toContainText("Pieces updated");
 });

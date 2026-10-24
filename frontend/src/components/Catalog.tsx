@@ -16,11 +16,19 @@ const titles = {
   units: "unitMaster",
 } as const;
 
+const captions = {
+  categories: { en: "categoryNameEnglish", ar: "categoryNameArabic" },
+  brands: { en: "brandNameEnglish", ar: "brandNameArabic" },
+  units: { en: "unitNameEnglish", ar: "unitNameArabic" },
+} as const;
+
 function orderCategories(items: CatalogItem[]) {
   const children = new Map<number | null, CatalogItem[]>();
   for (const item of items) {
     const parent = item.parentId ?? null;
-    children.set(parent, [...(children.get(parent) ?? []), item]);
+    const group = children.get(parent);
+    if (group) group.push(item);
+    else children.set(parent, [item]);
   }
   const ordered: CatalogItem[] = [];
   const visited = new Set<number>();
@@ -139,11 +147,11 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
             <input ref={codeRef} dir="ltr" required maxLength={30} value={values.code}
               onChange={event => change("code", event.target.value)} />
           </label>
-          <label>{t("companyNameEnglish")}
+          <label>{t(captions[kind].en)}
             <input required maxLength={200} value={values.nameEn}
               onChange={event => change("nameEn", event.target.value)} />
           </label>
-          <label>{t("companyNameArabic")}
+          <label>{t(captions[kind].ar)}
             <input maxLength={200} dir="rtl" value={values.nameAr}
               onChange={event => change("nameAr", event.target.value)} />
           </label>
