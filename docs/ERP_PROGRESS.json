@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0216",
+  "nextStepId": "ERP-0217",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -223,7 +223,8 @@
     "ERP-0212",
     "ERP-0213",
     "ERP-0214",
-    "ERP-0215"
+    "ERP-0215",
+    "ERP-0216"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
@@ -4886,6 +4887,33 @@
         "productionDatabase": "not accessed"
       },
       "notes": "RTL/LTR field direction, safe localized 400 feedback; quotation print belongs WP27/WP44."
+    },
+    {
+      "stepId": "ERP-0216",
+      "status": "complete",
+      "scope": "WP11 bilingual UI/RTL and responsive browser acceptance",
+      "completionMode": "browser and CI-verified current screens; future financial printing deferred",
+      "reviewedRepoCommit": "5c50c353ecff35803554b965da9b34eff944d1d1",
+      "evidence": [
+        "frontend/src/i18n.tsx",
+        "frontend/src/locale.ts",
+        "frontend/src/styles.css",
+        "frontend/e2e/erp.spec.ts",
+        "docs/ERP_0201_0220_LOCALIZATION.md"
+      ],
+      "verification": {
+        "kind": "full CI including responsive/RTL Playwright",
+        "run": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051364388",
+        "codeCi": "5/5 PASS",
+        "viewports": [
+          375,
+          768,
+          1024
+        ],
+        "physicalPrint": "not run WP44",
+        "realScreenReader": "not run WP49",
+        "productionDatabase": "not accessed"
+      }
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

@@ -169,3 +169,7 @@ Current ASP.NET Company writes require named company policies and Django Partner
 ## ERP-0215 — React implementation and CI
 
 `frontend/src/api/client.ts` handles JSON 400 field dictionaries safely; `i18n.tsx` localizes unknown errors. Company/Partner/Catalog forms use explicit LTR direction for English/machine-readable fields and RTL for Arabic names. Existing EN/AR switch and keyboard tests remain. Full CI run 40050867366 successful after exact-label selector fix (`8ed47a5`). No quotation, report or print UI invented; ERP-0216 owns viewport/device acceptance.
+
+## ERP-0216 — Current RTL and responsive acceptance
+
+Added Playwright check for Arabic UI, exact RTL company field, LTR English field, keyboard Tab focus and absence of document viewport overflow at 768px/1024px. Existing 375px and localization/print-identity preview checks remain. All 5 workflow jobs completed successfully at [CI 40051364388](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051364388). Existing EN/AR Company Unicode and partner data remain covered on disposable test databases. This is current-screen accessibility/keyboard/viewport smoke, **not** a real screen-reader study, mixed-script quotation layout or printer certification. Those belong WP27/WP44/WP49. No DB change.

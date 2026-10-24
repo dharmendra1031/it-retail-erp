@@ -298,3 +298,7 @@ Current ASP.NET Company writes require named company policies and Django Partner
 ## ERP-0215 — Database review
 
 React-only presentation/error changes. Existing numeric BIGINT IDs, Unicode and financial DECIMAL unchanged. Full CI 40050867366 passed in disposable environment, not production DB.
+
+## ERP-0216 — DB review
+
+5/5 CI 40051364388 confirms existing disposable SQL Server integration and browser regression following RTL UI changes. Current numeric BIGINT identity, Unicode columns, decimal(18,3) and related FK/index structures unchanged. No production data or migration changed; physical Arabic print remains downstream.
