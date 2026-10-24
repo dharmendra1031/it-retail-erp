@@ -136,3 +136,16 @@ Evidence: `django/apps/companies/serializers.py`, `django/apps/partners/api.py`,
 ## ERP-0210 — SQL Server migrations
 
 The language toggle uses browser state. Company/Partner/Catalog bilingual fields already exist in prior migrations. The current ASP.NET `Partners`, `CatalogMasters` and `PartnerDetails` and Django partner models use existing Unicode fields and BIGINT identities. No WP11 language setting or print table is necessary; migration/reversal is N/A (schema unchanged). Future document-print migrations belong to WP27/WP30/WP44. No new SQL integration or production write was done in this review.
+
+## ERP-0211 — Shared API/localization contract
+
+| Surface | ASP.NET Core | Django | Shared React behavior |
+| --- | --- | --- | --- |
+| Company list/detail/create/update/delete | `/api/companies`, `/api/companies/{id}` | Same routes | English and Arabic string properties retained; Company mutation uses multipart FormData |
+| Customer list/detail and writes | `/api/customers`, `/api/customers/{id}` | Same routes | JSON body uses `nameEn/nameAr/addressEn/addressAr`, numeric BIGINT IDs and DECIMAL strings |
+| Supplier list/detail and writes | `/api/suppliers`, `/api/suppliers/{id}` | Same routes | JSON body uses same names, optional email and 3-place monetary strings |
+| UI locale | No language API; invariant server values | No language API; invariant server values | `frontend/src/i18n.tsx` uses browser state, `html lang/dir`, typed EN/AR keys |
+| Success | 200 GET/PUT, 201 create, 204 delete | Same intended statuses | `apiRequest` preserves response, numeric ID safety |
+| Validation and auth | Manual `detail`, .NET model-state 400; 401/403 policy | DRF field-level 400, some `detail`; 401/403 depend on auth | Known errors translated, unknown/field errors safe generic localized message |
+
+**Open transport parity:** DRF returns field-keyed validation dictionaries; ASP.NET may return `detail` or model-state errors. These JSON error objects are NOT identical. Current `frontend/src/api/client.ts` normalizes safe visible error feedback; this step documents the discrepancy, not a claim of exact protocol symmetry. True field-error schema parity requires a specific API contract decision and matching tests (WP02/WP49 cross-backend acceptance). Customer/Supplier code policy discrepancy remains WP12/WP13. No Arabic quotation API or print endpoint exists in WP11; WP27/WP30/WP44 own it.

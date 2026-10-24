@@ -278,3 +278,7 @@ Django CompanySerializer, PartnerSerializer and catalog NamedSerializer expose i
 ## Review 031 — ERP-0210 migration decision
 
 No new schema for React translations, document lang/dir or localized presentation. Existing Django/EF Company/Partner/Catalog Unicode columns, BIGINT identity, DECIMAL(18,3), indexes and FKs remain. No migration, live SQL, rollback or data modifications executed. DB-001–DB-006 retained.
+
+## Review 032 — ERP-0211 shared API contract
+
+API language is independent of stored schema and PK. ASP.NET/Django expose existing bilingual Unicode fields, BIGINT identity and DECIMAL(18,3) partner amounts through existing /api routes. No DB model or migration changed. DRF 400 field error shape differs from ASP.NET but frontend safely localizes the visible fallback. There is no locale column, cross-tenant query or financial posting introduced. No production DB touched.

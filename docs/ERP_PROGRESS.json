@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0211",
+  "nextStepId": "ERP-0212",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -218,10 +218,11 @@
     "ERP-0207",
     "ERP-0208",
     "ERP-0209",
-    "ERP-0210"
+    "ERP-0210",
+    "ERP-0211"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "cdc323ad51f55716a2bbb0c657b303be32e695fb",
+  "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -4768,6 +4769,29 @@
         "sqlExecution": "not run",
         "productionDatabase": "not accessed"
       }
+    },
+    {
+      "stepId": "ERP-0211",
+      "status": "complete",
+      "scope": "Document bilingual API paths/shapes and error response contract",
+      "completionMode": "document verified paths and explicit remaining error-shape difference",
+      "reviewedRepoCommit": "62f60766ae321084fc2d0570926283ea60da723a",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "django/apps/companies/serializers.py",
+        "django/apps/partners/api.py",
+        "frontend/src/api/client.ts",
+        "docs/ERP_0201_0220_LOCALIZATION.md"
+      ],
+      "verification": {
+        "kind": "source-based contract comparison",
+        "baselineCi": "40050867366 PASS",
+        "newTests": "not run, document-only step",
+        "runtimeResponseShapes": "not identical on all DRF field errors; known remaining parity difference",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing frontend maps Django and ASP.NET validation errors into localized safe user feedback; transport-level response shape mismatch not claimed resolved."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
