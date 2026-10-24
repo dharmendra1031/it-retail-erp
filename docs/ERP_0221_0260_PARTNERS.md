@@ -199,3 +199,7 @@ Django PartnerViewSet wraps Supplier POST/PUT in transaction.atomic and catches 
 ## ERP-0254 — Supplier security and audit ownership
 
 ASP.NET Supplier GET/POST/PUT/DELETE use named granular policies, Django PartnerPermission uses server-side supplier action codes; both restrict list/upload/download of documents to Admin. ASP mutation requires CSRF and Django session CSRF. CI 40070737989 contains SQL negative security tests. Supplier is currently a global master with no BranchId, so no arbitrary new branch filter is added. Persistent audit events belong WP46; file reference restricts Supplier delete. Financial-posting branch access belongs future procurement owners.
+
+## ERP-0255 — React Supplier UI acceptance
+
+Shared React frontend/src/components/Partners.tsx already has Supplier create/edit/delete, bilingual fields, native keyboard-friendly form, payment terms 0..365, 3-decimal non-floating text amounts, client-side Supplier code/name search and Admin-only documents via existing API. Its save/upload failures use centralized translated languageError. frontend/src/api/partners.ts posts camelCase JSON and multipart private document files. Playwright `admin uses keyboard to create bilingual credit customer and supplier` verifies Supplier POST 201 and visible row on both backends in CI 40070737989. This step adds no separate Supplier screen or CSS overrides. List pagination and financial documents remain WP48 and future purchasing modules.

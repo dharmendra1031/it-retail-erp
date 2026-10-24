@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0255",
+  "nextStepId": "ERP-0256",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -262,7 +262,8 @@
     "ERP-0251",
     "ERP-0252",
     "ERP-0253",
-    "ERP-0254"
+    "ERP-0254",
+    "ERP-0255"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "f0a14d50be8542ccf1b6bc6a4f77a0f910a8e365",
@@ -5762,6 +5763,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "ASP.NET Supplier GET/POST/PUT/DELETE use named granular policies, Django PartnerPermission uses server-side supplier action codes; both restrict list/upload/download of documents to Admin. ASP mutation requires CSRF and Django session CSRF. CI 40070737989 contains SQL negative security tests. Supplier is currently a global master with no BranchId, so no arbitrary new branch filter is added. Persistent audit events belong WP46; file reference restricts Supplier delete. Financial-posting branch access belongs future procurement owners."
+    },
+    {
+      "stepId": "ERP-0255",
+      "status": "complete",
+      "scope": "Shared React Supplier form, API integration and feedback",
+      "completionMode": "verified existing UI and integration tests; no duplicate runtime changes",
+      "reviewedRepoCommit": "7b104604d1a67e3d0aec1662dc8961431cc1cc6d",
+      "evidence": [
+        "frontend/src/components/Partners.tsx",
+        "frontend/src/api/partners.ts",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "ciRun": "40070737989",
+        "status": "5/5 SUCCESS",
+        "browser": "Supplier POST 201 and row visible",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Shared React frontend/src/components/Partners.tsx already has Supplier create/edit/delete, bilingual fields, native keyboard-friendly form, payment terms 0..365, 3-decimal non-floating text amounts, client-side Supplier code/name search and Admin-only documents via existing API. Its save/upload failures use centralized translated languageError. frontend/src/api/partners.ts posts camelCase JSON and multipart private document files. Playwright `admin uses keyboard to create bilingual credit customer and supplier` verifies Supplier POST 201 and visible row on both backends in CI 40070737989. This step adds no separate Supplier screen or CSS overrides. List pagination and financial documents remain WP48 and future purchasing modules."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
