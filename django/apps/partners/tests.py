@@ -194,6 +194,7 @@ class PartnerApiTests(TestCase):
         downloaded = self.client.get(document_url)
         self.assertEqual(downloaded.content, b"%PDF-1.5\\ncontract")
         self.assertIn("contract.pdf", downloaded["Content-Disposition"])
+        self.assertEqual(downloaded["Cache-Control"], "no-store")
         mismatch = self.client.post(url, {"file": SimpleUploadedFile(
             "wrong.jpg", b"%PDF-1.5\\ncontract", content_type="application/pdf"
         )}, format="multipart")
@@ -230,6 +231,8 @@ class PartnerApiTests(TestCase):
         self.assertEqual(good.status_code, 201, good.data)
         document_id = good.data["id"]
         self.assertEqual(PartnerDocument.objects.count(), 1)
-        self.assertEqual(self.client.get(f"{url}/{document_id}").content, b"%PDF-1.4\nsecret")
+        downloaded = self.client.get(f"{url}/{document_id}")
+        self.assertEqual(downloaded.content, b"%PDF-1.4\nsecret")
+        self.assertEqual(downloaded["Cache-Control"], "no-store")
         self.client.force_authenticate(user=self.employee)
         self.assertEqual(self.client.get(f"{url}/{document_id}").status_code, 403)

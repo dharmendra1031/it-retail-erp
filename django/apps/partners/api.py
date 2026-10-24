@@ -204,4 +204,5 @@ def download_document(request, kind, partner_id, document_id):
         as_attachment=True, filename=document.file_name
     )
     response["X-Content-Type-Options"] = "nosniff"
+    response["Cache-Control"] = "no-store"
     return response

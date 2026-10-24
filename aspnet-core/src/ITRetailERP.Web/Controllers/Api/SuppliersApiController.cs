@@ -131,6 +131,7 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
             .FirstOrDefaultAsync(x => x.SupplierId == id && x.Id == documentId);
         if (document is null) return NotFound();
         Response.Headers["X-Content-Type-Options"] = "nosniff";
+        Response.Headers["Cache-Control"] = "no-store";
         return File(document.Content, document.ContentType, document.FileName);
     }
 
