@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0228",
+  "nextStepId": "ERP-0229",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -235,7 +235,8 @@
     "ERP-0224",
     "ERP-0225",
     "ERP-0226",
-    "ERP-0227"
+    "ERP-0227",
+    "ERP-0228"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5168,6 +5169,25 @@
         "newTests": "not needed for constraint specification"
       },
       "notes": "Customer code must normalize to ASCII uppercase, use a DB unique index plus clean 400 on duplicate/concurrent writes; names and Arabic address must preserve Unicode; mandatory NameEn/NameAr/Mobile, 0–365 payment term days, nonnegative DECIMAL(18,3) amounts, no HTML/locale parsing of money. Customer inactive state must remain explicit; no silent deletion if PartnerDocument rows exist. FK PROTECT + check constraint prevent cross-owner or orphan attachment. Downgrade PartnerDetails migration is potentially destructive on existing data, so do not run on production; on disposable SQL CI test migrations and rollback rehearsal, with pre-upgrade backup required for real deployment. No new DDL for step."
+    },
+    {
+      "stepId": "ERP-0228",
+      "status": "complete",
+      "scope": "ASP.NET customer model/contract/API acceptance",
+      "completionMode": "source-verified existing implementation; prior security fix CI passed",
+      "reviewedRepoCommit": "e0b0cd1c151e057dcde4df6726ac211e5704750a",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Models/Customer.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs"
+      ],
+      "verification": {
+        "kind": "real code review",
+        "baselineCi": "40060339256 5/5 success",
+        "newCivilIdTest": "e0b0cd1 pending CI; not yet a pass",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing Customer long ID, bounded EN/AR strings, mandatory NameAr/Mobile server validation, ASCII uppercase code, decimal(18,3), optional email. CustomersApiController policy-gated CRUD catches concurrent unique errors and restricts CivilId/documents to admins; file checks and private no-store/nosniff downloads in place. No extra model or API is necessary."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
