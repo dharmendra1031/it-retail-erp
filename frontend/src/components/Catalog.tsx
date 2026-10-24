@@ -159,7 +159,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
               onChange={event => change("code", event.target.value)} />
           </label>
           <label>{t(captions[kind].en)}
-            <input required maxLength={200} value={values.nameEn}
+            <input dir="ltr" required maxLength={200} value={values.nameEn}
               onChange={event => change("nameEn", event.target.value)} />
           </label>
           <label>{t(captions[kind].ar)}
@@ -179,7 +179,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
           )}
           {kind === "units" && (
             <label>{t("decimalPlaces")}
-              <input required type="number" min={0} max={6} step={1}
+              <input dir="ltr" required type="number" min={0} max={6} step={1}
                 value={values.decimalPlaces}
                 onChange={event => change("decimalPlaces", Number(event.target.value))} />
             </label>
