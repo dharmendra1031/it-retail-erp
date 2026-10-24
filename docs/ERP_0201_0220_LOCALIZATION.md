@@ -165,3 +165,7 @@ Source paths: `django/apps/companies/serializers.py`; `django/apps/partners/api.
 ## ERP-0214 — Authorization and audit ownership
 
 Current ASP.NET Company writes require named company policies and Django Partner/Catalog views require server-side action permissions. `frontend/src/locale.ts` translates only labels; permission codes remain invariant under EN/AR and root document dir. Current backend branch/warehouses are protected through existing policies; full business-document branch scoping and audit trail remain WP09/WP46 and future transaction owners. No locale-specific audit table, permission bypass or new security layer is justified. Tests for actual financial document rights are deferred; no unauthorized access is claimed verified here.
+
+## ERP-0215 — React implementation and CI
+
+`frontend/src/api/client.ts` handles JSON 400 field dictionaries safely; `i18n.tsx` localizes unknown errors. Company/Partner/Catalog forms use explicit LTR direction for English/machine-readable fields and RTL for Arabic names. Existing EN/AR switch and keyboard tests remain. Full CI run 40050867366 successful after exact-label selector fix (`8ed47a5`). No quotation, report or print UI invented; ERP-0216 owns viewport/device acceptance.

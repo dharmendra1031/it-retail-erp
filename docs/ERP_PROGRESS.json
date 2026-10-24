@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0215",
+  "nextStepId": "ERP-0216",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -222,7 +222,8 @@
     "ERP-0211",
     "ERP-0212",
     "ERP-0213",
-    "ERP-0214"
+    "ERP-0214",
+    "ERP-0215"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
@@ -4859,6 +4860,32 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Locale never changes authorization. Company writes use named ASP policies; Django partners and catalog use server-side permission actions. Future branch/transaction audit proof must be done by owner packages; no duplicate locale permission schema."
+    },
+    {
+      "stepId": "ERP-0215",
+      "status": "complete",
+      "scope": "React RTL forms and localized validation",
+      "completionMode": "existing WP11 code and successful CI",
+      "reviewedRepoCommit": "a821cb90825f40f32ea0139047f2a55c1db7a16e",
+      "evidence": [
+        "frontend/src/i18n.tsx",
+        "frontend/src/api/client.ts",
+        "frontend/src/components/CompanyForm.tsx",
+        "frontend/src/components/Partners.tsx",
+        "frontend/src/components/Catalog.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "kind": "real React changes and CI",
+        "commits": [
+          "d7ce79f",
+          "8ed47a5"
+        ],
+        "ci": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40050867366",
+        "result": "success",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "RTL/LTR field direction, safe localized 400 feedback; quotation print belongs WP27/WP44."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

@@ -294,3 +294,7 @@ CompanySerializer already wraps logo save and DB mutation in atomic transaction;
 ## ERP-0214 — Database review
 
 Current ASP.NET Company writes require named company policies and Django Partner/Catalog views require server-side action permissions. `frontend/src/locale.ts` translates only labels; permission codes remain invariant under EN/AR and root document dir. Current backend branch/warehouses are protected through existing policies; full business-document branch scoping and audit trail remain WP09/WP46 and future transaction owners. No locale-specific audit table, permission bypass or new security layer is justified. Tests for actual financial document rights are deferred; no unauthorized access is claimed verified here. BIGINT keys/Unicode/DECIMAL precision unchanged; no migration or production query.
+
+## ERP-0215 — Database review
+
+React-only presentation/error changes. Existing numeric BIGINT IDs, Unicode and financial DECIMAL unchanged. Full CI 40050867366 passed in disposable environment, not production DB.
