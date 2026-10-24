@@ -452,12 +452,27 @@ def check_api():
         "roleIds": [role["id"]], "isActive": True, "branchId": branch["id"],
     }, csrf)
     assert status == 200 and assigned_user["branchId"] == branch["id"], "Branch assignment failed"
+    status, updated_grants = request(client, f"/api/roles/{role['id']}/permissions", "PUT", {
+        "permissions": ["companies.add", "sales.view", "customers.view"],
+    }, csrf)
+    assert status == 200, "Customer reader grant was not saved"
+
     employee = build_opener(HTTPCookieProcessor(CookieJar()))
     _, employee_csrf = request(employee, "/api/auth/csrf")
     status, session = request(employee, "/api/auth/login", "POST", {
         "email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False,
     }, employee_csrf["csrfToken"])
     assert status == 200 and not session["isAdmin"], "Branch employee login failed"
+    status, customer_list = request(employee, "/api/customers")
+    assert status == 200, "Customer reader cannot list customers"
+    selected = next(row for row in customer_list if row["id"] == customer["id"])
+    assert "civilId" not in selected, "Customer list exposes Civil ID to non-admin"
+    status, customer_detail = request(employee, f"/api/customers/{customer['id']}")
+    assert status == 200 and "civilId" not in customer_detail, "Customer detail exposes Civil ID"
+    status, _ = request(employee, f"/api/customers/{customer['id']}/documents/{document['id']}")
+    assert status == 403, "Customer reader downloaded protected file"
+    status, _ = request(employee, "/api/customers", "POST", customer_data, employee_csrf["csrfToken"])
+    assert status == 403, "Read-only user created Customer"
     status, _ = request(employee, f"/api/suppliers/{supplier['id']}/documents/{supplier_file['id']}")
     assert status == 403, "Non-Admin accessed Supplier private document"
     status, visible_branches = request(employee, "/api/branches")
