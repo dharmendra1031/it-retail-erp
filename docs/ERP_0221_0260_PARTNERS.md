@@ -131,3 +131,9 @@ Evidence: `docs/SRS_BASELINE.md`, `docs/ERP_REQUIREMENTS_GAP_MATRIX.md`, `django
 SupplierRequest/Supplier long entity and SuppliesApiController present GET/POST/PUT/DELETE with bounded validation, unique code and amount/email checks. Django SupplierSerializer/PartnerViewSet and PartnerDocument APIs match; React Partners handles Supplier bilingual fields, saved decimals and admin file picker. ASP/Django files use numeric BIGINT IDs and contract-consistent supplier routes. Baseline CI 40060771866 passed SQL + frontend and browser, but not an actual purchase/ledger acceptance.
 
 Evidence: `aspnet-core/src/ITRetailERP.Web/Models/Supplier.cs`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `django/apps/partners/api.py`, `django/apps/partners/models.py`, `frontend/src/components/Partners.tsx`. SRS acceptance specification/source, not verification of supplier ledger, purchase or financial print.
+
+## ERP-0243 — Supplier SRS/code discrepancy and acceptance ownership
+
+Current Supplier CRUD covers code, bilingual names, contact details, paymentTermsDays, openingBalance and creditLimit; file list/upload/download are Admin-only. SRS §11 supplier statement/payables and first Purchase linkage cannot yet be executed—WP24/25/27/43 own them. Current no-store/nosniff protections are fixed; absent bulk pagination belongs WP48 and deep audit/retention WP46. No independent supplier-specific database migration is required.
+
+Source `docs/SRS_BASELINE.md`, `django/apps/partners/api.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`, `frontend/src/components/Partners.tsx`, `aspnet-core/tests/smoke_sqlserver.py`. Current Supplier Master proof separate from later purchase/ledger posting.
