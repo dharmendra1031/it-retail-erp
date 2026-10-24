@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0257",
+  "nextStepId": "ERP-0258",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -264,7 +264,8 @@
     "ERP-0253",
     "ERP-0254",
     "ERP-0255",
-    "ERP-0256"
+    "ERP-0256",
+    "ERP-0257"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "a6f1550e03b17c0cce0f9fabf5099f74fabc2bc8",
@@ -5803,6 +5804,25 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Supplier EN/AR inputs preserve value direction: English name/address and machine-readable Code/email/tax/DECIMAL LTR, Arabic name/address RTL. Minimal field-level `dir` attributes only, with no long CSS or overrides. Existing 768/1024 RTL viewport/keyboard smoke and the new Supplier-specific Arabic direction checks passed browser CI 40071424326. Django, React, ASP.NET and disposable SQL Server jobs also passed (5/5). Exact Arabic amounts remain server-owned decimal strings. Real screen-reader certification and bilingual purchase/statement print belong WP49/WP44."
+    },
+    {
+      "stepId": "ERP-0257",
+      "status": "complete",
+      "scope": "ASP.NET Supplier validation and SQL integration test acceptance",
+      "completionMode": "existing SQL/API and .NET unit tests passed; future purchase linkage deferred",
+      "reviewedRepoCommit": "caefd38c931afb425bea5d52f94c792f93dcee0b",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "aspnet-core/tests/ITRetailERP.Tests/LocalizationContractTests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs"
+      ],
+      "verification": {
+        "ci": "40071424326",
+        "result": "5/5 PASS",
+        "firstPurchaseLink": "not available WP24–27",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Current ASP.NET SQL smoke creates Supplier with bilingual name, terms, contact, 3-decimal opening balance and credit; PUT reuses the same numeric ID and reloads exact values. Invalid email, duplicate code and concurrent [201,400] duplicate attempts are rejected; protected-document upload/download/delete guards are checked. .NET LocalizationContractTests exercises shared PartnerValidation and invariant decimal formatting. CI 40071424326 completed ASP.NET tests and disposable SQL Server integration (all 5 jobs PASS). Linking first purchase and supplier payable is future WP24–WP27, so it is an executable downstream acceptance contract, not a claimed test here."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

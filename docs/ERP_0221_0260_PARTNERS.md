@@ -207,3 +207,7 @@ Shared React frontend/src/components/Partners.tsx already has Supplier create/ed
 ## ERP-0256 — Supplier bilingual UI verification
 
 Supplier EN/AR inputs preserve value direction: English name/address and machine-readable Code/email/tax/DECIMAL LTR, Arabic name/address RTL. Minimal field-level `dir` attributes only, with no long CSS or overrides. Existing 768/1024 RTL viewport/keyboard smoke and the new Supplier-specific Arabic direction checks passed browser CI 40071424326. Django, React, ASP.NET and disposable SQL Server jobs also passed (5/5). Exact Arabic amounts remain server-owned decimal strings. Real screen-reader certification and bilingual purchase/statement print belong WP49/WP44.
+
+## ERP-0257 — ASP.NET Supplier tests
+
+Current ASP.NET SQL smoke creates Supplier with bilingual name, terms, contact, 3-decimal opening balance and credit; PUT reuses the same numeric ID and reloads exact values. Invalid email, duplicate code and concurrent [201,400] duplicate attempts are rejected; protected-document upload/download/delete guards are checked. .NET LocalizationContractTests exercises shared PartnerValidation and invariant decimal formatting. CI 40071424326 completed ASP.NET tests and disposable SQL Server integration (all 5 jobs PASS). Linking first purchase and supplier payable is future WP24–WP27, so it is an executable downstream acceptance contract, not a claimed test here.
