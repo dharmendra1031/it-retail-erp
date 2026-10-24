@@ -32,6 +32,27 @@ class PartnerApiTests(TestCase):
             "telephone": "22221111", "remarks": "Monthly terms",
         }
 
+
+    def test_arabic_diacritics_round_trip(self):
+        self.client.force_authenticate(user=self.admin)
+        name_ar = "مُعَدّات الحاسوب — الكويت"
+        address_ar = "شارع ١٢، بناية A-4"
+        payload = {
+            **self.customer,
+            "code": "C-UNICODE-01",
+            "nameAr": name_ar,
+            "addressAr": address_ar,
+            "creditLimit": "1234.375",
+        }
+        created = self.client.post("/api/customers", payload, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+
+        detail = self.client.get(f"/api/customers/{created.data['id']}")
+        self.assertEqual(detail.status_code, 200)
+        self.assertEqual(detail.data["nameAr"], name_ar)
+        self.assertEqual(detail.data["addressAr"], address_ar)
+        self.assertEqual(detail.data["creditLimit"], "1234.375")
+
     def test_customer_credit_duplicate_and_validation(self):
         self.client.force_authenticate(user=self.admin)
         created = self.client.post("/api/customers", self.customer, format="json")
