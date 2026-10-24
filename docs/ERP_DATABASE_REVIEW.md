@@ -394,3 +394,9 @@ No PK/FK/index, decimal precision or schema change; audited real SQL CI 40060771
 Shared Partners.tsx renders Customer create/update/delete, EN/AR names/address, required Arabic name/mobile, type list, tax ID, civil ID, terms, 3-decimal opening balance and credit; search by code/name; keyboard Enter behavior; editing loads secured file list and allows admin to upload PDF/JPEG/PNG. The sidebar permits only admin to open Customer Master, but backend remains authority. API code uses decimal strings, not JS floats. Current customer/supplier Playwright and SQL smoke verified in CI 40060771866. Pagination/huge catalog performance remains WP48.
 
 No PK/FK/index, decimal precision or schema change; audited real SQL CI 40060771866 (disposable DB only).
+
+## ERP-0236 — Database and Unicode verification
+
+Existing Playwright verifies AR root lang/dir, Arabic Customer input dir=rtl and LTR code/email/credit, 375px navigation and 768/1024px tablet browser layout. Credit Customer keyboard-first flow creates and reloads bilingual values. Original language picker changes only UI labels; SQL decimal strings unchanged. Generic test suite does not certify real assistive screen-reader usage or financial document printing; those are WP49/WP44. Current SQL/browser CI 40060771866 green.
+
+SQL disposable integration confirmed at CI 40060771866; BIGINT IDs, decimal 18,3 and Unicode remain. No production data touched.
