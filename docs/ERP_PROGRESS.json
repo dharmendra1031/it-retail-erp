@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0217",
+  "nextStepId": "ERP-0221",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -224,10 +224,14 @@
     "ERP-0213",
     "ERP-0214",
     "ERP-0215",
-    "ERP-0216"
+    "ERP-0216",
+    "ERP-0217",
+    "ERP-0218",
+    "ERP-0219",
+    "ERP-0220"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
+  "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -4914,6 +4918,102 @@
         "realScreenReader": "not run WP49",
         "productionDatabase": "not accessed"
       }
+    },
+    {
+      "stepId": "ERP-0217",
+      "status": "complete",
+      "scope": "ASP.NET localization contracts and invariant-format unit tests",
+      "completionMode": "existing code audited and verified on disposable CI",
+      "reviewedRepoCommit": "dd5ad23164a076800f1527240c033827988eb01f",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/LocalizationContractTests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs"
+      ],
+      "verification": {
+        "kind": "5/5 GitHub Actions jobs",
+        "ci": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145",
+        "result": "success",
+        "djangoSql": "74/74",
+        "aspnetTests": "6/6",
+        "djangoBrowser": "19/19",
+        "aspnetBrowser": "13/13",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "6/6 xUnit PASS (including existing document numbering tests); Arabic round-trip via SQL Server/API smoke; financial quotation/physical print delegated to WP27/WP44."
+    },
+    {
+      "stepId": "ERP-0218",
+      "status": "complete",
+      "scope": "Django Unicode and negative-validation regression acceptance",
+      "completionMode": "existing code audited and verified on disposable CI",
+      "reviewedRepoCommit": "dd5ad23164a076800f1527240c033827988eb01f",
+      "evidence": [
+        "django/apps/partners/tests.py",
+        "django/apps/catalog/tests.py",
+        "django/apps/partners/api.py",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "kind": "5/5 GitHub Actions jobs",
+        "ci": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145",
+        "result": "success",
+        "djangoSql": "74/74",
+        "aspnetTests": "6/6",
+        "djangoBrowser": "19/19",
+        "aspnetBrowser": "13/13",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "74 Django tests PASS in SQL Server, 74 tests including 7 SQL-only skips on SQLite; Arabic/decimal contracts covered. Full financial document rendering belongs WP27/WP44."
+    },
+    {
+      "stepId": "ERP-0219",
+      "status": "complete",
+      "scope": "WP11 cross-backend SQL Server, RTL and browser integration",
+      "completionMode": "existing code audited and verified on disposable CI",
+      "reviewedRepoCommit": "dd5ad23164a076800f1527240c033827988eb01f",
+      "evidence": [
+        ".github/workflows/erp-verification.yml",
+        "frontend/e2e/erp.spec.ts",
+        "frontend/src/i18n.tsx",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "5/5 GitHub Actions jobs",
+        "ci": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145",
+        "result": "success",
+        "djangoSql": "74/74",
+        "aspnetTests": "6/6",
+        "djangoBrowser": "19/19",
+        "aspnetBrowser": "13/13",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Disposable SQL Server 74 Django tests, .NET 6/6; Django Playwright 19/19 and ASP Playwright 13/13; all 5 workflow jobs succeeded. Arabic financial quotation + paper-specific printing deferred to WP27/WP44."
+    },
+    {
+      "stepId": "ERP-0220",
+      "status": "complete",
+      "scope": "WP11 final security, performance, duplicated-code and ownership review",
+      "completionMode": "existing code audited and verified on disposable CI",
+      "reviewedRepoCommit": "dd5ad23164a076800f1527240c033827988eb01f",
+      "evidence": [
+        "frontend/src/i18n.tsx",
+        "frontend/src/locale.ts",
+        "frontend/src/components/Partners.tsx",
+        "docs/ERP_0201_0220_LOCALIZATION.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "5/5 GitHub Actions jobs",
+        "ci": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145",
+        "result": "success",
+        "djangoSql": "74/74",
+        "aspnetTests": "6/6",
+        "djangoBrowser": "19/19",
+        "aspnetBrowser": "13/13",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Review: no locale-specific permission bypass, money arithmetic or SQL changes; typed translations, Unicode fields, numeric BIGINT identifiers and RTL navigation retained. Remaining physical print/report/full a11y belong WP44/WP49."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

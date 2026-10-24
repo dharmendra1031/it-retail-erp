@@ -173,3 +173,9 @@ Current ASP.NET Company writes require named company policies and Django Partner
 ## ERP-0216 — Current RTL and responsive acceptance
 
 Added Playwright check for Arabic UI, exact RTL company field, LTR English field, keyboard Tab focus and absence of document viewport overflow at 768px/1024px. Existing 375px and localization/print-identity preview checks remain. All 5 workflow jobs completed successfully at [CI 40051364388](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051364388). Existing EN/AR Company Unicode and partner data remain covered on disposable test databases. This is current-screen accessibility/keyboard/viewport smoke, **not** a real screen-reader study, mixed-script quotation layout or printer certification. Those belong WP27/WP44/WP49. No DB change.
+
+## ERP-0217–0220 — WP11 complete acceptance (2026-10-24)
+
+CI [40051691145](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145) on code commit `dd5ad231`: all **5/5 jobs PASS**. Django SQL Server **74/74**, .NET **6/6 xUnit**, browser Django **19/19**, browser ASP.NET **13/13**. ASP.NET localization contracts and invariant currency/decimal formatting tests in `aspnet-core/tests/ITRetailERP.Tests/LocalizationContractTests.cs`, Django Unicode partner regressions in `django/apps/partners/tests.py`, negative Arabic UI/error feedback, RTL keyboard and 375/768/1024 viewport cases in `frontend/e2e/erp.spec.ts`. No production database affected.
+
+This closes current WP11 **localization foundation**, not commercial-document printing. Real quotation/invoice/statement EN/AR paper printing is deferred to WP27/WP30/WP44 with end-to-end release acceptance in WP49. Current permission codes are locale-independent and stored monetary amounts are SQL decimal(18,3); no locale schema/migration is justified. Source reviewed for duplicate translatable strings, unsafe errors, Unicode truncation and roles; report/thermal printer operations are absent by design.

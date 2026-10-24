@@ -302,3 +302,7 @@ React-only presentation/error changes. Existing numeric BIGINT IDs, Unicode and 
 ## ERP-0216 — DB review
 
 5/5 CI 40051364388 confirms existing disposable SQL Server integration and browser regression following RTL UI changes. Current numeric BIGINT identity, Unicode columns, decimal(18,3) and related FK/index structures unchanged. No production data or migration changed; physical Arabic print remains downstream.
+
+## Review ERP-0217–0220 — WP11 localization closeout
+
+At `dd5ad231`, [CI 40051691145](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40051691145) passed 5/5 on disposable SQL Server and browser E2E. No new localization tables/migrations. Existing Company/Partner/Catalog `NVARCHAR` and Django bilingual fields preserve Unicode; PKs are BIGINT, money is decimal(18,3), permissions are language-neutral. Currency display uses Intl only; financial posting and physical print layout are future-owned. Production databases untouched.
