@@ -1,3 +1,4 @@
+using ITRetailERP.Web.Services;
 using ITRetailERP.Web.Contracts;
 using ITRetailERP.Web.Data;
 using ITRetailERP.Web.Models;
@@ -37,7 +38,14 @@ public sealed class BrandsApiController(ApplicationDbContext db) : ControllerBas
         var row = new Brand();
         Apply(row, request, code);
         db.Brands.Add(row);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsDuplicate(error))
+        {
+            return BadRequest(new { detail = "Brand code already exists." });
+        }
         return CreatedAtAction(nameof(Get), new { id = row.Id }, row);
     }
 
@@ -54,7 +62,14 @@ public sealed class BrandsApiController(ApplicationDbContext db) : ControllerBas
             return BadRequest(new { detail = "Brand code already exists." });
         Apply(row, request, code);
         row.UpdatedAtUtc = DateTime.UtcNow;
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsDuplicate(error))
+        {
+            return BadRequest(new { detail = "Brand code already exists." });
+        }
         return Ok(row);
     }
 

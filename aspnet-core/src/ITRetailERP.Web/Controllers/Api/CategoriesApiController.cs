@@ -1,3 +1,4 @@
+using ITRetailERP.Web.Services;
 using ITRetailERP.Web.Contracts;
 using ITRetailERP.Web.Data;
 using ITRetailERP.Web.Models;
@@ -40,7 +41,14 @@ public sealed class CategoriesApiController(ApplicationDbContext db) : Controlle
         var category = new Category();
         Apply(category, request, code);
         db.Categories.Add(category);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsDuplicate(error))
+        {
+            return BadRequest(new { detail = "Category code already exists." });
+        }
         return CreatedAtAction(nameof(Get), new { id = category.Id }, category);
     }
 
@@ -59,7 +67,14 @@ public sealed class CategoriesApiController(ApplicationDbContext db) : Controlle
             return BadRequest(new { detail = "Category code already exists." });
         Apply(category, request, code);
         category.UpdatedAtUtc = DateTime.UtcNow;
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsDuplicate(error))
+        {
+            return BadRequest(new { detail = "Category code already exists." });
+        }
         return Ok(category);
     }
 

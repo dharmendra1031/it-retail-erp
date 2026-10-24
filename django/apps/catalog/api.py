@@ -1,6 +1,7 @@
 import re
 from decimal import Decimal
 
+from django.db import IntegrityError, transaction
 from django.db.models import ProtectedError
 from rest_framework import serializers
 from rest_framework.permissions import BasePermission, IsAuthenticated
@@ -97,6 +98,20 @@ class UnitSerializer(NamedSerializer):
 
 
 class CatalogViewSet(ModelViewSet):
+    def create(self, request, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                return super().create(request, *args, **kwargs)
+        except IntegrityError:
+            return Response({"detail": "Invalid request."}, status=400)
+
+    def update(self, request, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                return super().update(request, *args, **kwargs)
+        except IntegrityError:
+            return Response({"detail": "Invalid request."}, status=400)
+
     permission_classes = [IsAuthenticated, CatalogPermission]
     http_method_names = ["get", "post", "put", "delete", "head", "options"]
 

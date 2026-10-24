@@ -42,7 +42,14 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
         var supplier = new Supplier();
         Apply(supplier, request);
         db.Suppliers.Add(supplier);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsDuplicate(error))
+        {
+            return BadRequest(new { detail = "Code already exists." });
+        }
         return CreatedAtAction(nameof(Get), new { id = supplier.Id }, ToResponse(supplier));
     }
 
@@ -60,7 +67,14 @@ public sealed class SuppliersApiController(ApplicationDbContext db) : Controller
 
         Apply(supplier, request);
         supplier.UpdatedAtUtc = DateTime.UtcNow;
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsDuplicate(error))
+        {
+            return BadRequest(new { detail = "Code already exists." });
+        }
         return Ok(ToResponse(supplier));
     }
 
