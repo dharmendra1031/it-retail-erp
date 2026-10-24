@@ -330,3 +330,9 @@ Existing BIGINT IDENTITY/BigAutoField, NVARCHAR, DECIMAL(18,3) unique code and e
 Create authenticated admin Customer with code C-RTL-001, NameEn Retail, NameAr متجر الكويت, Arabic address, mobile, CreditLimit 2500.750, OpeningBalance 15.250, paymentTermsDays 30, type credit. Expect 201 numeric BIGINT ID, case-normalized code, exact Unicode and decimal string round-trip in GET/list/edit and shared React. New source must not alter monetary figures on UI locale switch. Ledger/quotation cannot be certified before business owners.
 
 Existing BIGINT IDENTITY/BigAutoField, NVARCHAR, DECIMAL(18,3) unique code and exclusive customer/supplier document ownership remain. No new migration or production DB operation.
+
+## ERP-0225 — Customer database review
+
+Reject duplicate case-insensitive code and simultaneous duplicates with HTTP 400; reject blank Arabic name/mobile, invalid credit/decimal/email without saved mutation; deny employee CivilId details, admin-only file upload/list/download and cross-owner document access; reject MIME/extension mismatch; existing protected documents block delete with 409 and private downloads return no-store/nosniff. File scanning and attachment retention policy are WP46.
+
+Existing DECIMAL(18,3), indexed code, BIGINT identities, restricted foreign keys and one-owner check unchanged. No schema migration executed.

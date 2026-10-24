@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0225",
+  "nextStepId": "ERP-0226",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -232,7 +232,8 @@
     "ERP-0221",
     "ERP-0222",
     "ERP-0223",
-    "ERP-0224"
+    "ERP-0224",
+    "ERP-0225"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5103,6 +5104,26 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Create authenticated admin Customer with code C-RTL-001, NameEn Retail, NameAr متجر الكويت, Arabic address, mobile, CreditLimit 2500.750, OpeningBalance 15.250, paymentTermsDays 30, type credit. Expect 201 numeric BIGINT ID, case-normalized code, exact Unicode and decimal string round-trip in GET/list/edit and shared React. New source must not alter monetary figures on UI locale switch. Ledger/quotation cannot be certified before business owners."
+    },
+    {
+      "stepId": "ERP-0225",
+      "status": "complete",
+      "scope": "Customer negative and authorization acceptance",
+      "completionMode": "current code ownership/acceptance review, no new schema",
+      "reviewedRepoCommit": "7def1c981a517bc34d74c9472f0b821f71a90ff3",
+      "evidence": [
+        "django/apps/partners/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs"
+      ],
+      "verification": {
+        "kind": "source evidence and acceptance specification",
+        "baselineCi": "40060339256 5/5 pass",
+        "newTests": "not run for spec/design step",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reject duplicate case-insensitive code and simultaneous duplicates with HTTP 400; reject blank Arabic name/mobile, invalid credit/decimal/email without saved mutation; deny employee CivilId details, admin-only file upload/list/download and cross-owner document access; reject MIME/extension mismatch; existing protected documents block delete with 409 and private downloads return no-store/nosniff. File scanning and attachment retention policy are WP46."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

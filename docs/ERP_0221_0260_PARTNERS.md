@@ -25,3 +25,9 @@ Source shows bilingual Customer API and form, normalized unique code, required A
 Create authenticated admin Customer with code C-RTL-001, NameEn Retail, NameAr متجر الكويت, Arabic address, mobile, CreditLimit 2500.750, OpeningBalance 15.250, paymentTermsDays 30, type credit. Expect 201 numeric BIGINT ID, case-normalized code, exact Unicode and decimal string round-trip in GET/list/edit and shared React. New source must not alter monetary figures on UI locale switch. Ledger/quotation cannot be certified before business owners.
 
 **Source:** SRS §§4,8,9,51,52,57; existing Customer DTO/DRF serializer, React Partner form and SQL/browser tests. Specification only: downstream financial statements/printing not claimed.
+
+## ERP-0225 — Customer negative and authorization acceptance
+
+Reject duplicate case-insensitive code and simultaneous duplicates with HTTP 400; reject blank Arabic name/mobile, invalid credit/decimal/email without saved mutation; deny employee CivilId details, admin-only file upload/list/download and cross-owner document access; reject MIME/extension mismatch; existing protected documents block delete with 409 and private downloads return no-store/nosniff. File scanning and attachment retention policy are WP46.
+
+**Checked source:** `django/apps/partners/tests.py`, `aspnet-core/tests/smoke_sqlserver.py`, `django/apps/partners/api.py`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`. **Evidence:** existing SQL/browser CI 40060339256, no new feature claimed from documentation alone.
