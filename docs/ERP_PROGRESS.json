@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0240",
+  "nextStepId": "ERP-0241",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -247,7 +247,8 @@
     "ERP-0236",
     "ERP-0237",
     "ERP-0238",
-    "ERP-0239"
+    "ERP-0239",
+    "ERP-0240"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5420,6 +5421,29 @@
         "pending": "Customer ledger and printing future modules"
       },
       "notes": "CI 40060771866 completed five jobs successfully: Django, ASP.NET, frontend, SQL Server integration and browser. ASP smoke checks DB BIGINT, Customer create/update/get Unicode/credit, 2 concurrent duplicate writes [201,400], forbidden private document retrieval, Customer protected-delete conflict, no-store and no-sniff. Shared React Playwright checks valid credit customer submit and Supplier after it. Cross-backend financial ledger/printed quotation not yet built and cannot be certified."
+    },
+    {
+      "stepId": "ERP-0240",
+      "status": "complete",
+      "scope": "WP12 Customer Master closeout with executed SQL/browser security verification",
+      "completionMode": "existing backend/UI implementation and focused security fix proven 5/5 CI",
+      "reviewedRepoCommit": "f57a95cc637c6f77989a7afa4c68db6499c4df26",
+      "evidence": [
+        "docs/ERP_0221_0260_PARTNERS.md",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "frontend/src/components/Partners.tsx",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/partners/tests.py"
+      ],
+      "verification": {
+        "kind": "5-job real CI",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866",
+        "checks": "5/5 PASS",
+        "productionDatabase": "not accessed",
+        "financialPosting": "deferred to owners"
+      },
+      "notes": "Reviewed shared PartnerViewSet and React Partners module for unnecessary parallel code, ASP.NET PartnerValidation reuse, CSRF, duplicate unique index race, customer CivilId masking, Admin-only documents and security headers. Security fix commit 1773c7f prevents caching confidential customer/supplier downloads, and focused ASP.NET SQL smoke e0b0cd1 proves read-only employee cannot access CivilId/file or post. 5/5 successful CI run 40060771866 proves current customer acceptance. No schema/migration/regression remains blocking WP12. Still open by ownership: AR quotation/report physical printing WP28/WP44; customer ledger, payment/allocation and branch financial posting WP30/WP32/33; larger pagination WP48; advanced security audit/retention WP46. Do not claim these delivered."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

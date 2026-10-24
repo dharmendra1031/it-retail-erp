@@ -418,3 +418,9 @@ No schema change. Existing FK/restrict, unique normalized Code, decimal 18,3 and
 CI 40060771866 completed five jobs successfully: Django, ASP.NET, frontend, SQL Server integration and browser. ASP smoke checks DB BIGINT, Customer create/update/get Unicode/credit, 2 concurrent duplicate writes [201,400], forbidden private document retrieval, Customer protected-delete conflict, no-store and no-sniff. Shared React Playwright checks valid credit customer submit and Supplier after it. Cross-backend financial ledger/printed quotation not yet built and cannot be certified.
 
 No schema change. Existing FK/restrict, unique normalized Code, decimal 18,3 and BIGINT keys tested in disposable environment; production data not accessed.
+
+## ERP-0240 — WP12 Customer closeout
+
+Reviewed shared PartnerViewSet and React Partners module for unnecessary parallel code, ASP.NET PartnerValidation reuse, CSRF, duplicate unique index race, customer CivilId masking, Admin-only documents and security headers. Security fix commit 1773c7f prevents caching confidential customer/supplier downloads, and focused ASP.NET SQL smoke e0b0cd1 proves read-only employee cannot access CivilId/file or post. 5/5 successful CI run 40060771866 proves current customer acceptance. No schema/migration/regression remains blocking WP12. Still open by ownership: AR quotation/report physical printing WP28/WP44; customer ledger, payment/allocation and branch financial posting WP30/WP32/33; larger pagination WP48; advanced security audit/retention WP46. Do not claim these delivered.
+
+Schema unchanged: BIGINT IDENTITY, unique Code, NVARCHAR bilingual values, DECIMAL(18,3), partner file owner check and FK restrictions; no production SQL.

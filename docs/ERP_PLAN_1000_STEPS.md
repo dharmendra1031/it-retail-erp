@@ -346,7 +346,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0237** (17/20) Run/add ASP.NET unit and validation tests for Create credit customer with Arabic address and payment terms; fix every failure. Execute tests for functionality owned/currently implementable here; if the scenario depends on a later owner package, specify the test and defer execution without claiming a pass.
 - [x] **ERP-0238** (18/20) Run/add Django unit and parity tests for Reject duplicate code, invalid limit and disallowed attachment; fix every failure. Execute tests for functionality owned/currently implementable here; if the scenario depends on a later owner package, specify the test and defer execution without claiming a pass.
 - [x] **ERP-0239** (19/20) Run SQL Server integration, concurrency and React E2E checks; reconcile Unique customer code and no unauthorized access to civil ID/files. Run integration/E2E only for capabilities due by this package; downstream-owned scenarios are deferred with explicit ownership and must not be reported as passed.
-- [ ] **ERP-0240** (20/20) Review duplication/security/performance, fix regressions, update API docs and record test + commit evidence before next step.
+- [x] **ERP-0240** (20/20) Review duplication/security/performance, fix regressions, update API docs and record test + commit evidence before next step.
 
 ### Package 13: Supplier Master and secured documents — ERP-0241 to ERP-0260
 **SRS sections:** 4, 10, 11, 50, 52, 57. **Deliverable:** Supplier codes, bilingual names, contacts, terms, opening balances and files.
