@@ -126,3 +126,9 @@ Arabic names and addresses must preserve diacritics, mixed-script characters and
 ASP.NET CompanyRequest/PartnerRequest and Company/Customer/Supplier entities already carry separate EN/AR bounded strings. SQL Server uses nvarchar; long BIGINT identity unchanged. Existing controller validation returns language-neutral detail, and React now translates it. No WP11 ASP.NET schema or contract repair needed. Financial print contracts belong WP27/WP30/WP44.
 
 Evidence: `aspnet-core/src/ITRetailERP.Web/Contracts/CompanyRequest.cs`, `aspnet-core/src/ITRetailERP.Web/Contracts/PartnerRequests.cs`, `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs`, `aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs`. Runtime implementation is already present; no duplicate localization or persistence layer has been created. New executable acceptance for future quotations and printing is not claimed.
+
+## ERP-0209 — Django Unicode serializer/configuration inspection
+
+Django CompanySerializer, PartnerSerializer and catalog NamedSerializer expose independent source-mapped English/Arabic fields with appropriate lengths. DRF emits field-error objects on 400; shared React now maps unmatched errors to localized safe invalidRequest. No locale-specific serializer or database table should be added. Product quotation/print flows belong later modules.
+
+Evidence: `django/apps/companies/serializers.py`, `django/apps/partners/api.py`, `django/apps/catalog/api.py`, `frontend/src/api/client.ts`. Runtime implementation is already present; no duplicate localization or persistence layer has been created. New executable acceptance for future quotations and printing is not claimed.

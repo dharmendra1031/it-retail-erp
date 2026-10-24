@@ -270,3 +270,7 @@ Existing models retain BIGINT auto-increment IDs, separate SQL Unicode EN/AR fie
 ## ERP-0208 — Database source review
 
 ASP.NET CompanyRequest/PartnerRequest and Company/Customer/Supplier entities already carry separate EN/AR bounded strings. SQL Server uses nvarchar; long BIGINT identity unchanged. Existing controller validation returns language-neutral detail, and React now translates it. No WP11 ASP.NET schema or contract repair needed. Financial print contracts belong WP27/WP30/WP44. No new migration, FK/index, monetary precision or ID change. Existing BIGINT and DECIMAL rules retained, DB-001–DB-006 previously tracked. No production SQL data read or modified.
+
+## ERP-0209 — Database source review
+
+Django CompanySerializer, PartnerSerializer and catalog NamedSerializer expose independent source-mapped English/Arabic fields with appropriate lengths. DRF emits field-error objects on 400; shared React now maps unmatched errors to localized safe invalidRequest. No locale-specific serializer or database table should be added. Product quotation/print flows belong later modules. No new migration, FK/index, monetary precision or ID change. Existing BIGINT and DECIMAL rules retained, DB-001–DB-006 previously tracked. No production SQL data read or modified.
