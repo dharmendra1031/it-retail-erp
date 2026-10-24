@@ -466,3 +466,9 @@ No DDL or production SQL changed. Prior disposable CI 40060771866 green.
 Persist Supplier NameEn/NameAr and addresses in separate SQL Unicode text without truncation, normalize ASCII 1–30 character Code to uppercase and enforce SQL unique index under concurrent inserts. Limit terms 0..365 and nonnegative DECIMAL(18,3) monetary fields; do not recompute balances in React. File attachment has exactly one owner, max 5 MB, PDF/PNG/JPEG signature/type/extension validated, admin-only, no-store/nosniff, and FK prevents deleting referenced Supplier. Any failed create/upload must leave no partial row. Existing migrations remain: reversing PartnerDetails on production drops valued columns, so do not run destructive down there; only disposable SQL CI rehearse.
 
 No added tables, UUIDs, FKs, indices, migration or production SQL writes; existing BIGINT/NVARCHAR/DECIMAL(18,3) and DB unique code preserved.
+
+## ERP-0248 — Supplier integrity review
+
+ASP.NET SupplierRequest/Supplier entity has long Id, email optional, bilingual Unicode names/addresses, ContactPerson, Telephone, Remarks, PaymentTermsDays, OpeningBalance and CreditLimit. SuppliersApiController implements CRUD with named add/view/edit/delete policies, CSRF, normalized Code, 400 for duplicate concurrency, admin-only document binary endpoints with MIME validation/5MB max, nosniff/no-store and safe filename. Existing SQL/browser 40060771866 verifies Supplier CRUD and file security. New oversize regression 4d3a4a89 is pending CI and is not claimed passed here.
+
+No added tables, UUIDs, FKs, indices, migration or production SQL writes; existing BIGINT/NVARCHAR/DECIMAL(18,3) and DB unique code preserved.
