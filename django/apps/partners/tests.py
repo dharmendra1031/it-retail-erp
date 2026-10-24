@@ -110,7 +110,7 @@ class PartnerApiTests(TestCase):
                     "nameAr": "المورّد",
                 }, format="json")
                 self.assertEqual(response.status_code, 400)
-                self.assertIn("code", response.data)
+                self.assertEqual(response.data, {"detail": "Invalid request."})
 
     def test_customer_optional_details_update_round_trip(self):
         self.client.force_authenticate(user=self.admin)
