@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0238",
+  "nextStepId": "ERP-0239",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -245,7 +245,8 @@
     "ERP-0234",
     "ERP-0235",
     "ERP-0236",
-    "ERP-0237"
+    "ERP-0237",
+    "ERP-0238"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5377,6 +5378,26 @@
         "deferred": "full financial print, physical a11y"
       },
       "notes": "`LocalizationContractTests` checks EN/AR DTO length and invariant money, and `aspnet-core/tests/smoke_sqlserver.py` exercises real SQL Server credit customer POST/PUT/GET, mandatory Arabic/mobile, duplicate code race, 3-decimal amounts, invalid email/credit and protected customer documents. The latest 5/5 workflow 40060771866 ran .NET unit tests and API+browser SQL smoke. Full customer ledger posting/quotation conversion tests are future WP28/30/32."
+    },
+    {
+      "stepId": "ERP-0238",
+      "status": "complete",
+      "scope": "Customer Django negative/error and protected-file regression acceptance",
+      "completionMode": "verified current available master functionality, downstream owners explicit",
+      "reviewedRepoCommit": "c10462d339fd2f235874ebd40647e353060f8917",
+      "evidence": [
+        "django/apps/partners/tests.py",
+        "django/apps/partners/api.py",
+        "django/config/exceptions.py"
+      ],
+      "verification": {
+        "kind": "executed GitHub Actions disposable SQL/test matrix",
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40060771866",
+        "jobs": "django, aspnet, frontend, sqlserver, browser all SUCCESS",
+        "productionDatabase": "not accessed",
+        "pending": "Customer ledger and printing future modules"
+      },
+      "notes": "Django PartnerApiTests covers Customer Arabic/mobile required, duplicate normalized code (and Unicode identifier rejection), invalid email/negative 3-decimal credit, rejected update leaves previous details unchanged, CivilId admin-only, restricted documents, bad MIME/extension signatures and delete conflict. Django and SQL Server jobs passed CI 40060771866. Test database disposable; no real customer data changed."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

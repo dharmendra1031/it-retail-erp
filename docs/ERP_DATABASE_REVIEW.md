@@ -406,3 +406,9 @@ SQL disposable integration confirmed at CI 40060771866; BIGINT IDs, decimal 18,3
 `LocalizationContractTests` checks EN/AR DTO length and invariant money, and `aspnet-core/tests/smoke_sqlserver.py` exercises real SQL Server credit customer POST/PUT/GET, mandatory Arabic/mobile, duplicate code race, 3-decimal amounts, invalid email/credit and protected customer documents. The latest 5/5 workflow 40060771866 ran .NET unit tests and API+browser SQL smoke. Full customer ledger posting/quotation conversion tests are future WP28/30/32.
 
 SQL disposable integration confirmed at CI 40060771866; BIGINT IDs, decimal 18,3 and Unicode remain. No production data touched.
+
+## ERP-0238 — SQL and data integrity evidence
+
+Django PartnerApiTests covers Customer Arabic/mobile required, duplicate normalized code (and Unicode identifier rejection), invalid email/negative 3-decimal credit, rejected update leaves previous details unchanged, CivilId admin-only, restricted documents, bad MIME/extension signatures and delete conflict. Django and SQL Server jobs passed CI 40060771866. Test database disposable; no real customer data changed.
+
+No schema change. Existing FK/restrict, unique normalized Code, decimal 18,3 and BIGINT keys tested in disposable environment; production data not accessed.
