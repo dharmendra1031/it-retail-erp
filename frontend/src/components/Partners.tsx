@@ -131,11 +131,11 @@ export function Partners({ kind }: { kind: PartnerKind }) {
             <input ref={codeInput} dir="ltr" required maxLength={30} value={values.code}
               onChange={event => change("code", event.target.value)} />
           </label>
-          <label>{t("companyNameEnglish")}
+          <label>{t(isCustomer ? "customerNameEnglish" : "supplierNameEnglish")}
             <input required maxLength={200} value={values.nameEn}
               onChange={event => change("nameEn", event.target.value)} />
           </label>
-          <label>{t("companyNameArabic")}
+          <label>{t(isCustomer ? "customerNameArabic" : "supplierNameArabic")}
             <input dir="rtl" required={isCustomer} maxLength={200} value={values.nameAr}
               onChange={event => change("nameAr", event.target.value)} />
           </label>

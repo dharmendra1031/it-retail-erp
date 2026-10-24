@@ -331,9 +331,9 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByRole("button", { name: "Customer Master" }).click();
   await page.getByLabel("Code").fill(`C-${suffix}`);
   await page.getByLabel("Code").press("Enter");
-  await expect(page.getByLabel("Company Name (English)")).toBeFocused();
-  await page.getByLabel("Company Name (English)").fill("Credit Partner");
-  await page.getByLabel("اسم الشركة").fill("عميل تجريبي");
+  await expect(page.getByLabel("Customer Name (English)")).toBeFocused();
+  await page.getByLabel("Customer Name (English)").fill("Credit Partner");
+  await page.getByLabel("Customer Name (Arabic)").fill("عميل تجريبي");
   await page.getByLabel("Credit Limit").fill("2500.750");
   await page.getByLabel("Company Name", { exact: true }).fill("Credit Shop LLC");
   await page.getByLabel("Mobile").fill("96599887766");
@@ -361,7 +361,7 @@ test("admin uses keyboard to create bilingual credit customer and supplier", asy
   await page.getByRole("button", { name: "Supplier Master" }).click();
   await expect(page.getByRole("heading", { name: "Supplier Master" })).toBeVisible();
   await page.getByLabel("Code").fill(`S-${suffix}`);
-  await page.getByLabel("Company Name (English)").fill("First Supplier");
+  await page.getByLabel("Supplier Name (English)").fill("First Supplier");
   await page.getByLabel("Opening Balance").fill("135.500");
   await page.getByLabel("Credit Limit").fill("800.500");
   await page.getByLabel("Contact Person").fill("Omar");
@@ -454,7 +454,7 @@ test("Arabic master forms preserve LTR codes and RTL names", async ({ page }) =>
   await page.getByRole("button", { name: "إدارة العملاء" }).click();
   await expect(page.getByLabel("الرمز")).toHaveAttribute("dir", "ltr");
   await expect(page.getByLabel("البريد الإلكتروني")).toHaveAttribute("dir", "ltr");
-  await expect(page.getByLabel("اسم الشركة", { exact: true })).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("اسم العميل", { exact: true })).toHaveAttribute("dir", "rtl");
 });
 
 test("RTL tablet layout keeps keyboard fields accessible", async ({ page }) => {
