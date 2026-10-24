@@ -290,3 +290,7 @@ CompaniesApiController CRUD persists EN/AR values without server locale conversi
 ## ERP-0213 — Database ownership review
 
 CompanySerializer already wraps logo save and DB mutation in atomic transaction; PartnerSerializer and Catalog serializers store bilingual values directly. Choosing Arabic never creates a separate server transaction, document or sequence. Cross-backend retry semantics for future quotations belong WP27; existing serializers require no additional WP11 operation. Existing BIGINT, EN/AR NVARCHAR and monetary DECIMAL precision remain. No migration/schema/index changes or production SQL operations.
+
+## ERP-0214 — Database review
+
+Current ASP.NET Company writes require named company policies and Django Partner/Catalog views require server-side action permissions. `frontend/src/locale.ts` translates only labels; permission codes remain invariant under EN/AR and root document dir. Current backend branch/warehouses are protected through existing policies; full business-document branch scoping and audit trail remain WP09/WP46 and future transaction owners. No locale-specific audit table, permission bypass or new security layer is justified. Tests for actual financial document rights are deferred; no unauthorized access is claimed verified here. BIGINT keys/Unicode/DECIMAL precision unchanged; no migration or production query.

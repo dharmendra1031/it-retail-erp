@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0214",
+  "nextStepId": "ERP-0215",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -221,7 +221,8 @@
     "ERP-0210",
     "ERP-0211",
     "ERP-0212",
-    "ERP-0213"
+    "ERP-0213",
+    "ERP-0214"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
@@ -4836,6 +4837,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "CompanySerializer already wraps logo save and DB mutation in atomic transaction; PartnerSerializer and Catalog serializers store bilingual values directly. Choosing Arabic never creates a separate server transaction, document or sequence. Cross-backend retry semantics for future quotations belong WP27; existing serializers require no additional WP11 operation."
+    },
+    {
+      "stepId": "ERP-0214",
+      "status": "complete",
+      "scope": "WP11 authorization/branch/audit ownership review",
+      "completionMode": "server-side permission evidence with downstream audit owners deferred",
+      "reviewedRepoCommit": "ee58c5f762cce33aede35fd49426f308efe02aef",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "django/apps/partners/api.py",
+        "django/apps/catalog/api.py",
+        "frontend/src/locale.ts",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "static permission/access review",
+        "existingActions": "permission identifiers language independent",
+        "businessAudit": "WP46 future-owned",
+        "newTests": "none source-only",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Locale never changes authorization. Company writes use named ASP policies; Django partners and catalog use server-side permission actions. Future branch/transaction audit proof must be done by owner packages; no duplicate locale permission schema."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

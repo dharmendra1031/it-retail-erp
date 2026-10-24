@@ -161,3 +161,7 @@ Source paths: `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiContr
 CompanySerializer already wraps logo save and DB mutation in atomic transaction; PartnerSerializer and Catalog serializers store bilingual values directly. Choosing Arabic never creates a separate server transaction, document or sequence. Cross-backend retry semantics for future quotations belong WP27; existing serializers require no additional WP11 operation.
 
 Source paths: `django/apps/companies/serializers.py`; `django/apps/partners/api.py`; `django/apps/catalog/api.py`. No new server endpoint, report, SQL table or placeholder financial posting was introduced.
+
+## ERP-0214 — Authorization and audit ownership
+
+Current ASP.NET Company writes require named company policies and Django Partner/Catalog views require server-side action permissions. `frontend/src/locale.ts` translates only labels; permission codes remain invariant under EN/AR and root document dir. Current backend branch/warehouses are protected through existing policies; full business-document branch scoping and audit trail remain WP09/WP46 and future transaction owners. No locale-specific audit table, permission bypass or new security layer is justified. Tests for actual financial document rights are deferred; no unauthorized access is claimed verified here.
