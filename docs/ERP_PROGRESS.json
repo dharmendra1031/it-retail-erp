@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0233",
+  "nextStepId": "ERP-0234",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -240,7 +240,8 @@
     "ERP-0229",
     "ERP-0230",
     "ERP-0231",
-    "ERP-0232"
+    "ERP-0232",
+    "ERP-0233"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5272,6 +5273,25 @@
         "productionDatabase": "not accessed"
       },
       "notes": "CustomersApiController POST/PUT applies normalized uppercase code once, checks collisions before insert and catches SQL unique-index race as HTTP 400. Validation precedes writes. DB assigns BIGINT Id; detail/create responses use exact decimal strings. DELETE refuses records with protected attachments (409). Each request is a single ORM save, no stock/ledger posting. Customer financial posting and approval idempotency are future WP30–33."
+    },
+    {
+      "stepId": "ERP-0233",
+      "status": "complete",
+      "scope": "Customer Django transaction and response parity",
+      "completionMode": "existing master CRUD/transaction logic reviewed and validated by baseline CI",
+      "reviewedRepoCommit": "781b50c6d10348ed5bc3fe77930403e24b011e1f",
+      "evidence": [
+        "django/apps/partners/api.py",
+        "django/apps/partners/tests.py",
+        "django/config/exceptions.py"
+      ],
+      "verification": {
+        "kind": "source review + already successful integration suite",
+        "baselineCi": "40060339256 success",
+        "newNonAdminSmoke": "e0b0cd1 pending independent verification",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "PartnerViewSet uses transaction.atomic for create/update and catches integrity races with standardized safe 400; CustomerSerializer validates normalized code, mandatory Arabic name/mobile, decimal values and optional email. Detailed/list representation masks CivilId unless admin; independent document CRUD uses protected FK. There is no WP12 financial posting/retry workflow; account receivables belong WP32/33. Django and ASP.NET create/update are semantically equivalent for the current master."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

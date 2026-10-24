@@ -376,3 +376,9 @@ Existing BIGINT, unique Code, DECIMAL(18,3), NVARCHAR, restrictive FK/owner CHEC
 CustomersApiController POST/PUT applies normalized uppercase code once, checks collisions before insert and catches SQL unique-index race as HTTP 400. Validation precedes writes. DB assigns BIGINT Id; detail/create responses use exact decimal strings. DELETE refuses records with protected attachments (409). Each request is a single ORM save, no stock/ledger posting. Customer financial posting and approval idempotency are future WP30–33.
 
 SQL BIGINT auto-increment IDs, unique Code, decimal(18,3), nvarchar and protected FK/owner CHECK remain. No new migration needed.
+
+## ERP-0233 — Customer consistency review
+
+PartnerViewSet uses transaction.atomic for create/update and catches integrity races with standardized safe 400; CustomerSerializer validates normalized code, mandatory Arabic name/mobile, decimal values and optional email. Detailed/list representation masks CivilId unless admin; independent document CRUD uses protected FK. There is no WP12 financial posting/retry workflow; account receivables belong WP32/33. Django and ASP.NET create/update are semantically equivalent for the current master.
+
+SQL BIGINT auto-increment IDs, unique Code, decimal(18,3), nvarchar and protected FK/owner CHECK remain. No new migration needed.

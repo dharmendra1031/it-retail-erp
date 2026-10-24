@@ -71,3 +71,9 @@ Evidence: `django/apps/partners/api.py`, `django/config/exceptions.py`, `aspnet-
 CustomersApiController POST/PUT applies normalized uppercase code once, checks collisions before insert and catches SQL unique-index race as HTTP 400. Validation precedes writes. DB assigns BIGINT Id; detail/create responses use exact decimal strings. DELETE refuses records with protected attachments (409). Each request is a single ORM save, no stock/ledger posting. Customer financial posting and approval idempotency are future WP30–33.
 
 **Source:** `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`, `aspnet-core/src/ITRetailERP.Web/Services/SqlConstraintErrors.cs`, `aspnet-core/tests/smoke_sqlserver.py`. Baseline SQL/browser CI 40060339256 PASS; future receivable posting not claimed.
+
+## ERP-0233 — Customer Django transaction and response parity
+
+PartnerViewSet uses transaction.atomic for create/update and catches integrity races with standardized safe 400; CustomerSerializer validates normalized code, mandatory Arabic name/mobile, decimal values and optional email. Detailed/list representation masks CivilId unless admin; independent document CRUD uses protected FK. There is no WP12 financial posting/retry workflow; account receivables belong WP32/33. Django and ASP.NET create/update are semantically equivalent for the current master.
+
+**Source:** `django/apps/partners/api.py`, `django/apps/partners/tests.py`, `django/config/exceptions.py`. Baseline SQL/browser CI 40060339256 PASS; future receivable posting not claimed.
