@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0223",
+  "nextStepId": "ERP-0224",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -230,7 +230,8 @@
     "ERP-0219",
     "ERP-0220",
     "ERP-0221",
-    "ERP-0222"
+    "ERP-0222",
+    "ERP-0223"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
@@ -5057,6 +5058,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "ASP.NET Customer long PK, normalized ASCII code, nullable optional email, BIGINT FK-protected binary documents, server-side civilId omission for non-admin; Django CustomerSerializer mirrors bilingual fields, validates mandatory Arabic name/mobile, protects files; React Partners form handles bilingual CRUD/search, optional email, 3-place decimal strings, admin document upload/download. Existing full CI 40056434243 PASSED 5/5; file presence alone does not pass AT-02."
+    },
+    {
+      "stepId": "ERP-0223",
+      "status": "complete",
+      "scope": "Customer SRS/code discrepancy review",
+      "completionMode": "source-evidenced gap/acceptance specification",
+      "reviewedRepoCommit": "f62b8e1a3e29425b2a2fc69c5df6431deaec3e5d",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "django/apps/partners/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "frontend/src/components/Partners.tsx",
+        "django/apps/partners/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "kind": "documented acceptance",
+        "codeCi": "40060339256 success (disposable SQL Server and browser)",
+        "newTests": "not required for specification-only step",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Source shows bilingual Customer API and form, normalized unique code, required Arabic name/mobile, CivilId read omission for nonadmins, documents admin-only and download protection. Remaining scope: full customer statement/receivable posting is WP32–WP33/WP43, quotation and printable output WP28/WP44; no API for these should be invented now. Current customer browsing is in-memory filtering, pagination owner WP48, full file threat scanning is downstream security WP46."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

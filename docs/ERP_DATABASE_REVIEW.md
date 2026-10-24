@@ -318,3 +318,9 @@ Existing Customer and PartnerDocument use auto-increment BIGINT, nvarchar/Unicod
 ASP.NET Customer long PK, normalized ASCII code, nullable optional email, BIGINT FK-protected binary documents, server-side civilId omission for non-admin; Django CustomerSerializer mirrors bilingual fields, validates mandatory Arabic name/mobile, protects files; React Partners form handles bilingual CRUD/search, optional email, 3-place decimal strings, admin document upload/download. Existing full CI 40056434243 PASSED 5/5; file presence alone does not pass AT-02.
 
 Existing Customer and PartnerDocument use auto-increment BIGINT, nvarchar/Unicode, CreditLimit/OpeningBalance decimal(18,3), unique code, exclusive owner CHECK, restricted FKs. No migration/production SQL changes in this step.
+
+## ERP-0223 — Customer data integrity review
+
+Source shows bilingual Customer API and form, normalized unique code, required Arabic name/mobile, CivilId read omission for nonadmins, documents admin-only and download protection. Remaining scope: full customer statement/receivable posting is WP32–WP33/WP43, quotation and printable output WP28/WP44; no API for these should be invented now. Current customer browsing is in-memory filtering, pagination owner WP48, full file threat scanning is downstream security WP46.
+
+Existing BIGINT IDENTITY/BigAutoField, NVARCHAR, DECIMAL(18,3) unique code and exclusive customer/supplier document ownership remain. No new migration or production DB operation.
