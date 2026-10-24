@@ -450,3 +450,27 @@ test("Arabic master forms preserve LTR codes and RTL names", async ({ page }) =>
   await expect(page.getByLabel("البريد الإلكتروني")).toHaveAttribute("dir", "ltr");
   await expect(page.getByLabel("اسم الشركة", { exact: true })).toHaveAttribute("dir", "rtl");
 });
+
+test("RTL tablet layout keeps keyboard fields accessible", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Language").selectOption("ar");
+  await page.getByLabel("البريد الإلكتروني").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("كلمة المرور").fill(password);
+  await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+  await expect(page.getByRole("heading", { name: "بيانات الشركة" })).toBeVisible();
+
+  for (const width of [768, 1024]) {
+    await page.setViewportSize({ width, height: 800 });
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.getByLabel("اسم الشركة", { exact: true })).toHaveAttribute("dir", "rtl");
+    await expect(page.getByLabel("اسم الشركة (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
+    const viewportOverflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth > window.innerWidth
+    );
+    expect(viewportOverflow, `Horizontal clipping at ${width}px`).toBe(false);
+  }
+
+  await page.getByLabel("اسم الشركة (بالإنجليزية)").focus();
+  await page.keyboard.press("Tab");
+  await expect(page.getByLabel("اسم الشركة", { exact: true })).toBeFocused();
+});
