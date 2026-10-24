@@ -261,7 +261,7 @@
     "ERP-0250"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "dd5ad23164a076800f1527240c033827988eb01f",
+  "lastVerifiedCommit": "4d3a4a894c7b41a17b939174df9c8a32adb2c322",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -5661,6 +5661,23 @@
         "productionDB": "not accessed"
       },
       "notes": "Reviewed Django partners.0001_initial/0002_partner_details and EF 20261023120000_Partners/20261023150000_PartnerDetails along with ApplicationDbContext and .github/workflows/erp-verification.yml. Both Supplier entities use BIGINT IDENTITY/BigAutoField, unique Code, NVARCHAR bilingual names/contact, DECIMAL(18,3) opening balance/credit, PartnerDocument exclusive-owner CHECK, restrictive customer/supplier FKs and owner indexes. Existing 5/5 CI 40060771866 executed real disposable SQL Server migration and API/browser suites; CI workflow explicitly replays Django partners 0001->latest and EF initial->latest. No new schema for WP13 steps through ERP-0250; migration generation and additional rollback are N/A. Rolling back existing PartnerDetails columns on production would lose data; not authorized. Newly added oversized-file regression has Django/frontend/ASP.NET/browser CI PASS and SQL integration result pending; do not claim the latest test is green until confirmed. Future purchase link/payable FKs belong WP24–WP27."
+    },
+    {
+      "stepId": "ERP-0250",
+      "status": "post-completion-ci-confirmation",
+      "reviewedRepoCommit": "4d3a4a894c7b41a17b939174df9c8a32adb2c322",
+      "evidence": [
+        "django/apps/partners/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40061566701",
+        "result": "5/5 PASS",
+        "details": "oversized Supplier attachment rejected without saved file, Django tests and ASP.NET SQL smoke green",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Current 250/1000 completed step tracker reconciled to latest code CI; Supplier invoice/ledger/statement and full SRS E2E remain future-owned."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
