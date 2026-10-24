@@ -180,6 +180,32 @@ class PartnerApiTests(TestCase):
         self.assertEqual(self.client.post("/api/customers", self.customer, format="json").status_code, 403)
         self.assertEqual(self.client.get("/api/customers/1/documents").status_code, 403)
 
+
+    def test_supplier_document_access_requires_admin_even_with_view_grant(self):
+        self.client.force_authenticate(user=self.admin)
+        created = self.client.post("/api/suppliers", self.supplier, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        url = f"/api/suppliers/{created.data['id']}/documents"
+        upload = self.client.post(url, {"file": SimpleUploadedFile(
+            "contract.pdf", b"%PDF-1.5\\ncontract", content_type="application/pdf"
+        )}, format="multipart")
+        self.assertEqual(upload.status_code, 201, upload.data)
+        document_url = f"{url}/{upload.data['id']}"
+        self.assertEqual(self.client.get(document_url).content, b"%PDF-1.5\\ncontract")
+        self.assertEqual(self.client.delete(f"/api/suppliers/{created.data['id']}").status_code, 409)
+
+        role = Role.objects.create(name="Supplier Reader")
+        role.permissions.add(AccessPermission.objects.get(code="suppliers.view"))
+        self.employee.roles.add(role)
+        self.client.force_authenticate(user=self.employee)
+        self.assertEqual(self.client.get("/api/suppliers").status_code, 200)
+        self.assertEqual(self.client.get(url).status_code, 403)
+        self.assertEqual(self.client.get(document_url).status_code, 403)
+        self.assertEqual(self.client.post(url, {"file": SimpleUploadedFile(
+            "leak.pdf", b"%PDF-1.7\\nprivate", content_type="application/pdf"
+        )}, format="multipart").status_code, 403)
+        self.assertEqual(PartnerDocument.objects.count(), 1)
+
     def test_secure_upload_download_and_corrupt_rejection(self):
         self.client.force_authenticate(user=self.admin)
         created = self.client.post("/api/customers", self.customer, format="json")

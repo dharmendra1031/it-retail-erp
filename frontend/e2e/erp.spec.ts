@@ -409,7 +409,12 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await page.getByLabel("Company Name (English)").fill("Pieces");
   await page.getByLabel("Decimal Places").fill("0");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: `PCS-${suffix}` })).toBeVisible();
+  const unitRow = page.getByRole("row").filter({ hasText: `PCS-${suffix}` });
+  await expect(unitRow).toBeVisible();
+  await unitRow.getByRole("button", { name: "Edit" }).click();
+  await page.getByLabel("Company Name (English)").fill("Pieces updated");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(unitRow).toContainText("Pieces updated");
 });
 
 test("Arabic form errors remain localized for field validation failures", async ({ page }) => {

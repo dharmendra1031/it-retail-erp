@@ -206,10 +206,18 @@ def check_api():
         "code": "COMPUTERS", "nameEn": "Computers", "nameAr": "الحواسيب",
     }, csrf)
     assert status == 201, f"Category creation failed: {status} {category}"
+    status, _ = request(client, "/api/categories", "POST", {
+        "code": "computers", "nameEn": "Duplicate Root",
+    }, csrf)
+    assert status == 400, "Duplicate normalized root category code accepted"
     status, subcategory = request(client, "/api/categories", "POST", {
         "code": "LAPTOPS", "nameEn": "Laptops", "parentId": category["id"],
     }, csrf)
     assert status == 201, "Subcategory creation failed"
+    status, _ = request(client, "/api/categories", "POST", {
+        "code": "laptops", "nameEn": "Duplicate Sibling", "parentId": category["id"],
+    }, csrf)
+    assert status == 400, "Duplicate normalized sibling code accepted"
     status, cycle = request(client, f"/api/categories/{category['id']}", "PUT", {
         "code": "COMPUTERS", "nameEn": "Computers", "parentId": subcategory["id"],
     }, csrf)
@@ -218,10 +226,18 @@ def check_api():
         "code": "DELL", "nameEn": "Dell", "nameAr": "ديل",
     }, csrf)
     assert status == 201, f"Brand creation failed: {status} {brand}"
+    status, _ = request(client, "/api/brands", "POST", {
+        "code": "dell", "nameEn": "Duplicate Brand",
+    }, csrf)
+    assert status == 400, "Duplicate normalized brand code accepted"
     status, unit = request(client, "/api/units", "POST", {
         "code": "PCS", "nameEn": "Pieces", "decimalPlaces": 0,
     }, csrf)
     assert status == 201, f"Unit creation failed: {status} {unit}"
+    status, _ = request(client, "/api/units", "POST", {
+        "code": "INVALID", "nameEn": "Wrong Precision", "decimalPlaces": 7,
+    }, csrf)
+    assert status == 400, "Invalid unit decimal places accepted"
     product = {
         "sku": "SKU-100", "barcode": "123456789012", "nameEn": "Laptop",
         "nameAr": "حاسوب محمول", "categoryId": category["id"],

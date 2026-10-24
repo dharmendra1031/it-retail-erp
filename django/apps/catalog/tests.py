@@ -47,6 +47,59 @@ class CatalogApiTests(TestCase):
         }, format="json").status_code, 400)
         self.assertEqual((Brand.objects.count(), Unit.objects.count()), (1, 1))
 
+
+    def test_category_sibling_uniqueness_and_invalid_reparent(self):
+        root = self.client.post("/api/categories", {
+            "code": "ROOT-A", "nameEn": "Root A", "nameAr": "الفئة الأولى",
+        }, format="json")
+        second = self.client.post("/api/categories", {
+            "code": "ROOT-B", "nameEn": "Root B",
+        }, format="json")
+        self.assertEqual((root.status_code, second.status_code), (201, 201))
+        common = {"code": "SSD", "nameEn": "SSD"}
+        one = self.client.post("/api/categories", {
+            **common, "parentId": root.data["id"],
+        }, format="json")
+        two = self.client.post("/api/categories", {
+            **common, "parentId": second.data["id"],
+        }, format="json")
+        self.assertEqual((one.status_code, two.status_code), (201, 201))
+        duplicate = self.client.post("/api/categories", {
+            **common, "code": "ssd", "parentId": root.data["id"],
+        }, format="json")
+        self.assertEqual(duplicate.status_code, 400)
+        collision = self.client.put(f"/api/categories/{one.data['id']}", {
+            **common, "parentId": second.data["id"],
+        }, format="json")
+        self.assertEqual(collision.status_code, 400)
+        still = self.client.get(f"/api/categories/{one.data['id']}")
+        self.assertEqual(still.data["parentId"], root.data["id"])
+
+    def test_brand_and_unit_updates_preserve_codes_and_unicode(self):
+        brand = self.client.post("/api/brands", {
+            "code": "HP", "nameEn": "HP", "nameAr": "إتش بي",
+        }, format="json")
+        duplicate = self.client.post("/api/brands", {
+            "code": "hp", "nameEn": "Duplicate",
+        }, format="json")
+        self.assertEqual((brand.status_code, duplicate.status_code), (201, 400))
+        updated = self.client.put(f"/api/brands/{brand.data['id']}", {
+            "code": "HP", "nameEn": "Hewlett Packard", "nameAr": "هيوليت باكارد",
+        }, format="json")
+        self.assertEqual(updated.status_code, 200, updated.data)
+        self.assertEqual(self.client.get(f"/api/brands/{brand.data['id']}").data["nameAr"], "هيوليت باكارد")
+
+        unit = self.client.post("/api/units", {
+            "code": "BOX", "nameEn": "Box", "nameAr": "صندوق", "decimalPlaces": 2,
+        }, format="json")
+        self.assertEqual(unit.status_code, 201, unit.data)
+        for invalid in (7, -1):
+            rejection = self.client.put(f"/api/units/{unit.data['id']}", {
+                "code": "BOX", "nameEn": "Box", "decimalPlaces": invalid,
+            }, format="json")
+            self.assertEqual(rejection.status_code, 400)
+        self.assertEqual(self.client.get(f"/api/units/{unit.data['id']}").data["decimalPlaces"], 2)
+
     def test_employee_without_grants_cannot_read_or_modify(self):
         self.client.force_authenticate(user=self.employee)
         self.assertEqual(self.client.get("/api/brands").status_code, 403)
