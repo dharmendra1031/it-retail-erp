@@ -282,3 +282,7 @@ No new schema for React translations, document lang/dir or localized presentatio
 ## Review 032 — ERP-0211 shared API contract
 
 API language is independent of stored schema and PK. ASP.NET/Django expose existing bilingual Unicode fields, BIGINT identity and DECIMAL(18,3) partner amounts through existing /api routes. No DB model or migration changed. DRF 400 field error shape differs from ASP.NET but frontend safely localizes the visible fallback. There is no locale column, cross-tenant query or financial posting introduced. No production DB touched.
+
+## ERP-0212 — Database ownership review
+
+CompaniesApiController CRUD persists EN/AR values without server locale conversion; Customers/Suppliers APIs retain binary permission codes and numeric IDs. No WP11 business transaction or locale-specific idempotency token is needed. Financial quotation/printing transactions and retry safety remain WP27/WP30/WP44. Existing BIGINT, EN/AR NVARCHAR and monetary DECIMAL precision remain. No migration/schema/index changes or production SQL operations.

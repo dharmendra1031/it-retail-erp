@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0212",
+  "nextStepId": "ERP-0213",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -219,7 +219,8 @@
     "ERP-0208",
     "ERP-0209",
     "ERP-0210",
-    "ERP-0211"
+    "ERP-0211",
+    "ERP-0212"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "9a2542f909b17ec5dee0b8f96a73442323aad19e",
@@ -4792,6 +4793,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Existing frontend maps Django and ASP.NET validation errors into localized safe user feedback; transport-level response shape mismatch not claimed resolved."
+    },
+    {
+      "stepId": "ERP-0212",
+      "status": "complete",
+      "scope": "ASP.NET localization operation/idempotency review",
+      "completionMode": "verified existing source and deferred non-WP11 operations",
+      "reviewedRepoCommit": "3a9fc63bedbac1af7f76c0d80ed8fdb0f580798c",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "kind": "read-only source ownership review",
+        "priorCi": "40050867366 PASS",
+        "runtimeChange": "not applicable for WP11",
+        "newTests": "not run (source review)",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "CompaniesApiController CRUD persists EN/AR values without server locale conversion; Customers/Suppliers APIs retain binary permission codes and numeric IDs. No WP11 business transaction or locale-specific idempotency token is needed. Financial quotation/printing transactions and retry safety remain WP27/WP30/WP44."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

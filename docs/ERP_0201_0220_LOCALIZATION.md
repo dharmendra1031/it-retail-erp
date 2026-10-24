@@ -149,3 +149,9 @@ The language toggle uses browser state. Company/Partner/Catalog bilingual fields
 | Validation and auth | Manual `detail`, .NET model-state 400; 401/403 policy | DRF field-level 400, some `detail`; 401/403 depend on auth | Known errors translated, unknown/field errors safe generic localized message |
 
 **Open transport parity:** DRF returns field-keyed validation dictionaries; ASP.NET may return `detail` or model-state errors. These JSON error objects are NOT identical. Current `frontend/src/api/client.ts` normalizes safe visible error feedback; this step documents the discrepancy, not a claim of exact protocol symmetry. True field-error schema parity requires a specific API contract decision and matching tests (WP02/WP49 cross-backend acceptance). Customer/Supplier code policy discrepancy remains WP12/WP13. No Arabic quotation API or print endpoint exists in WP11; WP27/WP30/WP44 own it.
+
+## ERP-0212 — ASP.NET localization operation/idempotency review
+
+CompaniesApiController CRUD persists EN/AR values without server locale conversion; Customers/Suppliers APIs retain binary permission codes and numeric IDs. No WP11 business transaction or locale-specific idempotency token is needed. Financial quotation/printing transactions and retry safety remain WP27/WP30/WP44.
+
+Source paths: `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CompaniesApiController.cs`; `aspnet-core/src/ITRetailERP.Web/Controllers/Api/CustomersApiController.cs`; `aspnet-core/src/ITRetailERP.Web/Controllers/Api/SuppliersApiController.cs`. No new server endpoint, report, SQL table or placeholder financial posting was introduced.
