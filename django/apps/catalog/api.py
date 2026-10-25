@@ -2,7 +2,7 @@ import re
 from decimal import Decimal
 
 from django.db import IntegrityError, transaction
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 from rest_framework import serializers
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
@@ -127,6 +127,15 @@ class CatalogViewSet(ModelViewSet):
 
 class CategoryViewSet(CatalogViewSet):
     serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.query_params.get("search", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(code__icontains=search) | Q(name_en__icontains=search) | Q(name_ar__icontains=search)
+            )
+        return queryset
 
 
 class BrandViewSet(CatalogViewSet):

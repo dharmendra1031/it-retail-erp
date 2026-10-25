@@ -58,7 +58,7 @@ function categoryDepth(item: CatalogItem, lookup: Map<number, CatalogItem>) {
 }
 
 export function Catalog({ kind }: { kind: CatalogKind }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [rows, setRows] = useState<CatalogItem[]>([]);
   const [values, setValues] = useState<CatalogValues>({ ...empty });
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -127,6 +127,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
     }
   }
 
+  const categoryLabel = (row: CatalogItem) => language === "ar" && row.nameAr ? row.nameAr : row.nameEn;
   const categoryLookup = new Map(rows.map(row => [row.id, row]));
   const availableParents = rows.filter(row => {
     if (editingId === null) return true;
@@ -172,7 +173,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
                 change("parentId", event.target.value ? Number(event.target.value) : null)}>
                 <option value="">{t("noParentCategory")}</option>
                 {availableParents.map(row => (
-                  <option key={row.id} value={row.id}>{row.nameEn}</option>
+                  <option key={row.id} value={row.id}>{categoryLabel(row)}</option>
                 ))}
               </select>
             </label>
@@ -203,8 +204,8 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
         <div className="table-wrap">
           <table>
             <thead><tr>
-              <th>ID</th><th>{t("code")}</th><th>{t("companyNameEnglish")}</th>
-              <th>{t("companyNameArabic")}</th>
+              <th>ID</th><th>{t("code")}</th><th>{t(captions[kind].en)}</th>
+              <th>{t(captions[kind].ar)}</th>
               {kind === "categories" && <th>{t("parentCategory")}</th>}
               {kind === "units" && <th>{t("decimalPlaces")}</th>}
               <th>{t("status")}</th><th>{t("actions")}</th>
@@ -217,7 +218,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
                     ? { paddingInlineStart: 12 + categoryDepth(row, categoryLookup) * 20 }
                     : undefined}>{row.nameEn}</td>
                   <td dir="rtl">{row.nameAr}</td>
-                  {kind === "categories" && <td>{rows.find(item => item.id === row.parentId)?.nameEn ?? "-"}</td>}
+                  {kind === "categories" && <td>{row.parentId == null ? "-" : categoryLookup.has(row.parentId) ? categoryLabel(categoryLookup.get(row.parentId)!) : "-"}</td>}
                   {kind === "units" && <td>{row.decimalPlaces}</td>}
                   <td>{t(row.isActive ? "active" : "inactive")}</td>
                   <td className="actions">

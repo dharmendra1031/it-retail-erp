@@ -15,9 +15,16 @@ public sealed class CategoriesApiController(ApplicationDbContext db) : Controlle
 {
     [HttpGet]
     [Authorize(Policy = "categories.view")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List([FromQuery] string? search)
     {
-        return Ok(await db.Categories.AsNoTracking().OrderBy(x => x.Code).ToListAsync());
+        var categories = db.Categories.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            categories = categories.Where(x =>
+                x.Code.Contains(term) || x.NameEn.Contains(term) || x.NameAr.Contains(term));
+        }
+        return Ok(await categories.OrderBy(x => x.Code).ToListAsync());
     }
 
     [HttpGet("{id:long}")]

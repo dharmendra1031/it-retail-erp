@@ -207,6 +207,18 @@ def check_api():
         "code": "COMPUTERS", "nameEn": "Computers", "nameAr": "الحواسيب",
     }, csrf)
     assert status == 201, f"Category creation failed: {status} {category}"
+    status, searched = request(client, "/api/categories?search=الحواسيب")
+    assert status == 200 and [row["id"] for row in searched] == [category["id"]], (
+        f"Arabic category search failed: {status} {searched}"
+    )
+    status, searched = request(client, "/api/categories?search=computer")
+    assert status == 200 and [row["id"] for row in searched] == [category["id"]], (
+        f"English category search failed: {status} {searched}"
+    )
+    status, _ = request(client, "/api/categories", "POST", {
+        "code": "INVALID-PARENT", "nameEn": "Invalid Parent", "parentId": 999999,
+    }, csrf)
+    assert status == 400, "Invalid parent was accepted"
     status, _ = request(client, "/api/categories", "POST", {
         "code": "computers", "nameEn": "Duplicate Root",
     }, csrf)

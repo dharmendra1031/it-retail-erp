@@ -36,6 +36,33 @@ class CatalogApiTests(TestCase):
         self.assertEqual(cycle.status_code, 400)
         self.assertEqual(self.client.delete(f"/api/categories/{root.data['id']}").status_code, 409)
 
+    def test_category_search_by_code_and_bilingual_name(self):
+        root = self.client.post("/api/categories", {
+            "code": "COMP", "nameEn": "Computers", "nameAr": "الحواسيب",
+        }, format="json")
+        self.assertEqual(root.status_code, 201, root.data)
+        child = self.client.post("/api/categories", {
+            "code": "LAP", "nameEn": "Laptops", "nameAr": "الحواسيب المحمولة",
+            "parentId": root.data["id"],
+        }, format="json")
+        self.assertEqual(child.status_code, 201, child.data)
+        self.client.post("/api/categories", {
+            "code": "PRN", "nameEn": "Printers", "nameAr": "الطابعات",
+        }, format="json")
+
+        for query, expected in [
+            ("?search=comp", {"COMP"}),
+            ("?search=Laptop", {"LAP"}),
+            ("?search=الحواسيب", {"COMP", "LAP"}),
+        ]:
+            response = self.client.get("/api/categories" + query)
+            self.assertEqual(response.status_code, 200, response.data)
+            self.assertEqual({row["code"] for row in response.data}, expected)
+
+        self.assertEqual(self.client.get(
+            f"/api/categories/{child.data['id']}"
+        ).data["parentId"], root.data["id"])
+
     def test_reparenting_does_not_create_a_deep_category_cycle(self):
         root = Category.objects.create(code="ROOT", name_en="Root")
         child = Category.objects.create(code="CHILD", name_en="Child", parent=root)

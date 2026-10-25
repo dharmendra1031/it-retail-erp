@@ -423,6 +423,34 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await expect(unitRow).toContainText("Pieces updated");
 });
 
+test("Arabic category hierarchy shows localized parent labels", async ({ page }) => {
+  const suffix = Date.now().toString(36);
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Category Master" }).click();
+  await page.getByLabel("Code").fill(`ROOT-${suffix}`);
+  await page.getByLabel("Category Name (English)").fill("Laptops");
+  await page.getByLabel("Category Name (Arabic)").fill("أجهزة محمولة");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: `ROOT-${suffix}` })).toBeVisible();
+
+  await page.getByLabel("Code").fill(`CHILD-${suffix}`);
+  await page.getByLabel("Category Name (English)").fill("Ultrabooks");
+  await page.getByLabel("Parent Category").selectOption({ label: "Laptops" });
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: `CHILD-${suffix}` })).toContainText("Laptops");
+
+  await page.getByLabel("Language").selectOption("ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("الفئة الأساسية").getByRole("option", { name: "أجهزة محمولة" })).toHaveCount(1);
+  await expect(page.getByRole("row").filter({ hasText: `CHILD-${suffix}` })).toContainText("أجهزة محمولة");
+  await expect(page.getByLabel("اسم الفئة")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("اسم الفئة (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
+});
+
 test("Arabic form errors remain localized for field validation failures", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("Language").selectOption("ar");
