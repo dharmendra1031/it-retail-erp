@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0261",
+  "nextStepId": "ERP-0281",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -268,10 +268,30 @@
     "ERP-0257",
     "ERP-0258",
     "ERP-0259",
-    "ERP-0260"
+    "ERP-0260",
+    "ERP-0261",
+    "ERP-0262",
+    "ERP-0263",
+    "ERP-0264",
+    "ERP-0265",
+    "ERP-0266",
+    "ERP-0267",
+    "ERP-0268",
+    "ERP-0269",
+    "ERP-0270",
+    "ERP-0271",
+    "ERP-0272",
+    "ERP-0273",
+    "ERP-0274",
+    "ERP-0275",
+    "ERP-0276",
+    "ERP-0277",
+    "ERP-0278",
+    "ERP-0279",
+    "ERP-0280"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "a6f1550e03b17c0cce0f9fabf5099f74fabc2bc8",
+  "lastVerifiedCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -5887,6 +5907,362 @@
         "migrations": "no schema change"
       },
       "notes": "WP13 Supplier Master final review completed at the current source: shared PartnerViewSet/PartnerSerializer and Supplier-specific thin serializer share code with Customer instead of duplicating it; ASP.NET Supplier CRUD reuses PartnerValidation and PartnerDocumentStorage; React shares Partners component. CSRF/policies/Admin-only binary attachment access are server enforced, MIME signature/extension and 5MiB cap checked, downloads use no-store/nosniff and safe attachment filenames, SQL unique index guards concurrent normalized codes. The Django default UniqueValidator discrepancy was repaired with explicit `validate_code`, giving matching duplicate-code errors on both backends. Supplier English name/address RTL defect fixed with field-level direction attributes, not CSS overrides. CI 40071424326 5/5 PASS, and the API contract is in docs/ERP_0251_SUPPLIER_API_CONTRACT.md. Residual future-owned work: first purchase and supplier ledger/payables WP24–WP27/WP43, universal pagination WP48, persistent audit trails WP46, physical printing WP44, cross-system E2E WP49. Do not infer financial posting has shipped. No production DB touched."
+    },
+    {
+      "stepId": "ERP-0261",
+      "status": "complete",
+      "scope": "Category SRS scope and downstream owners",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "docs/SRS_BASELINE.md",
+        "docs/ERP_PLAN_1000_STEPS.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "SRS §§4,12,14,43,63: bilingual root/child categories, status, searchable listing and product relationship. Product merchandising/pricing and invoice rendering belong WP16–WP17/WP44."
+    },
+    {
+      "stepId": "ERP-0262",
+      "status": "complete",
+      "scope": "ASP.NET/Django/React code inventory",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/models.py",
+        "django/apps/catalog/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs",
+        "frontend/src/components/Catalog.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Checked Category model, parent FK, filtered unique indexes, controller, DRF serializer, category tree and React API clients against actual source."
+    },
+    {
+      "stepId": "ERP-0263",
+      "status": "complete",
+      "scope": "Category implementation gap resolution",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs",
+        "frontend/src/components/Catalog.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reviewed code and closed two owned gaps: backend search across code/EN/AR and Arabic-language parent dropdown/table labels. Database relationships were already present."
+    },
+    {
+      "stepId": "ERP-0264",
+      "status": "complete",
+      "scope": "Category positive acceptance",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "API creates a bilingual root and child using numeric parentId; child category is referenced by a product and React displays parent and hierarchy without losing Arabic."
+    },
+    {
+      "stepId": "ERP-0265",
+      "status": "complete",
+      "scope": "Category negative acceptance",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reject same-parent/root normalized duplicate, missing parent, self/deep-cycle reparent and referenced child/root deletion; unauthorized staff cannot mutate/read without grants."
+    },
+    {
+      "stepId": "ERP-0266",
+      "status": "complete",
+      "scope": "Category SQL schema design",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/models.py",
+        "aspnet-core/src/ITRetailERP.Web/Models/Category.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing BIGINT identity/BigAutoField Category ID, nullable BIGINT parent FK, NVARCHAR EN/AR names, bool active and Product CategoryId FK; no UUID or new table."
+    },
+    {
+      "stepId": "ERP-0267",
+      "status": "complete",
+      "scope": "Category constraints and rollback",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/migrations/0001_initial.py",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023130000_CatalogMasters.cs",
+        "aspnet-core/src/ITRetailERP.Web/Services/SqlConstraintErrors.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Filtered root-code and composite parent-code unique indexes prevent sibling collisions; FK restricts product/child deletion. SQL unique/FK race errors have explicit 400/409 fallbacks."
+    },
+    {
+      "stepId": "ERP-0268",
+      "status": "complete",
+      "scope": "ASP.NET category model/contract/controller",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Models/Category.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/CatalogRequests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reused existing long-ID Category/CategoryRequest and guarded CRUD, adding query search by code/English/Arabic and FK-conflict handling on concurrent delete."
+    },
+    {
+      "stepId": "ERP-0269",
+      "status": "complete",
+      "scope": "Django category model/serializer/view",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/models.py",
+        "django/apps/catalog/api.py",
+        "django/config/exceptions.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Kept parent PROTECT, sibling/root uniqueness and cycle traversal; added Q-filter search to CategoryViewSet; validation duplicate details align with ASP.NET."
+    },
+    {
+      "stepId": "ERP-0270",
+      "status": "complete",
+      "scope": "Category migration/index verification",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/migrations/0001_initial.py",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023130000_CatalogMasters.cs",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "No new Category migration: Django catalog 0001 and EF CatalogMasters/Products migrations already provide matching keys, indexes and foreign keys; green CI applied migrations on disposable SQL Server."
+    },
+    {
+      "stepId": "ERP-0271",
+      "status": "complete",
+      "scope": "Category REST/API parity",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs",
+        "frontend/src/api/catalog.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Both systems expose GET/POST /api/categories, GET/PUT/DELETE /api/categories/{long}, GET /api/categories?search=term. Request fields code/nameEn/nameAr/parentId/isActive; standard 201/200/204/400/403/404/409."
+    },
+    {
+      "stepId": "ERP-0272",
+      "status": "complete",
+      "scope": "ASP.NET category operations",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Services/SqlConstraintErrors.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Server normalizes ASCII code, checks parent ancestry, duplicate siblings, policy and SQL conflicts; writes once per request. POST duplicate returns 400; protected child/product delete returns 409."
+    },
+    {
+      "stepId": "ERP-0273",
+      "status": "complete",
+      "scope": "Django category operations",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/api.py",
+        "django/apps/catalog/tests.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "CatalogViewSet wraps mutations in transaction.atomic, validates parent chain and normalized code; catches unique race and PROTECT exceptions without partially persisting invalid changes."
+    },
+    {
+      "stepId": "ERP-0274",
+      "status": "complete",
+      "scope": "Permissions and scope",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/api.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/CategoriesApiController.cs",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Category CRUD endpoints enforce server-side categories.view/add/edit/delete permissions and CSRF; catalog is global master with no BranchId. Persistent audit is future WP46, not claimed here."
+    },
+    {
+      "stepId": "ERP-0275",
+      "status": "complete",
+      "scope": "Category React UI",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "frontend/src/components/Catalog.tsx",
+        "frontend/src/api/catalog.ts",
+        "frontend/src/forms/keyboard.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing keyboard-first form, edit/delete, parent select, sorted tree and client search; now parent option and table parent name use Arabic when selected language is Arabic."
+    },
+    {
+      "stepId": "ERP-0276",
+      "status": "complete",
+      "scope": "Bilingual category UX",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "frontend/src/components/Catalog.tsx",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Code and English name LTR, Arabic input RTL; Arabic parent selector and child row use Arabic names. Shared browser tests check Arabic root direction and root ID targeting."
+    },
+    {
+      "stepId": "ERP-0277",
+      "status": "complete",
+      "scope": "ASP.NET tests",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/CatalogValidationTests.cs",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "CatalogValidationTests verify normalized category code, blank name rejection; SQL API smoke validates root, child, missing parent, Arabic search, cycle, child/product FK 409."
+    },
+    {
+      "stepId": "ERP-0278",
+      "status": "complete",
+      "scope": "Django negative/integration tests",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "django/apps/catalog/tests.py",
+        "django/apps/catalog/api.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "CatalogApiTests check bilingual Category search, duplicate siblings, deep cycle rejection, reparent collisions and Product-referenced category/parent deletion as 409."
+    },
+    {
+      "stepId": "ERP-0279",
+      "status": "complete",
+      "scope": "SQL concurrency and shared browser proof",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "frontend/e2e/erp.spec.ts",
+        ".github/workflows/erp-verification.yml"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Disposable SQL Server verifies concurrent same-parent duplicate sibling creation [201,400] plus Product FK protection; Playwright uses shared React against Django and ASP.NET and tests Arabic hierarchy."
+    },
+    {
+      "stepId": "ERP-0280",
+      "status": "complete",
+      "scope": "Category closeout/security review",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+      "evidence": [
+        "docs/ERP_0261_0280_CATEGORY.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "frontend/src/components/Catalog.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40157974570",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reviewed code duplication, FK/race handling, keyboard/RTL and master-data scope. Product UI/transaction posting WP16+, audit WP46, pagination WP48 and printed reports WP44 remain future-owned."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
