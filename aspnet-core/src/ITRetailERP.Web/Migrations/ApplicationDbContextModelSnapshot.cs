@@ -412,7 +412,8 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.Property<int>("DecimalPlaces").HasColumnType("int");
             b.HasKey("Id");
             b.HasIndex("Code").IsUnique();
-            b.ToTable("Units");
+            b.ToTable("Units", t => t.HasCheckConstraint(
+                "CK_Units_DecimalPlaces", "[DecimalPlaces] BETWEEN 0 AND 6"));
         });
 
         modelBuilder.Entity("ITRetailERP.Web.Models.Product", b =>

@@ -453,6 +453,39 @@ test("Arabic category hierarchy shows localized parent labels", async ({ page })
   await expect(page.getByLabel("اسم الفئة (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
 });
 
+test("Arabic brand and unit forms preserve bilingual values and keyboard flow", async ({ page }) => {
+  const suffix = Date.now().toString(36);
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Brand Master" }).click();
+  await page.getByLabel("Code").fill(`BR-${suffix}`);
+  await page.getByLabel("Code").press("Enter");
+  await expect(page.getByLabel("Brand Name (English)")).toBeFocused();
+  await page.getByLabel("Brand Name (English)").fill("Lenovo");
+  await page.getByLabel("Brand Name (Arabic)").fill("لينوفو");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByRole("row").filter({ hasText: `BR-${suffix}` })).toContainText("لينوفو");
+
+  await page.getByLabel("Language").selectOption("ar");
+  await expect(page.getByLabel("اسم العلامة التجارية", { exact: true })).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("الرمز")).toHaveAttribute("dir", "ltr");
+
+  await page.getByRole("button", { name: "إدارة الوحدات" }).click();
+  await page.getByLabel("الرمز").fill(`UNIT-${suffix}`);
+  await page.getByLabel("اسم الوحدة (بالإنجليزية)").fill("Kilogram");
+  await page.getByLabel("اسم الوحدة", { exact: true }).fill("كيلوغرام");
+  await page.getByLabel("المنازل العشرية").fill("6");
+  await page.getByRole("button", { name: "حفظ" }).click();
+  const unitRow = page.getByRole("row").filter({ hasText: `UNIT-${suffix}` });
+  await expect(unitRow).toContainText("كيلوغرام");
+  await unitRow.getByRole("button", { name: "تعديل" }).click();
+  await expect(page.getByLabel("المنازل العشرية")).toHaveValue("6");
+  await expect(page.getByLabel("اسم الوحدة", { exact: true })).toHaveAttribute("dir", "rtl");
+});
+
 test("Arabic form errors remain localized for field validation failures", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("Language").selectOption("ar");

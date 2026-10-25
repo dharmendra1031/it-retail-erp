@@ -41,6 +41,15 @@ public sealed class CatalogValidationTests
         Assert.Null(CatalogValidation.Code(category));
     }
 
+    [Fact]
+    public void UnitsAcceptMaximumSupportedPrecision()
+    {
+        var unit = new UnitRequest { Code = "KG", NameEn = "Kilogram", DecimalPlaces = 6 };
+        var errors = new List<ValidationResult>();
+        Assert.True(Validator.TryValidateObject(unit, new ValidationContext(unit), errors, true));
+        Assert.Equal("KG", CatalogValidation.Code(unit));
+    }
+
     [Theory]
     [InlineData(-1)]
     [InlineData(7)]

@@ -165,6 +165,33 @@ class CatalogApiTests(TestCase):
             self.assertEqual(rejection.status_code, 400)
         self.assertEqual(self.client.get(f"/api/units/{unit.data['id']}").data["decimalPlaces"], 2)
 
+    def test_unit_precision_database_constraint(self):
+        from django.db import IntegrityError, transaction
+
+        unit = Unit.objects.create(code="KG", name_en="Kilogram", decimal_places=3)
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                Unit.objects.filter(pk=unit.pk).update(decimal_places=7)
+        unit.refresh_from_db()
+        self.assertEqual(unit.decimal_places, 3)
+
+    def test_brand_unit_product_references_are_protected(self):
+        from decimal import Decimal
+
+        category = Category.objects.create(code="LAPTOP", name_en="Laptops")
+        brand = Brand.objects.create(code="LENOVO", name_en="Lenovo", name_ar="لينوفو")
+        unit = Unit.objects.create(code="PCS", name_en="Pieces", name_ar="قطعة")
+        Product.objects.create(
+            sku="LAPTOP-100", name_en="Laptop", name_ar="حاسوب محمول",
+            category=category, brand=brand, unit=unit,
+            cost_price=Decimal("250.000"), base_price=Decimal("350.000"),
+        )
+
+        for kind, pk in (("brands", brand.pk), ("units", unit.pk)):
+            response = self.client.delete(f"/api/{kind}/{pk}")
+            self.assertEqual(response.status_code, 409)
+        self.assertEqual(Product.objects.count(), 1)
+
     def test_employee_without_grants_cannot_read_or_modify(self):
         self.client.force_authenticate(user=self.employee)
         self.assertEqual(self.client.get("/api/brands").status_code, 403)

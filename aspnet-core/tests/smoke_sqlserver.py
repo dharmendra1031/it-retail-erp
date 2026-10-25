@@ -88,6 +88,13 @@ def check_schema():
         )
         assert cursor.fetchone()[0] == 1, "NormalizedEmail index must be unique"
 
+        cursor.execute(
+            "SELECT COUNT(*) FROM sys.check_constraints "
+            "WHERE parent_object_id = OBJECT_ID('Units') "
+            "AND name = 'CK_Units_DecimalPlaces'"
+        )
+        assert cursor.fetchone()[0] == 1, "Unit decimal precision CHECK constraint missing"
+
         try:
             cursor.execute(
                 "INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES (?, ?)",
@@ -258,6 +265,14 @@ def check_api():
         "code": "PCS", "nameEn": "Pieces", "decimalPlaces": 0,
     }, csrf)
     assert status == 201, f"Unit creation failed: {status} {unit}"
+    status, _ = request(client, "/api/units", "POST", {
+        "code": "KG", "nameEn": "Kilograms", "nameAr": "كيلوغرام", "decimalPlaces": 6,
+    }, csrf)
+    assert status == 201, "Valid 6-decimal unit was rejected"
+    status, _ = request(client, "/api/units", "POST", {
+        "code": "NEG", "nameEn": "Negative Precision", "decimalPlaces": -1,
+    }, csrf)
+    assert status == 400, "Negative unit decimal places accepted"
     status, _ = request(client, "/api/units", "POST", {
         "code": "INVALID", "nameEn": "Wrong Precision", "decimalPlaces": 7,
     }, csrf)

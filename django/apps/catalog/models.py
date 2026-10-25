@@ -39,6 +39,12 @@ class Unit(TimeStampedModel):
     decimal_places = models.PositiveSmallIntegerField(default=0)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        constraints = [models.CheckConstraint(
+            condition=models.Q(decimal_places__gte=0, decimal_places__lte=6),
+            name="ck_unit_decimal_places",
+        )]
+
 
 class Product(TimeStampedModel):
     TYPES = [("stock", "Stock"), ("nonstock", "Non-stock"), ("digital", "Digital")]

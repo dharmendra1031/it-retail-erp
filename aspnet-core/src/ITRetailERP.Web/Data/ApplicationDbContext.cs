@@ -79,7 +79,12 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         });
 
         builder.Entity<Brand>(entity => entity.HasIndex(x => x.Code).IsUnique());
-        builder.Entity<Unit>(entity => entity.HasIndex(x => x.Code).IsUnique());
+        builder.Entity<Unit>(entity =>
+        {
+            entity.HasIndex(x => x.Code).IsUnique();
+            entity.ToTable(table => table.HasCheckConstraint(
+                "CK_Units_DecimalPlaces", "[DecimalPlaces] BETWEEN 0 AND 6"));
+        });
 
         builder.Entity<Customer>(entity =>
         {
