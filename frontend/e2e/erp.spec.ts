@@ -402,6 +402,7 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   const childId = await child.locator("td").first().innerText();
   const root = page.getByRole("row").filter({ hasText: `COMP-${suffix}` });
   await root.getByRole("button", { name: "Edit" }).click();
+  await expect(page.getByLabel("Code")).toHaveValue(`COMP-${suffix}`);
   await expect(page.getByLabel("Parent Category").locator(`option[value="${childId}"]`)).toHaveCount(0);
   await page.getByRole("button", { name: "Cancel" }).click();
   await page.getByRole("button", { name: "Brand Master" }).click();
@@ -413,7 +414,7 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
 
   await page.getByLabel("Language").selectOption("ar");
   await expect(page.getByRole("row").filter({ hasText: `DELL-${suffix}` }).locator("td").nth(2)).toHaveText("ديل");
-  await page.getByLabel("Language").selectOption("en");
+  await page.locator(".language-switch select").selectOption("en");
 
   await page.getByRole("button", { name: "Unit Master" }).click();
   await page.getByLabel("Code").fill(`PCS-${suffix}`);
