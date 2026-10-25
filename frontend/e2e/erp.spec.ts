@@ -407,6 +407,7 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await page.getByRole("button", { name: "Brand Master" }).click();
   await page.getByLabel("Code").fill(`DELL-${suffix}`);
   await page.getByLabel("Brand Name (English)").fill("Dell");
+  await page.getByLabel("Brand Name (Arabic)").fill("ديل");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `DELL-${suffix}` })).toBeVisible();
 
