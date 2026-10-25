@@ -57,13 +57,16 @@ def request(client, path, method="GET", payload=None, csrf=None, multipart=False
     return response.status, json.loads(data) if data else None
 
 
-def check_schema():
-    connection = (
+def sql_connection():
+    return pyodbc.connect(
         "DRIVER={ODBC Driver 18 for SQL Server};"
         "SERVER=127.0.0.1,1433;DATABASE=erp_net_ci;UID=sa;"
         f"PWD={os.environ['DB_PASSWORD']};Encrypt=yes;TrustServerCertificate=yes;"
     )
-    with pyodbc.connect(connection) as db:
+
+
+def check_schema():
+    with sql_connection() as db:
         cursor = db.cursor()
         cursor.execute(
             "SELECT is_unique FROM sys.indexes "
@@ -280,6 +283,17 @@ def check_api():
     )
     status, reloaded_unit = request(client, f"/api/units/{unit['id']}")
     assert status == 200 and reloaded_unit["nameAr"] == "قطعة", "Arabic unit update was not persisted"
+    with sql_connection() as db:
+        try:
+            db.execute("UPDATE Units SET DecimalPlaces = 7 WHERE Id = ?", unit["id"])
+        except pyodbc.IntegrityError:
+            db.rollback()
+        else:
+            raise AssertionError("SQL Server allowed invalid decimal places")
+    status, unchanged_unit = request(client, f"/api/units/{unit['id']}")
+    assert status == 200 and unchanged_unit["decimalPlaces"] == 3, (
+        "Rejected SQL precision update changed saved unit"
+    )
     status, _ = request(client, "/api/units", "POST", {
         "code": "KG", "nameEn": "Kilograms", "nameAr": "كيلوغرام", "decimalPlaces": 6,
     }, csrf)
