@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0281",
+  "nextStepId": "ERP-0301",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -288,10 +288,30 @@
     "ERP-0277",
     "ERP-0278",
     "ERP-0279",
-    "ERP-0280"
+    "ERP-0280",
+    "ERP-0281",
+    "ERP-0282",
+    "ERP-0283",
+    "ERP-0284",
+    "ERP-0285",
+    "ERP-0286",
+    "ERP-0287",
+    "ERP-0288",
+    "ERP-0289",
+    "ERP-0290",
+    "ERP-0291",
+    "ERP-0292",
+    "ERP-0293",
+    "ERP-0294",
+    "ERP-0295",
+    "ERP-0296",
+    "ERP-0297",
+    "ERP-0298",
+    "ERP-0299",
+    "ERP-0300"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "067fe884cb14daa5ffa42bfb525d26f6b007bfab",
+  "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -6263,6 +6283,344 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Reviewed code duplication, FK/race handling, keyboard/RTL and master-data scope. Product UI/transaction posting WP16+, audit WP46, pagination WP48 and printed reports WP44 remain future-owned."
+    },
+    {
+      "stepId": "ERP-0281",
+      "status": "complete",
+      "scope": "SRS scope and downstream owner",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "docs/ERP_0281_0300_BRAND_UNIT.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "SRS §§4,12,14,63 mapped to global bilingual masters; Product form WP16 and audit WP46 deferred."
+    },
+    {
+      "stepId": "ERP-0282",
+      "status": "complete",
+      "scope": "Source code inventory",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Models/Brand.cs",
+        "django/apps/catalog/models.py",
+        "frontend/src/components/Catalog.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Reviewed Brand/Unit models, API controllers, Django serializers, React Catalog and Product FK."
+    },
+    {
+      "stepId": "ERP-0283",
+      "status": "complete",
+      "scope": "SRS gap reconciliation",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BrandsApiController.cs",
+        "django/apps/catalog/api.py",
+        "frontend/src/components/Catalog.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Closed bilingual server search and Arabic list rendering gaps; preserved existing CRUD and constraints."
+    },
+    {
+      "stepId": "ERP-0284",
+      "status": "complete",
+      "scope": "Happy-path brand/unit and Product API references",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/catalog/tests.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Brand and Unit created and updated through APIs; Product API links numeric BrandId and UnitId."
+    },
+    {
+      "stepId": "ERP-0285",
+      "status": "complete",
+      "scope": "Duplicate/precision/FK negative cases",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/catalog/tests.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Normalized duplicate brand/unit codes 400; precision out of range 400; Product-referenced deletion 409."
+    },
+    {
+      "stepId": "ERP-0286",
+      "status": "complete",
+      "scope": "Numeric and Unicode schema",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Models/Unit.cs",
+        "django/apps/catalog/models.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "BIGINT/BigAutoField IDs, unique code, Unicode names and decimal precision 0..6."
+    },
+    {
+      "stepId": "ERP-0287",
+      "status": "complete",
+      "scope": "Constraints and rollback",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261025040000_UnitPrecisionCheck.cs",
+        "django/apps/catalog/migrations/0003_unit_precision_check.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Database CHECK and FK constraints, SQL error fallback, EF/Django migrations verified in disposable SQL."
+    },
+    {
+      "stepId": "ERP-0288",
+      "status": "complete",
+      "scope": "ASP.NET model and CRUD",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BrandsApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/UnitsApiController.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing Brand/Unit long-ID models, policy-guarded controllers and validation; added EN/AR search."
+    },
+    {
+      "stepId": "ERP-0289",
+      "status": "complete",
+      "scope": "Django serializer and CRUD",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "django/apps/catalog/api.py",
+        "django/apps/catalog/models.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing Django model/viewset and atomic mutation; added bilingual search."
+    },
+    {
+      "stepId": "ERP-0290",
+      "status": "complete",
+      "scope": "Migration review and SQL schema",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023130000_CatalogMasters.cs",
+        "django/apps/catalog/migrations/0001_initial.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing EF CatalogMasters/UnitPrecisionCheck and Django catalog 0001/0003; no placeholder migration."
+    },
+    {
+      "stepId": "ERP-0291",
+      "status": "complete",
+      "scope": "Cross-backend API contract",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "docs/ERP_0281_0300_BRAND_UNIT.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "GET/list/search/get-by-ID and POST/PUT/DELETE paths and JSON camelCase parity documented."
+    },
+    {
+      "stepId": "ERP-0292",
+      "status": "complete",
+      "scope": "ASP.NET CRUD and duplicate handling",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/BrandsApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/UnitsApiController.cs"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "ASP.NET normalization, duplicate handling and FK 409 verified with SQL smoke."
+    },
+    {
+      "stepId": "ERP-0293",
+      "status": "complete",
+      "scope": "Django transaction and validation",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "django/apps/catalog/api.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django validation and atomic CRUD verified with tests; duplicate and protected-delete responses."
+    },
+    {
+      "stepId": "ERP-0294",
+      "status": "complete",
+      "scope": "Permissions and global scope",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Security/PermissionCatalog.cs",
+        "django/apps/catalog/api.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "brands.* and units.* permission policies; global catalog scope, no branch filter; persistent audit WP46."
+    },
+    {
+      "stepId": "ERP-0295",
+      "status": "complete",
+      "scope": "React master forms and list",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "frontend/src/components/Catalog.tsx",
+        "frontend/src/api/catalog.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "React Catalog Brand/Unit forms, client search, edit/delete, keyboard flow and localized list."
+    },
+    {
+      "stepId": "ERP-0296",
+      "status": "complete",
+      "scope": "Arabic/RTL keyboard verification",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "frontend/src/components/Catalog.tsx"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "English/Arabic names, RTL Arabic input, LTR codes, language-switch browser tests."
+    },
+    {
+      "stepId": "ERP-0297",
+      "status": "complete",
+      "scope": "ASP.NET validation and SQL tests",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/CatalogValidationTests.cs",
+        "aspnet-core/tests/smoke_sqlserver.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "ASP.NET CatalogValidationTests and disposable SQL/API tests for valid/invalid precision and Product FK."
+    },
+    {
+      "stepId": "ERP-0298",
+      "status": "complete",
+      "scope": "Django validation and parity tests",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "django/apps/catalog/tests.py"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django CatalogApiTests for normalized duplicate, bilingual search, precision and Product reference."
+    },
+    {
+      "stepId": "ERP-0299",
+      "status": "complete",
+      "scope": "Disposable SQL and browser E2E",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "5/5 CI jobs PASS, including Django and ASP.NET browser, SQL migrations and API smoke. Independent brand/unit race stress not claimed; unique indexes enforce duplicates."
+    },
+    {
+      "stepId": "ERP-0300",
+      "status": "complete",
+      "scope": "Security review and documentation",
+      "completionMode": "verified source + accepted backend/browser runtime",
+      "reviewedRepoCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+      "evidence": [
+        "docs/ERP_0281_0300_BRAND_UNIT.md",
+        "docs/api-contract.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039",
+        "result": "5/5 SUCCESS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Code review: existing shared Catalog reused; no extra migration. WP16 Product UI, WP44 printing, WP46 audit and WP48 pagination deferred."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

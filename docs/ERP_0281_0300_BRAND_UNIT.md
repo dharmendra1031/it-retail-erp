@@ -1,6 +1,6 @@
 # WP15 — Brand and Unit Master acceptance (ERP-0281–0300)
 
-**SRS:** §§4, 12, 14, 63. **Implementation:** `1d611a93ecc838bc87ddf8cdde646195c278005a`. **Status:** Awaiting final 5-job CI for this commit; do not update tracker until verified.
+**SRS:** §§4, 12, 14, 63. **Implementation:** `1d611a93ecc838bc87ddf8cdde646195c278005a`. **Status:** Verified — CI [40170805039](https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039) 5/5 PASS on implementation commit `e8cb36b5`.
 
 ## Acceptance and code ownership
 
@@ -16,7 +16,7 @@
 | 0295–0296 | `frontend/src/components/Catalog.tsx` supports keyboard Enter navigation, EN/AR labels, RTL inputs, bilingual list display, edit/delete, decimalPlaces range and status. React search is client-side, server search is available. Product selectors are owned by WP16 and not claimed. |
 | 0297–0298 | ASP.NET `CatalogValidationTests.cs` checks code and precision; Django `catalog/tests.py` checks bilingual search, normalized duplicate, product FK, 0–6 precision and permissions. |
 | 0299 | Disposable SQL Server `smoke_sqlserver.py` checks API create/update/search, database precision CHECK, Product FK and negative cases; Playwright shared React browser runs against both backends and checks Arabic list labels and keyboard flow. |
-| 0300 | Closeout: review duplicated code, security, Unicode, SQL constraints, keyboard, CI evidence and deferred owners. This row is not complete until final CI passes. |
+| 0300 | Reviewed duplication, security, Unicode, SQL constraints, keyboard and deferred owners. CI 40170805039 passed all five jobs. |
 
 ## Explicit downstream dependencies
 
@@ -26,6 +26,4 @@ Product creation form and Brand/Unit selectors belong to **WP16 (ERP-0301–0320
 
 ## Verification gate
 
-CI for implementation `1d611a93`: https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170480816
-
-Do not mark ERP-0281–0300 complete until CI reports Django, ASP.NET, React, browser and SQL Server jobs all successful.
+CI for implementation `e8cb36b5`: https://github.com/dharmendra1031/it-retail-erp/actions/runs/40170805039 — Django, ASP.NET, React, browser and SQL Server all **SUCCESS**. No production database accessed. Product form remains WP16.
