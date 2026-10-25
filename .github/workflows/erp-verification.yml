@@ -144,6 +144,8 @@ jobs:
         working-directory: django
         run: |
           python manage.py migrate --noinput
+          python manage.py migrate catalog 0002 --noinput
+          python manage.py migrate catalog --noinput
           python manage.py migrate core zero --noinput
           python manage.py migrate core --noinput
           python manage.py migrate partners 0001 --noinput
