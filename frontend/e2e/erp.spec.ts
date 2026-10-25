@@ -447,7 +447,7 @@ test("Arabic category hierarchy shows localized parent labels", async ({ page })
 
   await page.getByLabel("Language").selectOption("ar");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.getByLabel("الفئة الأساسية").getByRole("option", { name: "أجهزة محمولة" })).toHaveCount(1);
+  await expect(page.getByLabel("الفئة الأساسية").locator(`option[value="${rootId}"]`)).toHaveText("أجهزة محمولة");
   await expect(page.getByRole("row").filter({ hasText: `CHILD-${suffix}` })).toContainText("أجهزة محمولة");
   await expect(page.getByLabel("اسم الفئة", { exact: true })).toHaveAttribute("dir", "rtl");
   await expect(page.getByLabel("اسم الفئة (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
