@@ -9,14 +9,17 @@ def api_exception_handler(exc, context):
 
     if isinstance(exc, ValidationError):
         errors = response.data
-        fields = errors if isinstance(errors, dict) else {}
+        values = errors.values() if isinstance(errors, dict) else errors if isinstance(errors, list) else [errors]
+        messages = [str(error) for value in values
+                    for error in (value if isinstance(value, list) else [value])]
         known_errors = (
-            ("name", "Role name already exists."),
-            ("code", "Code already exists."),
+            "Role name already exists.",
+            "Code already exists.",
+            "Category code already exists.",
+            "Brand code already exists.",
+            "Unit code already exists.",
         )
-        detail = next((message for field, message in known_errors
-                       if any(str(error) == message for error in fields.get(field, []))),
-                      "Invalid request.")
+        detail = next((message for message in known_errors if message in messages), "Invalid request.")
         response.data = {"detail": detail}
     elif response.status_code in (401, 403, 404):
         response.data = None

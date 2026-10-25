@@ -20,6 +20,7 @@ class CatalogPermission(BasePermission):
 
 
 class NamedSerializer(serializers.ModelSerializer):
+    code = serializers.CharField(max_length=30)
     nameEn = serializers.CharField(source="name_en", max_length=200)
     nameAr = serializers.CharField(source="name_ar", max_length=200, required=False, allow_blank=True)
     isActive = serializers.BooleanField(source="is_active", required=False)

@@ -27,9 +27,11 @@ class CatalogApiTests(TestCase):
         }, format="json")
         self.assertEqual(child.status_code, 201, child.data)
         self.assertEqual(root.data["code"], "COMPUTERS")
-        self.assertEqual(self.client.post("/api/categories", {
+        duplicate = self.client.post("/api/categories", {
             "code": "laptops", "nameEn": "Duplicate", "parentId": root.data["id"],
-        }, format="json").status_code, 400)
+        }, format="json")
+        self.assertEqual(duplicate.status_code, 400)
+        self.assertEqual(duplicate.data, {"detail": "Category code already exists."})
         cycle = self.client.put(f"/api/categories/{root.data['id']}", {
             "code": "COMPUTERS", "nameEn": "Computers", "parentId": child.data["id"],
         }, format="json")
@@ -79,9 +81,14 @@ class CatalogApiTests(TestCase):
     def test_brand_and_unit_uniqueness_and_precision(self):
         brand = {"code": "dell", "nameEn": "Dell", "nameAr": "ديل"}
         self.assertEqual(self.client.post("/api/brands", brand, format="json").status_code, 201)
-        self.assertEqual(self.client.post("/api/brands", brand, format="json").status_code, 400)
+        duplicate_brand = self.client.post("/api/brands", brand, format="json")
+        self.assertEqual(duplicate_brand.status_code, 400)
+        self.assertEqual(duplicate_brand.data, {"detail": "Brand code already exists."})
         unit = {"code": "PCS", "nameEn": "Pieces", "decimalPlaces": 0}
         self.assertEqual(self.client.post("/api/units", unit, format="json").status_code, 201)
+        duplicate_unit = self.client.post("/api/units", unit, format="json")
+        self.assertEqual(duplicate_unit.status_code, 400)
+        self.assertEqual(duplicate_unit.data, {"detail": "Unit code already exists."})
         self.assertEqual(self.client.post("/api/units", {
             **unit, "code": "BAD", "decimalPlaces": 7
         }, format="json").status_code, 400)
