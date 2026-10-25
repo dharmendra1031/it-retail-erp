@@ -435,11 +435,13 @@ test("Arabic category hierarchy shows localized parent labels", async ({ page })
   await page.getByLabel("Category Name (English)").fill("Laptops");
   await page.getByLabel("Category Name (Arabic)").fill("أجهزة محمولة");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("row").filter({ hasText: `ROOT-${suffix}` })).toBeVisible();
+  const rootRow = page.getByRole("row").filter({ hasText: `ROOT-${suffix}` });
+  await expect(rootRow).toBeVisible();
+  const rootId = (await rootRow.locator("td").first().innerText()).trim();
 
   await page.getByLabel("Code").fill(`CHILD-${suffix}`);
   await page.getByLabel("Category Name (English)").fill("Ultrabooks");
-  await page.getByLabel("Parent Category").selectOption({ label: "Laptops" });
+  await page.getByLabel("Parent Category").selectOption(rootId);
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `CHILD-${suffix}` })).toContainText("Laptops");
 
@@ -447,7 +449,7 @@ test("Arabic category hierarchy shows localized parent labels", async ({ page })
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.getByLabel("الفئة الأساسية").getByRole("option", { name: "أجهزة محمولة" })).toHaveCount(1);
   await expect(page.getByRole("row").filter({ hasText: `CHILD-${suffix}` })).toContainText("أجهزة محمولة");
-  await expect(page.getByLabel("اسم الفئة")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("اسم الفئة", { exact: true })).toHaveAttribute("dir", "rtl");
   await expect(page.getByLabel("اسم الفئة (بالإنجليزية)")).toHaveAttribute("dir", "ltr");
 });
 

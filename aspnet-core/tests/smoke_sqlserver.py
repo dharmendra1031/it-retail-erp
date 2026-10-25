@@ -9,6 +9,7 @@ import time
 from http.cookiejar import CookieJar
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPCookieProcessor, Request, build_opener
+from urllib.parse import quote
 
 import pyodbc
 
@@ -207,7 +208,7 @@ def check_api():
         "code": "COMPUTERS", "nameEn": "Computers", "nameAr": "الحواسيب",
     }, csrf)
     assert status == 201, f"Category creation failed: {status} {category}"
-    status, searched = request(client, "/api/categories?search=الحواسيب")
+    status, searched = request(client, "/api/categories?search=" + quote("الحواسيب"))
     assert status == 200 and [row["id"] for row in searched] == [category["id"]], (
         f"Arabic category search failed: {status} {searched}"
     )
