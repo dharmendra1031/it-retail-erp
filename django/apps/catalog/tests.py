@@ -195,6 +195,10 @@ class CatalogApiTests(TestCase):
     def test_employee_without_grants_cannot_read_or_modify(self):
         self.client.force_authenticate(user=self.employee)
         self.assertEqual(self.client.get("/api/brands").status_code, 403)
+        self.assertEqual(self.client.get("/api/units").status_code, 403)
+        self.assertEqual(self.client.post("/api/brands", {
+            "code": "NO", "nameEn": "No Access"
+        }, format="json").status_code, 403)
         self.assertEqual(self.client.post("/api/categories", {
             "code": "NO", "nameEn": "No Access"
         }, format="json").status_code, 403)

@@ -257,6 +257,13 @@ def check_api():
         "code": "DELL", "nameEn": "Dell", "nameAr": "ديل",
     }, csrf)
     assert status == 201, f"Brand creation failed: {status} {brand}"
+    status, updated_brand = request(client, f"/api/brands/{brand['id']}", "PUT", {
+        "code": "dell", "nameEn": "Dell Technologies", "nameAr": "ديل الجديدة",
+        "isActive": True,
+    }, csrf)
+    assert status == 200 and updated_brand["code"] == "DELL", f"Brand update failed: {status} {updated_brand}"
+    status, reloaded_brand = request(client, f"/api/brands/{brand['id']}")
+    assert status == 200 and reloaded_brand["nameAr"] == "ديل الجديدة", "Arabic brand update was not persisted"
     status, _ = request(client, "/api/brands", "POST", {
         "code": "dell", "nameEn": "Duplicate Brand",
     }, csrf)
@@ -265,6 +272,14 @@ def check_api():
         "code": "PCS", "nameEn": "Pieces", "decimalPlaces": 0,
     }, csrf)
     assert status == 201, f"Unit creation failed: {status} {unit}"
+    status, updated_unit = request(client, f"/api/units/{unit['id']}", "PUT", {
+        "code": "pcs", "nameEn": "Pieces", "nameAr": "قطعة", "decimalPlaces": 3,
+    }, csrf)
+    assert status == 200 and updated_unit["decimalPlaces"] == 3, (
+        f"Unit update failed: {status} {updated_unit}"
+    )
+    status, reloaded_unit = request(client, f"/api/units/{unit['id']}")
+    assert status == 200 and reloaded_unit["nameAr"] == "قطعة", "Arabic unit update was not persisted"
     status, _ = request(client, "/api/units", "POST", {
         "code": "KG", "nameEn": "Kilograms", "nameAr": "كيلوغرام", "decimalPlaces": 6,
     }, csrf)
@@ -511,6 +526,9 @@ def check_api():
         "email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False,
     }, employee_csrf["csrfToken"])
     assert status == 200 and not session["isAdmin"], "Branch employee login failed"
+    for path in ("/api/categories", "/api/brands", "/api/units"):
+        status, _ = request(employee, path)
+        assert status == 403, f"Employee without catalog grant accessed {path}: {status}"
     status, customer_list = request(employee, "/api/customers")
     assert status == 200, "Customer reader cannot list customers"
     selected = next(row for row in customer_list if row["id"] == customer["id"])
