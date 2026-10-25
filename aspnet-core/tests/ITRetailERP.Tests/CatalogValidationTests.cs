@@ -25,6 +25,22 @@ public sealed class CatalogValidationTests
         Assert.Null(CatalogValidation.Code(unit));
     }
 
+    [Fact]
+    public void CategoriesNormalizeCodeAndRejectBlankNames()
+    {
+        var category = new CategoryRequest
+        {
+            Code = " ssd ",
+            NameEn = "Solid State Drives",
+            NameAr = "أقراص الحالة الصلبة",
+        };
+
+        Assert.Equal("SSD", CatalogValidation.Code(category));
+
+        category.NameEn = "   ";
+        Assert.Null(CatalogValidation.Code(category));
+    }
+
     [Theory]
     [InlineData(-1)]
     [InlineData(7)]
