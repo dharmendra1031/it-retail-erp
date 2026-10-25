@@ -142,9 +142,29 @@ class CategoryViewSet(CatalogViewSet):
 class BrandViewSet(CatalogViewSet):
     serializer_class = BrandSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.query_params.get("search", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(code__icontains=search) | Q(name_en__icontains=search) |
+                Q(name_ar__icontains=search)
+            )
+        return queryset
+
 
 class UnitViewSet(CatalogViewSet):
     serializer_class = UnitSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.query_params.get("search", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(code__icontains=search) | Q(name_en__icontains=search) |
+                Q(name_ar__icontains=search)
+            )
+        return queryset
 
 
 class ProductSerializer(serializers.ModelSerializer):

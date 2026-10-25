@@ -216,7 +216,7 @@ export function Catalog({ kind }: { kind: CatalogKind }) {
                   <td>{row.id}</td><td>{row.code}</td>
                   <td style={kind === "categories"
                     ? { paddingInlineStart: 12 + categoryDepth(row, categoryLookup) * 20 }
-                    : undefined}>{row.nameEn}</td>
+                    : undefined}>{language === "ar" && row.nameAr ? row.nameAr : row.nameEn}</td>
                   <td dir="rtl">{row.nameAr}</td>
                   {kind === "categories" && <td>{row.parentId == null ? "-" : categoryLookup.has(row.parentId) ? categoryLabel(categoryLookup.get(row.parentId)!) : "-"}</td>}
                   {kind === "units" && <td>{row.decimalPlaces}</td>}

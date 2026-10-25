@@ -140,6 +140,41 @@ class CatalogApiTests(TestCase):
         still = self.client.get(f"/api/categories/{one.data['id']}")
         self.assertEqual(still.data["parentId"], root.data["id"])
 
+    def test_brand_unit_search_normalization_and_referenced_deletion(self):
+        from decimal import Decimal
+
+        brand = self.client.post("/api/brands", {
+            "code": "  acer  ", "nameEn": "Acer", "nameAr": "ايسر",
+        }, format="json")
+        unit = self.client.post("/api/units", {
+            "code": " kg ", "nameEn": "Kilogram", "nameAr": "كيلوغرام",
+            "decimalPlaces": 3,
+        }, format="json")
+        self.assertEqual((brand.status_code, unit.status_code), (201, 201))
+        self.assertEqual((brand.data["code"], unit.data["code"]), ("ACER", "KG"))
+        for kind, term, expected in (
+            ("brands", "ايسر", "ACER"), ("brands", "ace", "ACER"),
+            ("units", "كيلوغرام", "KG"), ("units", "kilogram", "KG"),
+        ):
+            result = self.client.get(f"/api/{kind}?search={term}")
+            self.assertEqual(result.status_code, 200)
+            self.assertEqual([row["code"] for row in result.data], [expected])
+        self.assertEqual(self.client.post("/api/brands", {
+            "code": "ACER", "nameEn": "Duplicate",
+        }, format="json").status_code, 400)
+        self.assertEqual(self.client.post("/api/units", {
+            "code": "KG", "nameEn": "Duplicate", "decimalPlaces": 0,
+        }, format="json").status_code, 400)
+
+        category = Category.objects.create(code="LAPTOPS", name_en="Laptops")
+        Product.objects.create(
+            sku="ACER-01", name_en="Acer Laptop", category=category,
+            brand_id=brand.data["id"], unit_id=unit.data["id"],
+            cost_price=Decimal("100.000"), base_price=Decimal("120.000"),
+        )
+        for kind, pk in (("brands", brand.data["id"]), ("units", unit.data["id"])):
+            self.assertEqual(self.client.delete(f"/api/{kind}/{pk}").status_code, 409)
+
     def test_brand_and_unit_updates_preserve_codes_and_unicode(self):
         brand = self.client.post("/api/brands", {
             "code": "HP", "nameEn": "HP", "nameAr": "إتش بي",

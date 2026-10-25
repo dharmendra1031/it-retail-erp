@@ -410,6 +410,10 @@ test("admin manages bilingual category hierarchy brand and unit", async ({ page 
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("row").filter({ hasText: `DELL-${suffix}` })).toBeVisible();
 
+  await page.getByLabel("Language").selectOption("ar");
+  await expect(page.getByRole("row").filter({ hasText: `DELL-${suffix}` }).locator("td").nth(2)).toHaveText("ديل");
+  await page.getByLabel("Language").selectOption("en");
+
   await page.getByRole("button", { name: "Unit Master" }).click();
   await page.getByLabel("Code").fill(`PCS-${suffix}`);
   await page.getByLabel("Unit Name (English)").fill("Pieces");

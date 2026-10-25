@@ -15,8 +15,17 @@ public sealed class UnitsApiController(ApplicationDbContext db) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "units.view")]
-    public async Task<IActionResult> List() =>
-        Ok(await db.Units.AsNoTracking().OrderBy(x => x.Code).ToListAsync());
+    public async Task<IActionResult> List([FromQuery] string? search)
+    {
+        var rows = db.Units.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            rows = rows.Where(x => x.Code.Contains(term) ||
+                x.NameEn.Contains(term) || x.NameAr.Contains(term));
+        }
+        return Ok(await rows.OrderBy(x => x.Code).ToListAsync());
+    }
 
     [HttpGet("{id:long}")]
     [Authorize(Policy = "units.view")]

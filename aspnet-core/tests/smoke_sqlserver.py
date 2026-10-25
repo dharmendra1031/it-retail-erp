@@ -271,6 +271,10 @@ def check_api():
         "code": "dell", "nameEn": "Duplicate Brand",
     }, csrf)
     assert status == 400, "Duplicate normalized brand code accepted"
+    status, found_brands = request(client, "/api/brands?search=%D8%AF%D9%8A%D9%84")
+    assert status == 200 and brand["id"] in [row["id"] for row in found_brands], "Arabic brand search failed"
+    status, found_brands = request(client, "/api/brands?search=Technologies")
+    assert status == 200 and brand["id"] in [row["id"] for row in found_brands], "English brand search failed"
     status, unit = request(client, "/api/units", "POST", {
         "code": "PCS", "nameEn": "Pieces", "decimalPlaces": 0,
     }, csrf)
@@ -283,6 +287,8 @@ def check_api():
     )
     status, reloaded_unit = request(client, f"/api/units/{unit['id']}")
     assert status == 200 and reloaded_unit["nameAr"] == "قطعة", "Arabic unit update was not persisted"
+    status, found_units = request(client, "/api/units?search=%D9%82%D8%B7%D8%B9%D8%A9")
+    assert status == 200 and unit["id"] in [row["id"] for row in found_units], "Arabic unit search failed"
     with sql_connection() as db:
         try:
             db.execute("UPDATE Units SET DecimalPlaces = 7 WHERE Id = ?", unit["id"])
