@@ -232,6 +232,16 @@ def check_api():
         "code": "laptops", "nameEn": "Duplicate Sibling", "parentId": category["id"],
     }, csrf)
     assert status == 400, "Duplicate normalized sibling code accepted"
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        sibling_statuses = list(pool.map(
+            lambda _: request(client, "/api/categories", "POST", {
+                "code": "SSD-RACE", "nameEn": "Concurrent SSD",
+                "parentId": category["id"],
+            }, csrf)[0], range(2),
+        ))
+    assert sorted(sibling_statuses) == [201, 400], (
+        f"Concurrent duplicate siblings were not rejected: {sibling_statuses}"
+    )
     status, cycle = request(client, f"/api/categories/{category['id']}", "PUT", {
         "code": "COMPUTERS", "nameEn": "Computers", "parentId": subcategory["id"],
     }, csrf)
@@ -254,7 +264,7 @@ def check_api():
     assert status == 400, "Invalid unit decimal places accepted"
     product = {
         "sku": "SKU-100", "barcode": "123456789012", "nameEn": "Laptop",
-        "nameAr": "حاسوب محمول", "categoryId": category["id"],
+        "nameAr": "حاسوب محمول", "categoryId": subcategory["id"],
         "brandId": brand["id"], "unitId": unit["id"],
         "productType": "stock", "serialTracked": True,
         "costPrice": "250.000", "basePrice": "320.500",
@@ -273,6 +283,8 @@ def check_api():
     assert status == 400, "Non-stock with serial quantity accepted"
     status, _ = request(client, f"/api/categories/{category['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Referenced category should be protected"
+    status, _ = request(client, f"/api/categories/{subcategory['id']}", "DELETE", csrf=csrf)
+    assert status == 409, "Category used by product must remain protected"
     status, _ = request(client, f"/api/brands/{brand['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Referenced brand should be protected"
     status, _ = request(client, f"/api/units/{unit['id']}", "DELETE", csrf=csrf)

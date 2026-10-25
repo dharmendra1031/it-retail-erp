@@ -96,7 +96,14 @@ public sealed class CategoriesApiController(ApplicationDbContext db) : Controlle
             || await db.Products.AnyAsync(x => x.CategoryId == id))
             return Conflict(new { detail = "Record is in use." });
         db.Categories.Remove(category);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsForeignKeyViolation(error))
+        {
+            return Conflict(new { detail = "Record is in use." });
+        }
         return NoContent();
     }
 

@@ -83,7 +83,14 @@ public sealed class BrandsApiController(ApplicationDbContext db) : ControllerBas
         if (await db.Products.AnyAsync(x => x.BrandId == id))
             return Conflict(new { detail = "Record is in use." });
         db.Brands.Remove(row);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException error) when (SqlConstraintErrors.IsForeignKeyViolation(error))
+        {
+            return Conflict(new { detail = "Record is in use." });
+        }
         return NoContent();
     }
 

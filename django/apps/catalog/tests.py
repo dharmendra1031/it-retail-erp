@@ -78,6 +78,24 @@ class CatalogApiTests(TestCase):
         self.assertIsNone(root.parent_id)
         self.assertEqual(Category.objects.count(), 3)
 
+    def test_category_with_subcategory_and_product_cannot_be_deleted(self):
+        from decimal import Decimal
+
+        root = Category.objects.create(code="HARDWARE", name_en="Hardware", name_ar="أجهزة")
+        child = Category.objects.create(code="SSD", name_en="SSD", parent=root)
+        unit = Unit.objects.create(code="PCS", name_en="Pieces")
+        Product.objects.create(
+            sku="SSD-001", name_en="SSD 1TB", name_ar="قرص",
+            category=child, unit=unit,
+            cost_price=Decimal("10.500"), base_price=Decimal("15.750"),
+        )
+
+        for category in (child, root):
+            response = self.client.delete(f"/api/categories/{category.pk}")
+            self.assertEqual(response.status_code, 409)
+        self.assertEqual(Product.objects.count(), 1)
+        self.assertEqual(Category.objects.count(), 2)
+
     def test_brand_and_unit_uniqueness_and_precision(self):
         brand = {"code": "dell", "nameEn": "Dell", "nameAr": "ديل"}
         self.assertEqual(self.client.post("/api/brands", brand, format="json").status_code, 201)
