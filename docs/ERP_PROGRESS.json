@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0301",
+  "nextStepId": "ERP-0302",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -308,7 +308,8 @@
     "ERP-0297",
     "ERP-0298",
     "ERP-0299",
-    "ERP-0300"
+    "ERP-0300",
+    "ERP-0301"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
@@ -6621,6 +6622,30 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Code review: existing shared Catalog reused; no extra migration. WP16 Product UI, WP44 printing, WP46 audit and WP48 pagination deferred."
+    },
+    {
+      "stepId": "ERP-0301",
+      "status": "complete",
+      "scope": "Product/Item Master SRS acceptance extraction, assumptions and exclusions",
+      "completionMode": "documentation-only requirements-to-code trace",
+      "reviewedRepoCommit": "f2296dd1655d63a54d05eea05c1fcd89d576ff40",
+      "evidence": [
+        "docs/ERP_0301_PRODUCT_SCOPE.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "aspnet-core/src/ITRetailERP.Web/Models/Product.cs",
+        "django/apps/catalog/models.py"
+      ],
+      "verification": {
+        "kind": "original SRS and existing source review",
+        "documentationChecks": "Original SRS §§4,12,13,14,42,43 mapped; exclusions and owning packages recorded",
+        "baselineCI": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40171067175",
+        "runtimeBuild": "not run (documentation-only step)",
+        "databaseMigration": "not run; no schema changes",
+        "applicationTests": "not run; implementation/testing owned by following WP16 steps",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "No Product runtime feature claimed complete. Business meaning of Item Code vs SKU, Model, purchase/cost price, wholesale, tax, opening stock and warranty left explicit for WP16/dependent packages. Next ERP-0302 source inventory."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

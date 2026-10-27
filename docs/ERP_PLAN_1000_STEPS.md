@@ -433,7 +433,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 **Dependencies:** packages 14–15. **Invariant:** Unique identifiers and correct type-specific validation.
 **Happy-path proof:** Create stock item with bilingual description and barcode. **Negative proof:** Reject duplicate SKU, bad price and missing required category.
 
-- [ ] **ERP-0301** (01/20) Extract Product/Item Master and classification acceptance details from SRS §§4, 12, 13, 14, 42, 43; record assumptions and exclusions.
+- [x] **ERP-0301** (01/20) Extract Product/Item Master and classification acceptance details from SRS §§4, 12, 13, 14, 42, 43; record assumptions and exclusions.
 - [ ] **ERP-0302** (02/20) Inspect Product entity, normalized indexes, CRUD and search, Equivalent Product model, serializer, filters and DB indexes and Product form, list, category/brand selectors and pagination; record actual files and current behavior.
 - [ ] **ERP-0303** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [ ] **ERP-0304** (04/20) Specify the happy-path acceptance: Create stock item with bilingual description and barcode.
