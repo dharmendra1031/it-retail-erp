@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0310",
+  "nextStepId": "ERP-0311",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -317,10 +317,11 @@
     "ERP-0306",
     "ERP-0307",
     "ERP-0308",
-    "ERP-0309"
+    "ERP-0309",
+    "ERP-0310"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
+  "lastVerifiedCommit": "7dfb38980df11c3763cf8a9bcafd62cde7597541",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -6883,6 +6884,30 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Django Product search now covers SKU, barcode and EN/AR names like ASP.NET. Existing model/serializer/migration need no change for this search repair. Next ERP-0310 migration/index review."
+    },
+    {
+      "stepId": "ERP-0310",
+      "status": "complete",
+      "scope": "Product SQL Server physical schema, unique indexes and migration upgrade/reapply review",
+      "completionMode": "existing migrations + executable dual-database SQL metadata verification",
+      "reviewedRepoCommit": "7dfb38980df11c3763cf8a9bcafd62cde7597541",
+      "evidence": [
+        "aspnet-core/tests/product_schema_sqlserver.py",
+        ".github/workflows/erp-verification.yml",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023140000_Products.cs",
+        "django/apps/catalog/migrations/0002_product.py",
+        "docs/ERP_0310_PRODUCT_SQL_SCHEMA.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40649242422",
+        "result": "5/5 SUCCESS",
+        "productSchema": "PASS on Django erp_integration.catalog_product and EF erp_net_ci.Products",
+        "migrationUpgradeRollback": "Django catalog + EF reversals/reapplies in disposable SQL Server CI passed",
+        "initialFailure": "40648922891 failed due to test incorrectly distinguishing NUMERIC from DECIMAL; corrected",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Source schemas already own BIGINT IDENTITY, NVARCHAR EN/AR, precise prices/reorder, filtered unique barcode and protected FKs. No new migration needed or made. ERP-0311 API contract next; Product concurrency, React UI and final E2E later."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
