@@ -6,6 +6,7 @@ using ITRetailERP.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace ITRetailERP.Web.Controllers.Api;
 
@@ -54,7 +55,18 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
         var product = new Product();
         Apply(product, request);
         db.Products.Add(product);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+        {
+            return BadRequest(new { detail = "SKU or barcode already exists." });
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 547 })
+        {
+            return BadRequest(new { detail = "Invalid request." });
+        }
         return CreatedAtAction(nameof(Get), new { id = product.Id }, ToResponse(product));
     }
 
@@ -73,7 +85,18 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
             return BadRequest(new { detail = "SKU or barcode already exists." });
         Apply(product, request);
         product.UpdatedAtUtc = DateTime.UtcNow;
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+        {
+            return BadRequest(new { detail = "SKU or barcode already exists." });
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 547 })
+        {
+            return BadRequest(new { detail = "Invalid request." });
+        }
         return Ok(ToResponse(product));
     }
 
@@ -85,7 +108,14 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
         var product = await db.Products.FindAsync(id);
         if (product is null) return NotFound();
         db.Products.Remove(product);
-        await db.SaveChangesAsync();
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 547 })
+        {
+            return Conflict(new { detail = "Record is in use." });
+        }
         return NoContent();
     }
 
