@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0315",
+  "nextStepId": "ERP-0316",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -322,10 +322,11 @@
     "ERP-0311",
     "ERP-0312",
     "ERP-0313",
-    "ERP-0314"
+    "ERP-0314",
+    "ERP-0315"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "f24b00b5138370038fab07fd6c5bba49a4c95dc1",
+  "lastVerifiedCommit": "c74ac6339d74d1f3ef62a65d86e184c39bfd1fc6",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -7001,6 +7002,33 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Global Product Master has no branch scope; warehouse stock scope WP21/25, audit WP46. React Product UI and permission-aware nav remain ERP-0315."
+    },
+    {
+      "stepId": "ERP-0315",
+      "status": "complete",
+      "scope": "Product Master React form/list/selectors with optional backend pagination and browser integration",
+      "completionMode": "runtime ASP.NET/Django/React changes + SQL Server browser regression",
+      "reviewedRepoCommit": "c74ac6339d74d1f3ef62a65d86e184c39bfd1fc6",
+      "evidence": [
+        "frontend/src/api/products.ts",
+        "frontend/src/components/Products.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/i18n.tsx",
+        "frontend/e2e/erp.spec.ts",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "django/apps/catalog/api.py",
+        "docs/ERP_0315_PRODUCT_UI_PAGINATION.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40660099435",
+        "result": "5/5 SUCCESS",
+        "paging": "Django and EF SQL Server Product page tests pass",
+        "browser": "Product bilingual create/search E2E on Django and ASP.NET with SQL Server PASS",
+        "initialFailure": "CI 40659759197 browser accessible-name mismatch fixed",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Admin Product UI complete for current package; non-admin Product view grant exists backend but current frontend shell is admin-only, tracked for role-aware UI integration. ERP-0316 bilingual accessibility verification next."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
