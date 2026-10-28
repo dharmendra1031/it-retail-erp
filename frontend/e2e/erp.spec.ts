@@ -561,3 +561,42 @@ test("RTL tablet layout keeps keyboard fields accessible", async ({ page }) => {
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("اسم الشركة", { exact: true })).toBeFocused();
 });
+
+
+test("admin creates a bilingual Product from Product Master", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Category Master" }).click();
+  await page.getByLabel("Code").fill("E2EPRCAT");
+  await page.getByLabel("Category Name (English)").fill("E2E Product Category");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("row").filter({ hasText: "E2EPRCAT" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Unit Master" }).click();
+  await page.getByLabel("Code").fill("E2EPRUNIT");
+  await page.getByLabel("Unit Name (English)").fill("E2E Product Unit");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("row").filter({ hasText: "E2EPRUNIT" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Product Master" }).click();
+  await expect(page.getByRole("heading", { name: "Product Master", exact: true })).toBeVisible();
+  await page.getByLabel("SKU").fill("E2EPROD01");
+  await page.getByLabel("Barcode").fill("123456770012");
+  await page.getByLabel("Product Name (English)").fill("Demo Notebook");
+  await page.getByLabel("Product Name (Arabic)").fill("حاسوب تجريبي");
+  await page.getByLabel("Category", { exact: true }).selectOption({ label: "E2E Product Category" });
+  await page.getByLabel("Unit", { exact: true }).selectOption({ label: "E2E Product Unit" });
+  await page.getByLabel("Cost Price").fill("200.000");
+  await page.getByLabel("Selling Price").fill("300.000");
+  await page.getByLabel("Minimum Price").fill("250.000");
+  await page.getByRole("button", { name: "Save Product" }).click();
+
+  const row = page.getByRole("row").filter({ hasText: "E2EPROD01" });
+  await expect(row).toBeVisible();
+  await expect(row).toContainText("حاسوب تجريبي");
+  await page.getByLabel("Search products...").fill("E2EPROD01");
+  await expect(row).toBeVisible();
+});

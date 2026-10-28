@@ -123,6 +123,21 @@ const english = {
   savePermissions: "Save Permissions",
   permissionsSaved: "Permissions saved.",
   unableLoadPermissions: "Unable to load permissions.",
+  productMaster: "Product Master", addProduct: "Add Product", editProduct: "Edit Product",
+  productSku: "SKU", productBarcode: "Barcode",
+  productNameEnglish: "Product Name (English)", productNameArabic: "Product Name (Arabic)",
+  productDescriptionEnglish: "Description (English)", productDescriptionArabic: "Description (Arabic)",
+  productCategory: "Category", productBrand: "Brand", productUnit: "Unit",
+  selectProductCategory: "Select category", selectProductUnit: "Select unit", noProductBrand: "No brand",
+  productType: "Product Type", stockProduct: "Stock", nonstockProduct: "Non-stock",
+  digitalProduct: "Digital", serialTracked: "Serial tracked",
+  productCostPrice: "Cost Price", productSellingPrice: "Selling Price",
+  productMinimumPrice: "Minimum Price", productReorderLevel: "Reorder Level",
+  saveProduct: "Save Product", searchProducts: "Search products...",
+  noProducts: "No products found.", previousProductsPage: "Previous", nextProductsPage: "Next",
+  productsPage: "Page", unableLoadProducts: "Unable to load products.",
+  unableSaveProduct: "Unable to save product.", unableDeleteProduct: "Unable to delete product.",
+  confirmDeleteProduct: "Delete product", duplicateProduct: "SKU or barcode already exists.",
 } as const;
 
 const arabic: Record<keyof typeof english, string> = {
@@ -249,6 +264,21 @@ const arabic: Record<keyof typeof english, string> = {
   savePermissions: "حفظ الصلاحيات",
   permissionsSaved: "تم حفظ الصلاحيات.",
   unableLoadPermissions: "تعذر تحميل الصلاحيات.",
+  productMaster: "إدارة المنتجات", addProduct: "إضافة منتج", editProduct: "تعديل منتج",
+  productSku: "رمز المخزون", productBarcode: "الباركود",
+  productNameEnglish: "اسم المنتج (بالإنجليزية)", productNameArabic: "اسم المنتج (بالعربية)",
+  productDescriptionEnglish: "الوصف (بالإنجليزية)", productDescriptionArabic: "الوصف (بالعربية)",
+  productCategory: "الفئة", productBrand: "العلامة التجارية", productUnit: "الوحدة",
+  selectProductCategory: "اختر الفئة", selectProductUnit: "اختر الوحدة", noProductBrand: "بلا علامة تجارية",
+  productType: "نوع المنتج", stockProduct: "مخزني", nonstockProduct: "غير مخزني",
+  digitalProduct: "رقمي", serialTracked: "يتطلب الرقم التسلسلي",
+  productCostPrice: "سعر التكلفة", productSellingPrice: "سعر البيع",
+  productMinimumPrice: "أقل سعر", productReorderLevel: "حد إعادة الطلب",
+  saveProduct: "حفظ المنتج", searchProducts: "بحث عن المنتجات...",
+  noProducts: "لا توجد منتجات.", previousProductsPage: "السابق", nextProductsPage: "التالي",
+  productsPage: "صفحة", unableLoadProducts: "تعذر تحميل المنتجات.",
+  unableSaveProduct: "تعذر حفظ المنتج.", unableDeleteProduct: "تعذر حذف المنتج.",
+  confirmDeleteProduct: "حذف المنتج", duplicateProduct: "رمز المنتج أو الباركود موجود مسبقاً.",
 };
 
 type Language = "en" | "ar";
@@ -303,6 +333,7 @@ const errorKeys: Record<string, TranslationKey> = {
   "Record is in use.": "recordInUse",
   "Protected documents exist.": "protectedDocuments",
   "Invalid document.": "invalidDocument",
+  "SKU or barcode already exists.": "duplicateProduct",
 };
 
 export function languageError(message: string, t: (key: TranslationKey) => string) {

@@ -56,6 +56,10 @@ export function AppShell({ user, page, onPageChange, onLogout, children }: Props
               onClick={() => onPageChange("units")}>{t("unitMaster")}</button>
           )}
           {user.isAdmin && (
+            <button type="button" className={`nav-link ${page === "products" ? "active" : ""}`}
+              onClick={() => onPageChange("products")}>{t("productMaster")}</button>
+          )}
+          {user.isAdmin && (
             <button type="button" className={`nav-link ${page === "suppliers" ? "active" : ""}`}
               onClick={() => onPageChange("suppliers")}>{t("supplierMaster")}</button>
           )}

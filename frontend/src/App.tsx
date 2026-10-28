@@ -8,8 +8,9 @@ import { Users } from "./components/Users";
 import { Organization } from "./components/Organization";
 import { Partners } from "./components/Partners";
 import { Catalog } from "./components/Catalog";
+import { Products } from "./components/Products";
 
-export type Page = "companies" | "roles" | "users" | "organization" | "customers" | "suppliers" | "categories" | "brands" | "units";
+export type Page = "companies" | "roles" | "users" | "organization" | "customers" | "suppliers" | "categories" | "brands" | "units" | "products";
 
 export default function App() {
   const [user, setUser] = useState<CurrentUser | null | undefined>(undefined);
@@ -51,7 +52,7 @@ export default function App() {
 
   return (
     <AppShell user={user} page={activePage} onPageChange={setPage} onLogout={handleLogout}>
-      {activePage === "roles" ? <Roles /> : activePage === "users" ? <Users /> : activePage === "organization" ? <Organization /> : activePage === "customers" || activePage === "suppliers" ? <Partners key={activePage} kind={activePage} /> : activePage === "categories" || activePage === "brands" || activePage === "units" ? <Catalog key={activePage} kind={activePage} /> : <Companies canManage={user.isAdmin} />}
+      {activePage === "roles" ? <Roles /> : activePage === "users" ? <Users /> : activePage === "organization" ? <Organization /> : activePage === "customers" || activePage === "suppliers" ? <Partners key={activePage} kind={activePage} /> : activePage === "categories" || activePage === "brands" || activePage === "units" ? <Catalog key={activePage} kind={activePage} /> : activePage === "products" ? <Products /> : <Companies canManage={user.isAdmin} />}
     </AppShell>
   );
 }
