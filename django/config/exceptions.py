@@ -18,6 +18,7 @@ def api_exception_handler(exc, context):
             "Category code already exists.",
             "Brand code already exists.",
             "Unit code already exists.",
+            "SKU or barcode already exists.",
         )
         detail = next((message for message in known_errors if message in messages), "Invalid request.")
         response.data = {"detail": detail}

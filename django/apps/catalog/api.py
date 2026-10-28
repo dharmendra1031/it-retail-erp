@@ -98,20 +98,32 @@ class UnitSerializer(NamedSerializer):
         return code
 
 
+PRODUCT_DUPLICATE_ERROR = "SKU or barcode already exists."
+
+
 class CatalogViewSet(ModelViewSet):
+    def integrity_detail(self, error):
+        message = str(error)
+        if self.basename == "products" and (
+            "UNIQUE constraint failed" in message
+            or re.search(r"\\((?:2601|2627)\\)", message)
+        ):
+            return PRODUCT_DUPLICATE_ERROR
+        return "Invalid request."
+
     def create(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
                 return super().create(request, *args, **kwargs)
-        except IntegrityError:
-            return Response({"detail": "Invalid request."}, status=400)
+        except IntegrityError as error:
+            return Response({"detail": self.integrity_detail(error)}, status=400)
 
     def update(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
                 return super().update(request, *args, **kwargs)
-        except IntegrityError:
-            return Response({"detail": "Invalid request."}, status=400)
+        except IntegrityError as error:
+            return Response({"detail": self.integrity_detail(error)}, status=400)
 
     permission_classes = [IsAuthenticated, CatalogPermission]
     http_method_names = ["get", "post", "put", "delete", "head", "options"]
@@ -202,7 +214,7 @@ class ProductSerializer(serializers.ModelSerializer):
         if Product.objects.filter(sku__iexact=sku).exclude(
             pk=self.instance.pk if self.instance else None
         ).exists():
-            raise serializers.ValidationError("SKU already exists.")
+            raise serializers.ValidationError(PRODUCT_DUPLICATE_ERROR)
         return sku
 
     def validate_barcode(self, value):
@@ -212,7 +224,7 @@ class ProductSerializer(serializers.ModelSerializer):
         if value and Product.objects.filter(barcode__iexact=value).exclude(
             pk=self.instance.pk if self.instance else None
         ).exists():
-            raise serializers.ValidationError("Barcode already exists.")
+            raise serializers.ValidationError(PRODUCT_DUPLICATE_ERROR)
         return value
 
     def validate_nameEn(self, value):

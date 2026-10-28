@@ -298,6 +298,28 @@ class ProductApiTests(TestCase):
             }, format="json").status_code, 400)
         self.assertFalse(Product.objects.exists())
 
+    def test_duplicate_sku_barcode_details_and_multiple_blank_barcodes(self):
+        created = self.client.post("/api/products", self.data, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+
+        for fields in (
+            {"barcode": "111222333444"},
+            {"sku": "LAPTOP-02"},
+        ):
+            duplicate = self.client.post(
+                "/api/products", {**self.data, **fields}, format="json"
+            )
+            self.assertEqual(duplicate.status_code, 400, duplicate.data)
+            self.assertEqual(duplicate.data, {"detail": "SKU or barcode already exists."})
+
+        for sku in ("BARCODELESS-1", "BARCODELESS-2"):
+            response = self.client.post(
+                "/api/products", {**self.data, "sku": sku, "barcode": ""},
+                format="json",
+            )
+            self.assertEqual(response.status_code, 201, response.data)
+            self.assertIsNone(response.data["barcode"])
+
     def test_nonstock_no_quantity_settings(self):
         response = self.client.post("/api/products", {
             **self.data, "sku": "SERVICE-01", "barcode": "", "productType": "nonstock",
