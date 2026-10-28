@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using ITRetailERP.Web.Contracts;
 using ITRetailERP.Web.Data;
 using ITRetailERP.Web.Models;
+using ITRetailERP.Web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,7 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
 
     [HttpPost]
     [Authorize(Policy = "products.add")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Create(ProductRequest request)
     {
         if (!await Valid(request)) return BadRequest(new { detail = "Invalid request." });
@@ -72,7 +73,7 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
 
     [HttpPut("{id:long}")]
     [Authorize(Policy = "products.edit")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Update(long id, ProductRequest request)
     {
         var product = await db.Products.FindAsync(id);
@@ -102,7 +103,7 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
 
     [HttpDelete("{id:long}")]
     [Authorize(Policy = "products.delete")]
-    [ValidateAntiForgeryToken]
+    [ServiceFilter(typeof(ApiCsrfFilter))]
     public async Task<IActionResult> Delete(long id)
     {
         var product = await db.Products.FindAsync(id);
