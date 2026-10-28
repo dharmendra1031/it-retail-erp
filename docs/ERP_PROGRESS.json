@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0318",
+  "nextStepId": "ERP-0319",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -325,7 +325,8 @@
     "ERP-0314",
     "ERP-0315",
     "ERP-0316",
-    "ERP-0317"
+    "ERP-0317",
+    "ERP-0318"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e7c8247d37efd2656c1da990b2c423ab0a8f5105",
@@ -7073,6 +7074,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Added missing Unit, negative price and nonstock serial/reorder rejection checks. Existing positive case covers normalized barcode, bilingual fields and exact decimals. Stock posting belongs WP21/25; next ERP-0318."
+    },
+    {
+      "stepId": "ERP-0318",
+      "status": "complete",
+      "scope": "Django Product rejection and ASP.NET error-contract parity",
+      "completionMode": "Django API regressions on isolated SQLite and local disposable SQL Server",
+      "reviewedRepoCommit": "4830943357999f364ff2b83b0f4312dada175e87",
+      "evidence": [
+        "django/apps/catalog/tests.py",
+        "django/apps/catalog/api.py",
+        "django/apps/catalog/models.py",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "productSqlite": "ProductApiTests 10/10 passed",
+        "productSqlServer": "ProductApiTests 10/10 passed on temporary test_erp_0318 database",
+        "djangoFullSqlite": "91 tests passed with 7 SQL-specific skips",
+        "systemCheck": "no issues",
+        "migrationDrift": "No changes detected",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Normalized duplicate SKU/barcode, omitted/null/zero/inactive Category, three negative prices, excessive precision and rejected update preserve row and return documented 400 detail. Independent SQL concurrency remains ERP-0319."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

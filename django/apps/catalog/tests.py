@@ -338,6 +338,66 @@ class ProductApiTests(TestCase):
             self.assertEqual(response.status_code, 201, response.data)
             self.assertIsNone(response.data["barcode"])
 
+    def test_rejected_product_mutations_preserve_existing_row(self):
+        seeded = self.client.post(
+            "/api/products", {**self.data, "barcode": "ABC-12345"}, format="json"
+        )
+        self.assertEqual(seeded.status_code, 201, seeded.data)
+        product_id = seeded.data["id"]
+        before = Product.objects.values().get(pk=product_id)
+        inactive = Category.objects.create(code="INACTIVE", name_en="Inactive", is_active=False)
+
+        cases = (
+            ("duplicate sku", {"sku": " laptop-01 ", "barcode": "NEW-12345"},
+             "SKU or barcode already exists."),
+            ("duplicate barcode", {"sku": "NEW-01", "barcode": " abc-12345 "},
+             "SKU or barcode already exists."),
+            ("missing category", {"sku": "NEW-02", "barcode": "NEW-12345", "categoryId": None},
+             "Invalid request."),
+            ("zero category", {"sku": "NEW-08", "barcode": "NEW-12345", "categoryId": 0},
+             "Invalid request."),
+            ("inactive category", {"sku": "NEW-03", "barcode": "NEW-12345", "categoryId": inactive.pk},
+             "Invalid request."),
+            ("negative cost", {"sku": "NEW-04", "barcode": "NEW-12345", "costPrice": "-0.001"},
+             "Invalid request."),
+            ("negative base", {"sku": "NEW-05", "barcode": "NEW-12345", "basePrice": "-0.001"},
+             "Invalid request."),
+            ("negative minimum", {"sku": "NEW-06", "barcode": "NEW-12345", "minPrice": "-0.001"},
+             "Invalid request."),
+            ("excess price precision", {"sku": "NEW-07", "barcode": "NEW-12345", "basePrice": "320.5001"},
+             "Invalid request."),
+        )
+        for label, change, detail in cases:
+            with self.subTest(case=label):
+                rejected = self.client.post(
+                    "/api/products", {**self.data, **change}, format="json"
+                )
+                self.assertEqual(rejected.status_code, 400, rejected.data)
+                self.assertEqual(rejected.data, {"detail": detail})
+                self.assertEqual(Product.objects.count(), 1)
+                self.assertEqual(Product.objects.values().get(pk=product_id), before)
+
+        omitted_category = {**self.data, "sku": "NEW-09", "barcode": "NEW-12345"}
+        del omitted_category["categoryId"]
+        rejected = self.client.post("/api/products", omitted_category, format="json")
+        self.assertEqual(rejected.status_code, 400, rejected.data)
+        self.assertEqual(rejected.data, {"detail": "Invalid request."})
+        self.assertEqual(Product.objects.values().get(pk=product_id), before)
+        self.assertEqual(Product.objects.count(), 1)
+
+        for label, change in (
+            ("bad price", {"costPrice": "-0.001"}),
+            ("missing category", {"categoryId": None}),
+            ("inactive category", {"categoryId": inactive.pk}),
+        ):
+            with self.subTest(update=label):
+                rejected = self.client.put(
+                    f"/api/products/{product_id}",
+                    {**self.data, "barcode": "ABC-12345", **change}, format="json",
+                )
+                self.assertEqual(rejected.status_code, 400, rejected.data)
+                self.assertEqual(Product.objects.values().get(pk=product_id), before)
+
     def test_product_read_only_grant_denies_mutations(self):
         created = self.client.post("/api/products", self.data, format="json")
         self.assertEqual(created.status_code, 201, created.data)
