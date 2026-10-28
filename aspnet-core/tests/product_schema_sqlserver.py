@@ -73,7 +73,10 @@ def verify(database, table, expected_columns, expected_fks):
         for name, (kind, length, precision, scale, nullable) in expected_columns.items():
             actual = columns.get(name.lower())
             assert actual is not None, f"{database}.{table}.{name} is missing"
-            assert actual[0].lower() == kind, f"{database}.{name}: expected {kind}, got {actual[0]}"
+            type_matches = actual[0].lower() == kind or (
+                kind == "decimal" and actual[0].lower() == "numeric"
+            )
+            assert type_matches, f"{database}.{name}: expected {kind}, got {actual[0]}"
             if length is not None:
                 assert actual[1] == length * 2, f"{database}.{name}: incorrect NVARCHAR length"
             if precision is not None:
