@@ -58,7 +58,7 @@ public sealed class ProductSearchTests
             Assert.Equal(1, json.RootElement.GetProperty("total").GetInt32());
             Assert.Equal(1, json.RootElement.GetProperty("page").GetInt32());
             Assert.Equal(1, json.RootElement.GetProperty("pageSize").GetInt32());
-            Assert.Equal(product.Id, json.RootElement.GetProperty("items")[0].GetProperty("id").GetInt64());
+            Assert.Equal(product.Id, json.RootElement.GetProperty("items")[0].GetProperty("Id").GetInt64());
         }
         Assert.IsType<BadRequestObjectResult>(await controller.List(null, 0, 25));
 
