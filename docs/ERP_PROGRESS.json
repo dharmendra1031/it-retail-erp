@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0305",
+  "nextStepId": "ERP-0306",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -312,7 +312,8 @@
     "ERP-0301",
     "ERP-0302",
     "ERP-0303",
-    "ERP-0304"
+    "ERP-0304",
+    "ERP-0305"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
@@ -6741,6 +6742,35 @@
         "productionDatabase": "not accessed"
       },
       "notes": "HP-Product-01 specifies authenticated/CSRF create, exact bilingual and decimal response, GET/list readback, disposable SQL row/FK/index checks and future two-backend React E2E. No runtime pass claimed. Next ERP-0305 negative/authorization specification."
+    },
+    {
+      "stepId": "ERP-0305",
+      "status": "complete",
+      "scope": "Specify Product duplicate/price/category and authorization negative acceptance",
+      "completionMode": "acceptance specification only",
+      "reviewedRepoCommit": "7cc72d4fc7aeb3b08e9f3d20574761457791c465",
+      "evidence": [
+        "docs/ERP_0305_PRODUCT_NEGATIVE_ACCEPTANCE.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023140000_Products.cs",
+        "aspnet-core/src/ITRetailERP.Web/Security/PermissionRequirement.cs",
+        "django/apps/catalog/api.py",
+        "django/apps/catalog/models.py",
+        "django/apps/catalog/migrations/0002_product.py",
+        "django/apps/accounts/permissions.py"
+      ],
+      "verification": {
+        "kind": "negative acceptance specification and source review",
+        "originalSrs": "linked source unavailable; repository SRS baseline used",
+        "runtimeBuild": "not run; no runtime code changes",
+        "applicationTests": "not run; execution assigned to ERP-0317-0319",
+        "databaseMigration": "not run; no schema changes",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Specified 400/no-mutation duplicate, price, category/type/identifier cases; 401/403 permissions; CSRF denial; concurrent unique-index outcomes and two-backend response parity. No runtime pass claimed. Next ERP-0306 schema and identifier design."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
