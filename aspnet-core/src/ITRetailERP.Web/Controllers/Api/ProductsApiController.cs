@@ -22,7 +22,11 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim();
-            products = products.Where(x => x.Sku.Contains(term));
+            products = products.Where(x =>
+                x.Sku.Contains(term) ||
+                (x.Barcode != null && x.Barcode.Contains(term)) ||
+                x.NameEn.Contains(term) ||
+                x.NameAr.Contains(term));
         }
         return Ok((await products.OrderBy(x => x.Sku).ToListAsync()).Select(ToResponse));
     }

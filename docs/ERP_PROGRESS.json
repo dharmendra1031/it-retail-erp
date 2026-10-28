@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0308",
+  "nextStepId": "ERP-0309",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -315,7 +315,8 @@
     "ERP-0304",
     "ERP-0305",
     "ERP-0306",
-    "ERP-0307"
+    "ERP-0307",
+    "ERP-0308"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
@@ -6827,6 +6828,33 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Specified normalized unique identifiers, API-vs-DB guards, exact decimal and Unicode values, active status semantics, no-partial-write concurrency, disposable migration rollback and prohibition on destructive production Down. Next ERP-0308 ASP.NET Product review/repair."
+    },
+    {
+      "stepId": "ERP-0308",
+      "status": "complete",
+      "scope": "ASP.NET Product entity/contract/index review and name/barcode search repair",
+      "completionMode": "runtime search change with SQL Server TDD regression",
+      "reviewedRepoCommit": "1f0aa9f82fb6485ef39e351daa56ae8ed5990ffe",
+      "evidence": [
+        "docs/ERP_0308_ASPNET_PRODUCT_REVIEW.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "aspnet-core/tests/ITRetailERP.Tests/ProductSearchTests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Models/Product.cs",
+        "aspnet-core/src/ITRetailERP.Web/Contracts/ProductRequest.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023140000_Products.cs"
+      ],
+      "verification": {
+        "kind": "red-green SQL Server Product search regression and Release build",
+        "red": "ProductSearchTests failed on name search: collection empty",
+        "green": "dotnet test tests/ITRetailERP.Tests/ITRetailERP.Tests.csproj -c Release: 12/12 passed on ITRetailERP_ProductSearchTest LocalDB",
+        "build": "dotnet build src/ITRetailERP.Web/ITRetailERP.Web.csproj -c Release --no-restore: 0 warnings, 0 errors",
+        "databaseMigration": "current EF migrations applied to dedicated LocalDB test database; no new migration",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Existing Product entity/contracts/indexes reviewed as sufficient for approved core fields. ASP.NET list now searches SKU, barcode and EN/AR names. Django parity next ERP-0309; later steps own error/CSRF/E2E and unresolved business fields."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
