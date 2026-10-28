@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0309",
+  "nextStepId": "ERP-0310",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -316,7 +316,8 @@
     "ERP-0305",
     "ERP-0306",
     "ERP-0307",
-    "ERP-0308"
+    "ERP-0308",
+    "ERP-0309"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
@@ -6855,6 +6856,33 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Existing Product entity/contracts/indexes reviewed as sufficient for approved core fields. ASP.NET list now searches SKU, barcode and EN/AR names. Django parity next ERP-0309; later steps own error/CSRF/E2E and unresolved business fields."
+    },
+    {
+      "stepId": "ERP-0309",
+      "status": "complete",
+      "scope": "Django Product model/serializer/migration review and four-field search parity",
+      "completionMode": "runtime search change with red-green API regression",
+      "reviewedRepoCommit": "5549c127a3b39ec56514682f92e570acafe1dc45",
+      "evidence": [
+        "docs/ERP_0309_DJANGO_PRODUCT_REVIEW.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "django/apps/catalog/api.py",
+        "django/apps/catalog/tests.py",
+        "django/apps/catalog/models.py",
+        "django/apps/catalog/migrations/0002_product.py",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs"
+      ],
+      "verification": {
+        "kind": "red-green Django Product API search and full SQLite unit suite",
+        "red": "new Product search test failed on English name, Arabic name and barcode with empty lists",
+        "green": "manage.py test apps.core apps.accounts apps.companies apps.partners apps.catalog --settings=config.settings_test: 85 tests, 7 skipped, 0 failures",
+        "systemCheck": "manage.py check --settings=config.settings_test: no issues",
+        "migrationDrift": "manage.py makemigrations --check --dry-run --settings=config.settings_test: no changes detected",
+        "sqlServer": "not run for Django; physical schema/index tests due ERP-0310/0319",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django Product search now covers SKU, barcode and EN/AR names like ASP.NET. Existing model/serializer/migration need no change for this search repair. Next ERP-0310 migration/index review."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

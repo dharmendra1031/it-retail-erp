@@ -273,6 +273,18 @@ class ProductApiTests(TestCase):
         self.assertEqual(self.client.delete(f"/api/brands/{self.brand.pk}").status_code, 409)
         self.assertEqual(self.client.delete(f"/api/units/{self.unit.pk}").status_code, 409)
 
+    def test_product_search_finds_english_arabic_name_and_barcode(self):
+        product = {**self.data, "nameEn": "Portable Notebook"}
+        response = self.client.post("/api/products", product, format="json")
+        self.assertEqual(response.status_code, 201, response.data)
+        product_id = response.data["id"]
+
+        for term in ("Notebook", product["nameAr"], product["barcode"]):
+            with self.subTest(term=term):
+                result = self.client.get("/api/products", {"search": term})
+                self.assertEqual(result.status_code, 200, result.data)
+                self.assertEqual([row["id"] for row in result.data], [product_id])
+
     def test_product_price_category_and_type_rules(self):
         for change in [
             {"sku": "A", "costPrice": "-1.000"},

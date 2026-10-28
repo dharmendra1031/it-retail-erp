@@ -239,7 +239,10 @@ class ProductViewSet(CatalogViewSet):
 
     def get_queryset(self):
         queryset = Product.objects.select_related("category", "brand", "unit").order_by("sku")
-        sku = self.request.query_params.get("search", "").strip()
-        if sku:
-            queryset = queryset.filter(sku__icontains=sku)
+        search = self.request.query_params.get("search", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(sku__icontains=search) | Q(barcode__icontains=search) |
+                Q(name_en__icontains=search) | Q(name_ar__icontains=search)
+            )
         return queryset
