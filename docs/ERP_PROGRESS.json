@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0307",
+  "nextStepId": "ERP-0308",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -314,7 +314,8 @@
     "ERP-0303",
     "ERP-0304",
     "ERP-0305",
-    "ERP-0306"
+    "ERP-0306",
+    "ERP-0307"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e8cb36b5eeead23724b934704abc5a3ceab4bfdb",
@@ -6799,6 +6800,33 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Mapped BIGINT ID, normalized SKU/barcode, bilingual text, FKs, exact decimals, status and tax/stock owner boundaries. Item Code, category/brand, price, Model and tax alternatives documented as unresolved gates before implementing those fields. Next ERP-0307 constraints and rollback design."
+    },
+    {
+      "stepId": "ERP-0307",
+      "status": "complete",
+      "scope": "Define Product identifier, decimal, Unicode, status and rollback invariants",
+      "completionMode": "source-backed constraint specification only",
+      "reviewedRepoCommit": "76ec2c3de852302c2f5603d968e20acc94c0a9e4",
+      "evidence": [
+        "docs/ERP_0307_PRODUCT_CONSTRAINTS.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "docs/ERP_PLAN_1000_STEPS.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "aspnet-core/src/ITRetailERP.Web/Data/ApplicationDbContext.cs",
+        "aspnet-core/src/ITRetailERP.Web/Migrations/20261023140000_Products.cs",
+        "django/apps/catalog/api.py",
+        "django/apps/catalog/models.py",
+        "django/apps/catalog/migrations/0002_product.py"
+      ],
+      "verification": {
+        "kind": "static constraints and rollback review",
+        "originalSrs": "linked source unavailable; repository SRS baseline used",
+        "runtimeBuild": "not run; no runtime code changes",
+        "applicationTests": "not run; executable checks due ERP-0317-0319",
+        "databaseMigration": "not run; no schema changes",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Specified normalized unique identifiers, API-vs-DB guards, exact decimal and Unicode values, active status semantics, no-partial-write concurrency, disposable migration rollback and prohibition on destructive production Down. Next ERP-0308 ASP.NET Product review/repair."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

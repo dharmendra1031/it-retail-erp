@@ -1,0 +1,36 @@
+# ERP-0307 — Product constraints, precision, status and rollback contract
+
+**Scope:** WP16 Product/Item Master; SRS §§4, 12–14, 42–43 as traced by `SRS_BASELINE.md` and `ERP_0301_PRODUCT_SCOPE.md`; design in `ERP_0306_PRODUCT_DATA_DESIGN.md`. Reviewed `development` at `76ec2c3de852302c2f5603d968e20acc94c0a9e4`. This defines expected behavior and identifies which guarantees already live in source. It does not claim a new SQL or API acceptance pass.
+
+## Identifier and relationship invariants
+
+| Invariant | Current enforcement | Required proof / owner |
+| --- | --- | --- |
+| Product ID is positive server-generated BIGINT | EF `Product.Id`/migration `BIGINT IDENTITY`; Django `BigAutoField`/migration | Disposable SQL/API readback in ERP-0310/0319; no client-chosen GUID or primary key. |
+| SKU is required, canonical uppercase ASCII `[A-Z0-9_-]{1,40}`, unique | ASP.NET `ProductsApiController.Valid/Apply`; Django `ProductSerializer.validate_sku`; EF unique SKU index; Django `unique=True` | Test whitespace/case normalization, duplicate POST/PUT and simultaneous duplicate writes. DB uniqueness is the final race guard; controlled API 400 parity is still due ERP-0311–0313/0319. |
+| Barcode is optional; nonblank canonical uppercase ASCII `[A-Z0-9_-]{3,64}`, unique | ASP.NET `Barcode` helper plus filtered unique non-null index; Django serializer plus `unique=True, null=True` | Test blank -> null, multiple barcode-less Products, case-insensitive duplicate and physical SQL Server index behavior in both migrated schemas. |
+| Category and Unit are required, Brand optional under current policy; selected masters must be active | Both API validators/querysets; EF restrictive FKs; Django PROTECT FKs | Reject missing/inactive IDs before save; preserve FK integrity under concurrent parent deletion. Leaf-only/mandatory Brand rules remain D2 in ERP-0306. |
+
+There is no separate Item Code field; D1 in ERP-0306 must be settled before adding a second unique identifier. Do not claim Product search by name/barcode is implemented: both current list endpoints filter SKU only. WP16 later API/UI steps own expanded search and selectors.
+
+## Decimal, Unicode and type constraints
+
+- **Money:** `costPrice`, `basePrice` and `minPrice` must be finite, nonnegative decimal(18,3) values serialized as exact three-place strings. `minPrice <= basePrice`. Reject an input with excess decimal places or magnitude outside decimal(18,3); do not silently round. ASP.NET `Money` checks nonnegative, `< 10^15` and equality after rounding to three places; Django `DecimalField(max_digits=18, decimal_places=3, min_value=0)` and `validate` cover the equivalent intended rule. ERP-0317–0319 must execute edge cases on both APIs and SQL Server.
+- **Reorder:** `reorderLevel` is nonnegative decimal(18,6), serialized to six places. Nonstock/digital Products must have zero reorder and `serialTracked=false`; stock Products may use serial tracking. Unit decimal-place policy is defined by Unit Master (0–6) and must be respected by later quantity posting. Neither Product API may use binary floating-point arithmetic for persisted prices/quantities.
+- **Unicode:** English and Arabic names/descriptions remain separate fields. EF migration uses NVARCHAR(200/1000); Django CharField on SQL Server must be verified as Unicode-capable in the physical schema. Preserve Arabic code points through create/update/readback, including mixed English/Arabic text. Trimming must not erase meaningful internal characters. Arabic fields are optional in the current API, but an explicitly supplied Arabic value must round-trip unchanged.
+- **Database versus API guard:** EF/Django migrations show unique indexes and FKs but no Product-specific SQL CHECK constraints for nonnegative prices, `min <= base`, nonstock settings or active parent selection. Current validation is at the API layer. Direct SQL writes are outside the public contract, yet ERP-0310 should decide whether safe additive CHECK constraints are needed for database-wide integrity after inspecting existing data and backend parity. Never assert a constraint exists solely because an API rejects a request.
+
+## Status and mutation semantics
+
+`isActive`/`IsActive` is a Product master availability flag, not a purchase/sales posting state. Both APIs currently permit a create/update with explicit active status; the same status must be returned and stored. Future transaction endpoints must reject a newly referenced inactive Product at posting time, while historical transaction rows remain readable. Stock, serial, warranty, payment and audit statuses belong WP17/21–25/30–34/46; changing Product active status cannot itself create or reverse those effects. Hard delete is currently possible for an unreferenced Product; future transaction FKs and financial retention rules must protect referenced records before those modules ship.
+
+## Failed-write and rollback contract
+
+1. For rejected validation, duplicate identifiers, unauthorized actions and CSRF failures, assert no Product insert and no change to the prior Product row or `UpdatedAtUtc`/`updated_at`. Use a fresh API GET and SQL query on a disposable database after each failure; a 4xx alone is insufficient.
+2. On two simultaneous duplicate POSTs, exactly one may commit. The loser must return an agreed controlled 400 without a partial row or leaked SQL error. On a conflicting PUT, preserve the entire old row. EF `SaveChangesAsync` is a single-unit write here but `ProductsApiController` lacks a late `DbUpdateException` handler; Django `CatalogViewSet.create/update` uses `transaction.atomic` and catches `IntegrityError` with a generic 400. API response parity and concurrency testing are due ERP-0311–0313/0319.
+3. For a future multi-row Product operation, place all related writes in one database transaction and roll back the whole unit on failure. Do not reserve document numbers, mutate stock or post ledger rows in a Product Master save. Those operations have separate package owners and their own idempotency/rollback gates.
+4. Any approved additive Product migration must be applied and rolled back on a disposable SQL Server database before deployment. Inspect live data for duplicate/null/scale conflicts before adding unique, NOT NULL or CHECK constraints. EF `20261023140000_Products.Down` drops the whole Product table and is destructive to populated data; never use it as a production rollback plan. Prefer a tested forward repair migration when a deployed schema needs correction. Django reverse migration of `0002_product` likewise removes Product data.
+
+## Evidence and next gate
+
+Source reviewed: `aspnet-core/src/ITRetailERP.Web/Models/Product.cs`, `Contracts/ProductRequest.cs`, `Controllers/Api/ProductsApiController.cs`, `Data/ApplicationDbContext.cs`, `Migrations/20261023140000_Products.cs`; `django/apps/catalog/models.py`, `api.py`, `migrations/0002_product.py`; `docs/ERP_0304_PRODUCT_HAPPY_PATH.md` and `ERP_0305_PRODUCT_NEGATIVE_ACCEPTANCE.md`. No Product runtime code, migration or production database was changed for ERP-0307. ERP-0308–0313 own necessary implementation/parity fixes; ERP-0317–0319 own executable SQL and browser proof. The next step is ERP-0308 ASP.NET Product entity/contract review and repair.
