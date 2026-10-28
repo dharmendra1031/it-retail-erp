@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0313",
+  "nextStepId": "ERP-0314",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -320,10 +320,11 @@
     "ERP-0309",
     "ERP-0310",
     "ERP-0311",
-    "ERP-0312"
+    "ERP-0312",
+    "ERP-0313"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "2497bb6ff95c808601e4d0b2462195c1e57234db",
+  "lastVerifiedCommit": "b6e818c786f194377d590de5e0084f90fe1c7b3e",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -6953,6 +6954,29 @@
         "productionDatabase": "not accessed"
       },
       "notes": "SQL Server 2601/2627 => 400 duplicate, 547 => 400 on save and 409 on delete. Transactional financial idempotency deferred to its owning package. Django Product parity next ERP-0313."
+    },
+    {
+      "stepId": "ERP-0313",
+      "status": "complete",
+      "scope": "Django Product duplicate SKU/barcode error response parity and transactional integrity",
+      "completionMode": "source fix + red/green Django API regression on SQLite and SQL Server",
+      "reviewedRepoCommit": "b6e818c786f194377d590de5e0084f90fe1c7b3e",
+      "evidence": [
+        "django/apps/catalog/api.py",
+        "django/config/exceptions.py",
+        "django/apps/catalog/tests.py",
+        "docs/ERP_0313_DJANGO_PRODUCT_PARITY.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40657866476",
+        "result": "5/5 SUCCESS",
+        "red": "CI 40657648527 identified DRF default Barcode UniqueValidator detail mismatch",
+        "green": "Duplicate SKU and barcode each HTTP 400 with identical Product detail; two barcode-less Products 201; Django SQLite + disposable SQL Server tests PASS",
+        "migrations": "none; existing migration replay PASS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Django product duplicate messages now match ASP.NET; no blanket masking of non-unique integrity errors; concurrency stress still due ERP-0319."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
