@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0316",
+  "nextStepId": "ERP-0317",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -323,10 +323,11 @@
     "ERP-0312",
     "ERP-0313",
     "ERP-0314",
-    "ERP-0315"
+    "ERP-0315",
+    "ERP-0316"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "c74ac6339d74d1f3ef62a65d86e184c39bfd1fc6",
+  "lastVerifiedCommit": "e7c8247d37efd2656c1da990b2c423ab0a8f5105",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -7029,6 +7030,29 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Admin Product UI complete for current package; non-admin Product view grant exists backend but current frontend shell is admin-only, tracked for role-aware UI integration. ERP-0316 bilingual accessibility verification next."
+    },
+    {
+      "stepId": "ERP-0316",
+      "status": "complete",
+      "scope": "Verify Product RTL, bilingual Unicode, keyboard flow and exact-decimal roundtrip",
+      "completionMode": "React browser + Django API + ASP.NET SQL integration tests",
+      "reviewedRepoCommit": "e7c8247d37efd2656c1da990b2c423ab0a8f5105",
+      "evidence": [
+        "frontend/e2e/erp.spec.ts",
+        "django/apps/catalog/tests.py",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "docs/ERP_0316_PRODUCT_BILINGUAL_VERIFICATION.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40660802519",
+        "result": "5/5 SUCCESS",
+        "browser": "Arabic Product Master RTL and keyboard Playwright PASS",
+        "django": "Arabic diacritics/3-place and 6-place decimals roundtrip PASS",
+        "sqlServer": "ASP.NET Product Arabic/decimal readback PASS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "WP16 Product entry localization verified; report printing/currency lifecycle later packages; next ERP-0317."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
