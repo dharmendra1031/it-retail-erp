@@ -143,7 +143,7 @@ export function Products() {
               onChange={event => change("descriptionAr", event.target.value)} />
           </label>
           <label>{t("productCategory")}
-            <select required value={values.categoryId || ""}
+            <select aria-label={t("productCategory")} required value={values.categoryId || ""}
               onChange={event => change("categoryId", Number(event.target.value))}>
               <option value="">{t("selectProductCategory")}</option>
               {activeCategories.map(item =>
@@ -151,7 +151,7 @@ export function Products() {
             </select>
           </label>
           <label>{t("productBrand")}
-            <select value={values.brandId ?? ""}
+            <select aria-label={t("productBrand")} value={values.brandId ?? ""}
               onChange={event => change("brandId", event.target.value ? Number(event.target.value) : null)}>
               <option value="">{t("noProductBrand")}</option>
               {activeBrands.map(item =>
@@ -159,7 +159,7 @@ export function Products() {
             </select>
           </label>
           <label>{t("productUnit")}
-            <select required value={values.unitId || ""}
+            <select aria-label={t("productUnit")} required value={values.unitId || ""}
               onChange={event => change("unitId", Number(event.target.value))}>
               <option value="">{t("selectProductUnit")}</option>
               {activeUnits.map(item =>
@@ -167,7 +167,7 @@ export function Products() {
             </select>
           </label>
           <label>{t("productType")}
-            <select value={values.productType} onChange={event => {
+            <select aria-label={t("productType")} value={values.productType} onChange={event => {
               const type = event.target.value as ProductValues["productType"];
               setValues(current => ({
                 ...current, productType: type,
