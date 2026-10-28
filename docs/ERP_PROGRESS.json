@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0312",
+  "nextStepId": "ERP-0313",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -319,10 +319,11 @@
     "ERP-0308",
     "ERP-0309",
     "ERP-0310",
-    "ERP-0311"
+    "ERP-0311",
+    "ERP-0312"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "7dfb38980df11c3763cf8a9bcafd62cde7597541",
+  "lastVerifiedCommit": "2497bb6ff95c808601e4d0b2462195c1e57234db",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -6931,6 +6932,27 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Recorded existing API contracts and late duplicate exception disparity; fixes due ERP-0312/0313; UI ERP-0315."
+    },
+    {
+      "stepId": "ERP-0312",
+      "status": "complete",
+      "scope": "ASP.NET Product create/update/delete safe late SQL constraint handling with regression",
+      "completionMode": "runtime code and SQL Server TDD integration acceptance",
+      "reviewedRepoCommit": "2497bb6ff95c808601e4d0b2462195c1e57234db",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "aspnet-core/tests/ITRetailERP.Tests/ProductConflictTests.cs",
+        "docs/ERP_0312_ASPNET_PRODUCT_CONFLICTS.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40656984940",
+        "result": "5/5 SUCCESS",
+        "lateUnique": "physical SQL unique SKU and Barcode conflict tests return HTTP 400; no writes",
+        "databaseMigration": "not needed; preexisting EF/Django migration reapply PASS",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "SQL Server 2601/2627 => 400 duplicate, 547 => 400 on save and 409 on delete. Transactional financial idempotency deferred to its owning package. Django Product parity next ERP-0313."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
