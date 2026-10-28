@@ -106,7 +106,7 @@ class CatalogViewSet(ModelViewSet):
         message = str(error)
         if self.basename == "products" and (
             "UNIQUE constraint failed" in message
-            or re.search(r"\\((?:2601|2627)\\)", message)
+            or re.search(r"\((?:2601|2627)\)", message)
         ):
             return PRODUCT_DUPLICATE_ERROR
         return "Invalid request."
