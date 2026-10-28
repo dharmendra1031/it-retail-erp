@@ -322,6 +322,12 @@ def check_api():
     }
     status, created_product = request(client, "/api/products", "POST", product, csrf)
     assert status == 201 and created_product["sku"] == "SKU-100", f"Product creation failed: {status} {created_product}"
+    status, _ = request(client, "/api/products", "POST", {
+        **product, "sku": "NO-CSRF", "barcode": "",
+    })
+    assert status == 403, "Product creation without CSRF was accepted"
+    status, missing = request(client, "/api/products?search=NO-CSRF")
+    assert status == 200 and not missing, "Rejected non-CSRF Product was persisted"
     status, duplicate = request(client, "/api/products", "POST", {
         **product, "barcode": "987654321000",
     }, csrf)
@@ -546,6 +552,39 @@ def check_api():
         "email": "sqlsales@example.test", "password": "StrongSalesPass123!", "rememberMe": False,
     }, employee_csrf["csrfToken"])
     assert status == 200 and not session["isAdmin"], "Branch employee login failed"
+    status, _ = request(employee, "/api/products")
+    assert status == 403, "Employee without Product grant listed Products"
+    status, _ = request(employee, f"/api/products/{created_product['id']}")
+    assert status == 403, "Employee without Product grant opened Product detail"
+    status, _ = request(employee, "/api/products", "POST", {
+        **product, "sku": "DENIED-SKU", "barcode": "",
+    }, employee_csrf["csrfToken"])
+    assert status == 403, "Employee without Product add grant created Product"
+
+    status, _ = request(client, f"/api/roles/{role['id']}/permissions", "PUT", {
+        "permissions": ["companies.add", "sales.view", "customers.view", "products.view"],
+    }, csrf)
+    assert status == 200, "Product read-only grant was not assigned"
+    status, product_rows = request(employee, "/api/products")
+    assert status == 200 and any(row["id"] == created_product["id"] for row in product_rows), (
+        "Product reader cannot list Products"
+    )
+    status, product_detail = request(employee, f"/api/products/{created_product['id']}")
+    assert status == 200 and product_detail["sku"] == "SKU-100", "Product reader cannot view detail"
+    status, _ = request(employee, "/api/products", "POST", {
+        **product, "sku": "READONLY-SKU", "barcode": "",
+    }, employee_csrf["csrfToken"])
+    assert status == 403, "Product reader created Product"
+    status, _ = request(employee, f"/api/products/{created_product['id']}", "PUT", {
+        **product, "nameEn": "Unauthorized",
+    }, employee_csrf["csrfToken"])
+    assert status == 403, "Product reader edited Product"
+    status, _ = request(employee, f"/api/products/{created_product['id']}", "DELETE",
+                        csrf=employee_csrf["csrfToken"])
+    assert status == 403, "Product reader deleted Product"
+    status, original_product = request(client, f"/api/products/{created_product['id']}")
+    assert status == 200 and original_product["nameEn"] == "Laptop", "Rejected Product edit mutated row"
+
     for path in ("/api/categories", "/api/brands", "/api/units"):
         status, _ = request(employee, path)
         assert status == 403, f"Employee without catalog grant accessed {path}: {status}"

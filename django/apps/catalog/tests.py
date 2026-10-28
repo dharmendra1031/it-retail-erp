@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-from apps.accounts.models import User
+from apps.accounts.models import AccessPermission, Role, User
 from .models import Brand, Category, Unit, Product
 
 
@@ -319,6 +319,51 @@ class ProductApiTests(TestCase):
             )
             self.assertEqual(response.status_code, 201, response.data)
             self.assertIsNone(response.data["barcode"])
+
+    def test_product_read_only_grant_denies_mutations(self):
+        created = self.client.post("/api/products", self.data, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        product_id = created.data["id"]
+
+        employee = User.objects.create_user(
+            username="product-reader", email="reader@example.test", password="StrongPass123!"
+        )
+        self.client.force_authenticate(user=employee)
+        for path in ("/api/products", f"/api/products/{product_id}"):
+            self.assertEqual(self.client.get(path).status_code, 403)
+
+        role = Role.objects.create(name="Product Reader")
+        permission, _ = AccessPermission.objects.get_or_create(
+            code="products.view", defaults={"name": "Products View"}
+        )
+        role.permissions.add(permission)
+        employee.roles.add(role)
+
+        listing = self.client.get("/api/products")
+        detail = self.client.get(f"/api/products/{product_id}")
+        self.assertEqual(listing.status_code, 200, listing.data)
+        self.assertEqual(detail.status_code, 200, detail.data)
+        self.assertEqual(detail.data["id"], product_id)
+
+        for method, path, payload in (
+            ("post", "/api/products", {**self.data, "sku": "DENIED-NEW", "barcode": ""}),
+            ("put", f"/api/products/{product_id}", {**self.data, "nameEn": "Unauthorized"}),
+            ("delete", f"/api/products/{product_id}", None),
+        ):
+            response = getattr(self.client, method)(path, payload, format="json")
+            self.assertEqual(response.status_code, 403, response.data)
+
+        self.client.force_authenticate(user=self.admin)
+        reloaded = self.client.get(f"/api/products/{product_id}")
+        self.assertEqual(reloaded.data["nameEn"], self.data["nameEn"])
+        self.assertEqual(Product.objects.count(), 1)
+
+    def test_product_write_requires_csrf_cookie_session(self):
+        session_client = APIClient(enforce_csrf_checks=True)
+        session_client.force_login(self.admin)
+        response = session_client.post("/api/products", self.data, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(Product.objects.exists())
 
     def test_nonstock_no_quantity_settings(self):
         response = self.client.post("/api/products", {
