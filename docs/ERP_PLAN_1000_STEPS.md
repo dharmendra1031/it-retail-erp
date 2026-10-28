@@ -438,7 +438,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0303** (03/20) Compare source requirements with existing implementation; mark each gap with code evidence, not guesses.
 - [x] **ERP-0304** (04/20) Specify the happy-path acceptance: Create stock item with bilingual description and barcode.
 - [x] **ERP-0305** (05/20) Specify the negative/authorization case: Reject duplicate SKU, bad price and missing required category.
-- [ ] **ERP-0306** (06/20) Design data, configuration and numeric BIGINT IDs for Item code/SKU/barcode, EN/AR fields, prices, tax, reorder, status; record N/A with evidence if schema unchanged.
+- [x] **ERP-0306** (06/20) Design data, configuration and numeric BIGINT IDs for Item code/SKU/barcode, EN/AR fields, prices, tax, reorder, status; record N/A with evidence if schema unchanged.
 - [ ] **ERP-0307** (07/20) Define constraints, decimal/Unicode handling, statuses and rollback around: Unique identifiers and correct type-specific validation.
 - [ ] **ERP-0308** (08/20) Implement or repair ASP.NET entities/configuration/contracts for Product entity, normalized indexes, CRUD and search. Execute runtime changes only for surfaces owned by this package; otherwise record N/A/deferred downstream owner with code evidence and do not create placeholder implementation.
 - [ ] **ERP-0309** (09/20) Implement or repair Django models/serializers/configuration for Equivalent Product model, serializer, filters and DB indexes. Execute runtime changes only for surfaces owned by this package; otherwise record N/A/deferred downstream owner with code evidence and do not create placeholder implementation.
