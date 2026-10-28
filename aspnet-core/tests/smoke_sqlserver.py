@@ -322,6 +322,11 @@ def check_api():
     }
     status, created_product = request(client, "/api/products", "POST", product, csrf)
     assert status == 201 and created_product["sku"] == "SKU-100", f"Product creation failed: {status} {created_product}"
+    assert created_product["nameAr"] == "حاسوب محمول", "Product Arabic name changed"
+    assert created_product["costPrice"] == "250.000", "Product cost lost precision"
+    assert created_product["basePrice"] == "320.500", "Product selling price lost precision"
+    assert created_product["minPrice"] == "300.000", "Product minimum price lost precision"
+    assert created_product["reorderLevel"] == "5.000000", "Product reorder lost precision"
     status, _ = request(client, "/api/products", "POST", {
         **product, "sku": "NO-CSRF", "barcode": "",
     })

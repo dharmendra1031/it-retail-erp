@@ -383,6 +383,33 @@ class ProductApiTests(TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertFalse(Product.objects.exists())
 
+    def test_product_arabic_unicode_and_decimal_round_trip(self):
+        data = {
+            **self.data,
+            "nameAr": "حاسوب مُتنقّل", "descriptionAr": "حاسوب تجريبي بذاكرة كبيرة",
+            "costPrice": "123.456", "basePrice": "150.500",
+            "minPrice": "120.125", "reorderLevel": "4.123456",
+        }
+        created = self.client.post("/api/products", data, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        self.assertEqual(created.data["nameAr"], data["nameAr"])
+        self.assertEqual(created.data["descriptionAr"], data["descriptionAr"])
+        self.assertEqual(created.data["costPrice"], "123.456")
+        self.assertEqual(created.data["basePrice"], "150.500")
+        self.assertEqual(created.data["minPrice"], "120.125")
+        self.assertEqual(created.data["reorderLevel"], "4.123456")
+
+        updated = self.client.put(
+            f"/api/products/{created.data['id']}",
+            {**data, "descriptionAr": "تفاصيل مُحدّثة"},
+            format="json",
+        )
+        self.assertEqual(updated.status_code, 200, updated.data)
+        reloaded = self.client.get(f"/api/products/{created.data['id']}")
+        self.assertEqual(reloaded.data["descriptionAr"], "تفاصيل مُحدّثة")
+        self.assertEqual(reloaded.data["costPrice"], "123.456")
+        self.assertEqual(reloaded.data["reorderLevel"], "4.123456")
+
     def test_nonstock_no_quantity_settings(self):
         response = self.client.post("/api/products", {
             **self.data, "sku": "SERVICE-01", "barcode": "", "productType": "nonstock",

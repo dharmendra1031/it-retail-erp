@@ -600,3 +600,55 @@ test("admin creates a bilingual Product from Product Master", async ({ page }) =
   await page.getByLabel("Search products...").fill("E2EPROD01");
   await expect(row).toBeVisible();
 });
+
+
+test("admin Product Master keeps RTL labels, keyboard order and exact Arabic amounts", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Category Master" }).click();
+  await page.getByLabel("Code").fill("ARPRCAT");
+  await page.getByLabel("Category Name (English)").fill("Arabic Product Category");
+  await page.getByLabel("Category Name (Arabic)").fill("فئة عربية");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("row").filter({ hasText: "ARPRCAT" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Unit Master" }).click();
+  await page.getByLabel("Code").fill("ARPRUNIT");
+  await page.getByLabel("Unit Name (English)").fill("Arabic Product Unit");
+  await page.getByLabel("Unit Name (Arabic)").fill("وحدة عربية");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("row").filter({ hasText: "ARPRUNIT" })).toBeVisible();
+
+  await page.getByLabel("Language").selectOption("ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await page.getByRole("button", { name: "إدارة المنتجات" }).click();
+
+  const sku = page.getByLabel("رمز المخزون");
+  await expect(sku).toHaveAttribute("dir", "ltr");
+  await sku.fill("ARPR0001");
+  await sku.press("Enter");
+  await expect(page.getByLabel("الباركود")).toBeFocused();
+
+  await page.getByLabel("الباركود").fill("123456778899");
+  await page.getByLabel("اسم المنتج (بالإنجليزية)").fill("Arabic Notebook");
+  const arabicName = page.getByLabel("اسم المنتج (بالعربية)");
+  await expect(arabicName).toHaveAttribute("dir", "rtl");
+  await arabicName.fill("حاسوب مُتنقّل");
+  await page.getByLabel("الفئة", { exact: true }).selectOption({ label: "فئة عربية" });
+  await page.getByLabel("الوحدة", { exact: true }).selectOption({ label: "وحدة عربية" });
+  await page.getByLabel("سعر التكلفة").fill("123.456");
+  await page.getByLabel("سعر البيع").fill("150.500");
+  await page.getByLabel("أقل سعر").fill("120.125");
+  await page.getByLabel("حد إعادة الطلب").fill("4.123456");
+  await page.getByRole("button", { name: "حفظ المنتج" }).click();
+
+  const row = page.getByRole("row").filter({ hasText: "ARPR0001" });
+  await expect(row).toContainText("حاسوب مُتنقّل");
+  await expect(row).toContainText("150.500");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByLabel("رمز المخزون")).toBeVisible();
+});
