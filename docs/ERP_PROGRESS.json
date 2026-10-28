@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0317",
+  "nextStepId": "ERP-0318",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -324,7 +324,8 @@
     "ERP-0313",
     "ERP-0314",
     "ERP-0315",
-    "ERP-0316"
+    "ERP-0316",
+    "ERP-0317"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "e7c8247d37efd2656c1da990b2c423ab0a8f5105",
@@ -7053,6 +7054,25 @@
         "productionDatabase": "not accessed"
       },
       "notes": "WP16 Product entry localization verified; report printing/currency lifecycle later packages; next ERP-0317."
+    },
+    {
+      "stepId": "ERP-0317",
+      "status": "complete",
+      "scope": "ASP.NET Product stock create and validation tests",
+      "completionMode": "local disposable SQL Server migration and full ASP.NET test suite",
+      "reviewedRepoCommit": "5207ecd",
+      "evidence": [
+        "aspnet-core/tests/ITRetailERP.Tests/ProductCreationTests.cs",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "migration": "EF database update succeeded on ITRetailERP_Erp0317_Test local disposable SQL Server database",
+        "productTests": "ProductCreationTests 2/2 passed",
+        "aspnetSuite": "Release dotnet test 16/16 passed",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Added missing Unit, negative price and nonstock serial/reorder rejection checks. Existing positive case covers normalized barcode, bilingual fields and exact decimals. Stock posting belongs WP21/25; next ERP-0318."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

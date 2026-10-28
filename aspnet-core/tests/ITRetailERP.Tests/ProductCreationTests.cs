@@ -127,6 +127,19 @@ public sealed class ProductCreationTests
         request.MinPrice = 2m;
         request.CostPrice = 1.1234m;
         Assert.IsType<BadRequestObjectResult>(await controller.Create(request));
+        request.CostPrice = 1m;
+        request.UnitId = 999999999;
+        Assert.IsType<BadRequestObjectResult>(await controller.Create(request));
+        request.UnitId = unit.Id;
+        request.BasePrice = -1m;
+        Assert.IsType<BadRequestObjectResult>(await controller.Create(request));
+        request.BasePrice = 5m;
+        request.ProductType = "nonstock";
+        request.SerialTracked = true;
+        Assert.IsType<BadRequestObjectResult>(await controller.Create(request));
+        request.SerialTracked = false;
+        request.ReorderLevel = 1m;
+        Assert.IsType<BadRequestObjectResult>(await controller.Create(request));
         Assert.False(await db.Products.AsNoTracking().AnyAsync(x => x.Sku == request.Sku));
         await transaction.RollbackAsync();
     }
