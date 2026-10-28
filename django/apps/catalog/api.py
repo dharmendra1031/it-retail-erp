@@ -204,7 +204,7 @@ class ProductSerializer(serializers.ModelSerializer):
                   "categoryId", "brandId", "unitId", "productType", "serialTracked",
                   "costPrice", "basePrice", "minPrice", "reorderLevel", "isActive")
         read_only_fields = ("id",)
-        extra_kwargs = {"barcode": {"required": False, "allow_blank": True, "allow_null": True},
+        extra_kwargs = {"barcode": {"required": False, "allow_blank": True, "allow_null": True, "validators": []},
                         "sku": {"validators": []}}
 
     def validate_sku(self, value):
