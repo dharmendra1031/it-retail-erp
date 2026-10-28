@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0311",
+  "nextStepId": "ERP-0312",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -318,7 +318,8 @@
     "ERP-0307",
     "ERP-0308",
     "ERP-0309",
-    "ERP-0310"
+    "ERP-0310",
+    "ERP-0311"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "7dfb38980df11c3763cf8a9bcafd62cde7597541",
@@ -6908,6 +6909,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Source schemas already own BIGINT IDENTITY, NVARCHAR EN/AR, precise prices/reorder, filtered unique barcode and protected FKs. No new migration needed or made. ERP-0311 API contract next; Product concurrency, React UI and final E2E later."
+    },
+    {
+      "stepId": "ERP-0311",
+      "status": "complete",
+      "scope": "Document actual ASP.NET/Django Product route, request/response/error contract and known parity gaps",
+      "completionMode": "source-backed documentation only",
+      "reviewedRepoCommit": "674bc93cc054e7c7bd046a2434743e76e5546abb",
+      "evidence": [
+        "docs/ERP_0311_PRODUCT_API_CONTRACT.md",
+        "docs/api-contract.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "django/apps/catalog/api.py"
+      ],
+      "verification": {
+        "baselineCI": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40649719993",
+        "kind": "static code and SQL migration review",
+        "runtimeTests": "not run (documentation only)",
+        "databaseMigration": "none",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Recorded existing API contracts and late duplicate exception disparity; fixes due ERP-0312/0313; UI ERP-0315."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
