@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0314",
+  "nextStepId": "ERP-0315",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -321,10 +321,11 @@
     "ERP-0310",
     "ERP-0311",
     "ERP-0312",
-    "ERP-0313"
+    "ERP-0313",
+    "ERP-0314"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "b6e818c786f194377d590de5e0084f90fe1c7b3e",
+  "lastVerifiedCommit": "f24b00b5138370038fab07fd6c5bba49a4c95dc1",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -6977,6 +6978,29 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Django product duplicate messages now match ASP.NET; no blanket masking of non-unique integrity errors; concurrency stress still due ERP-0319."
+    },
+    {
+      "stepId": "ERP-0314",
+      "status": "complete",
+      "scope": "Product authorization, read-only grants and server-side CSRF protection",
+      "completionMode": "red-green real HTTP CSRF security fix and cross-backend regressions",
+      "reviewedRepoCommit": "f24b00b5138370038fab07fd6c5bba49a4c95dc1",
+      "evidence": [
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "aspnet-core/tests/smoke_sqlserver.py",
+        "django/apps/catalog/tests.py",
+        "docs/ERP_0314_PRODUCT_AUTH_SECURITY.md",
+        "docs/ERP_DATABASE_REVIEW.md"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40658905027",
+        "result": "5/5 SUCCESS",
+        "red": "CI 40658496827 detected missing CSRF on ASP.NET Product create",
+        "green": "real HTTP Product CSRF/mutation denial PASS; Django auth and cookie-session CSRF PASS; SQL Server integration PASS",
+        "databaseMigration": "none",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Global Product Master has no branch scope; warehouse stock scope WP21/25, audit WP46. React Product UI and permission-aware nav remain ERP-0315."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
