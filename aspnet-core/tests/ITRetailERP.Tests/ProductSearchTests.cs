@@ -51,6 +51,17 @@ public sealed class ProductSearchTests
             Assert.Contains(rows, row => row.Id == product.Id);
         }
 
+        var paged = Assert.IsType<OkObjectResult>(await controller.List(null, 1, 1));
+        using (var json = System.Text.Json.JsonDocument.Parse(
+            System.Text.Json.JsonSerializer.Serialize(paged.Value)))
+        {
+            Assert.Equal(1, json.RootElement.GetProperty("total").GetInt32());
+            Assert.Equal(1, json.RootElement.GetProperty("page").GetInt32());
+            Assert.Equal(1, json.RootElement.GetProperty("pageSize").GetInt32());
+            Assert.Equal(product.Id, json.RootElement.GetProperty("items")[0].GetProperty("id").GetInt64());
+        }
+        Assert.IsType<BadRequestObjectResult>(await controller.List(null, 0, 25));
+
         await transaction.RollbackAsync();
     }
 }

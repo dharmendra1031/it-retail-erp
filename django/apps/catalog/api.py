@@ -249,6 +249,25 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductViewSet(CatalogViewSet):
     serializer_class = ProductSerializer
 
+    def list(self, request, *args, **kwargs):
+        if "page" not in request.query_params and "pageSize" not in request.query_params:
+            return super().list(request, *args, **kwargs)
+        try:
+            page = int(request.query_params.get("page", "1"))
+            size = int(request.query_params.get("pageSize", "25"))
+        except ValueError:
+            return Response({"detail": "Invalid request."}, status=400)
+        if page < 1 or not 1 <= size <= 100 or (page - 1) * size > 2147483647:
+            return Response({"detail": "Invalid request."}, status=400)
+
+        queryset = self.filter_queryset(self.get_queryset())
+        total = queryset.count()
+        products = queryset[(page - 1) * size:page * size]
+        return Response({
+            "items": self.get_serializer(products, many=True).data,
+            "total": total, "page": page, "pageSize": size,
+        })
+
     def get_queryset(self):
         queryset = Product.objects.select_related("category", "brand", "unit").order_by("sku")
         search = self.request.query_params.get("search", "").strip()

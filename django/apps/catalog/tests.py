@@ -285,6 +285,24 @@ class ProductApiTests(TestCase):
                 self.assertEqual(result.status_code, 200, result.data)
                 self.assertEqual([row["id"] for row in result.data], [product_id])
 
+    def test_product_page_filters_and_validation(self):
+        for sku, barcode in (("LAPTOP-01", "111222333444"), ("LAPTOP-02", "222333444555")):
+            response = self.client.post(
+                "/api/products", {**self.data, "sku": sku, "barcode": barcode},
+                format="json",
+            )
+            self.assertEqual(response.status_code, 201, response.data)
+
+        first = self.client.get("/api/products", {"page": 1, "pageSize": 1})
+        second = self.client.get("/api/products", {"page": 2, "pageSize": 1})
+        self.assertEqual(first.status_code, 200, first.data)
+        self.assertEqual(first.data["total"], 2)
+        self.assertEqual(first.data["pageSize"], 1)
+        self.assertEqual([row["sku"] for row in first.data["items"]], ["LAPTOP-01"])
+        self.assertEqual([row["sku"] for row in second.data["items"]], ["LAPTOP-02"])
+        self.assertEqual(self.client.get("/api/products", {"page": 0}).status_code, 400)
+        self.assertEqual(self.client.get("/api/products", {"pageSize": 101}).status_code, 400)
+
     def test_product_price_category_and_type_rules(self):
         for change in [
             {"sku": "A", "costPrice": "-1.000"},

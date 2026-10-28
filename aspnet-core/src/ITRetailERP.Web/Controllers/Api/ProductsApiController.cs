@@ -18,7 +18,8 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
 {
     [HttpGet]
     [Authorize(Policy = "products.view")]
-    public async Task<IActionResult> List([FromQuery] string? search)
+    public async Task<IActionResult> List([FromQuery] string? search,
+        [FromQuery] int? page = null, [FromQuery] int? pageSize = null)
     {
         var products = db.Products.AsNoTracking().AsQueryable();
         if (!string.IsNullOrWhiteSpace(search))
@@ -30,6 +31,19 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
                 x.NameEn.Contains(term) ||
                 x.NameAr.Contains(term));
         }
+        if (page.HasValue || pageSize.HasValue)
+        {
+            var number = page ?? 1;
+            var size = pageSize ?? 25;
+            if (number < 1 || size is < 1 or > 100 || ((long)number - 1) * size > int.MaxValue)
+                return BadRequest(new { detail = "Invalid request." });
+
+            var total = await products.CountAsync();
+            var items = await products.OrderBy(x => x.Sku)
+                .Skip((number - 1) * size).Take(size).ToListAsync();
+            return Ok(new { items = items.Select(ToResponse), total, page = number, pageSize = size });
+        }
+
         return Ok((await products.OrderBy(x => x.Sku).ToListAsync()).Select(ToResponse));
     }
 
