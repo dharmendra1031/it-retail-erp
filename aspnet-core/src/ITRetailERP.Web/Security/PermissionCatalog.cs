@@ -5,6 +5,7 @@ public static class PermissionCatalog
     private static readonly Dictionary<string, string[]> Actions = new()
     {
         ["products"] = ["view", "add", "edit", "delete"],
+        ["product-licenses"] = ["view", "add", "reveal", "revoke"],
         ["categories"] = ["view", "add", "edit", "delete"],
         ["brands"] = ["view", "add", "edit", "delete"],
         ["units"] = ["view", "add", "edit", "delete"],

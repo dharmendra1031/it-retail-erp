@@ -93,6 +93,9 @@ public sealed class ProductsApiController(ApplicationDbContext db) : ControllerB
         var product = await db.Products.FindAsync(id);
         if (product is null) return NotFound();
         if (!await Valid(request)) return BadRequest(new { detail = "Invalid request." });
+        if (product.ProductType == "digital" && request.ProductType != "digital" &&
+            await db.ProductLicenses.AnyAsync(x => x.ProductId == id))
+            return BadRequest(new { detail = "Invalid request." });
         var sku = request.Sku.Trim().ToUpperInvariant();
         var barcode = Barcode(request.Barcode);
         if (await db.Products.AnyAsync(x => x.Id != id &&

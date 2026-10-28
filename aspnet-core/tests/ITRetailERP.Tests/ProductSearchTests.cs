@@ -51,7 +51,7 @@ public sealed class ProductSearchTests
             Assert.Contains(rows, row => row.Id == product.Id);
         }
 
-        var paged = Assert.IsType<OkObjectResult>(await controller.List(null, 1, 1));
+        var paged = Assert.IsType<OkObjectResult>(await controller.List($"Notebook {suffix}", 1, 1));
         using (var json = System.Text.Json.JsonDocument.Parse(
             System.Text.Json.JsonSerializer.Serialize(paged.Value)))
         {

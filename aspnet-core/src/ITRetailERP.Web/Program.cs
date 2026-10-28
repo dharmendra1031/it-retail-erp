@@ -76,6 +76,7 @@ builder.Services.AddAntiforgery(options =>
 
 builder.Services.AddScoped<CompanyLogoStorage>();
 builder.Services.AddScoped<DocumentNumberService>();
+builder.Services.AddScoped<ProductLicenseCrypto>();
 builder.Services.AddScoped<ApiCsrfFilter>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 builder.Services.AddAuthorization(options =>

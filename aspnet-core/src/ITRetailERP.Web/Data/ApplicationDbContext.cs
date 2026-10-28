@@ -11,6 +11,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductLicense> ProductLicenses => Set<ProductLicense>();
     public DbSet<Brand> Brands => Set<Brand>();
     public DbSet<Unit> Units => Set<Unit>();
     public DbSet<Customer> Customers => Set<Customer>();
@@ -59,12 +60,33 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
             entity.Property(x => x.BasePrice).HasPrecision(18, 3);
             entity.Property(x => x.MinPrice).HasPrecision(18, 3);
             entity.Property(x => x.ReorderLevel).HasPrecision(18, 6);
+            entity.ToTable(table => table.HasCheckConstraint(
+                "CK_Products_TypeStockSettings",
+                "[ProductType] = N'stock' OR " +
+                "([ProductType] IN (N'nonstock', N'digital') AND " +
+                "[SerialTracked] = 0 AND [ReorderLevel] = 0)"));
             entity.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne<Brand>().WithMany().HasForeignKey(x => x.BrandId)
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne<Unit>().WithMany().HasForeignKey(x => x.UnitId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<ProductLicense>(entity =>
+        {
+            entity.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(x => x.ProductId);
+            entity.HasIndex(x => x.KeyFingerprint).IsUnique()
+                .HasFilter("[IsActive] = 1 AND [KeyFingerprint] IS NOT NULL");
+            entity.ToTable(table => table.HasCheckConstraint(
+                "CK_ProductLicenses_DatesAndIdentity",
+                "([EncryptedKey] IS NOT NULL OR LEN([LicenseNumber]) > 0) AND " +
+                "([ActivationDate] IS NULL OR [ExpiryDate] IS NULL OR " +
+                "[ExpiryDate] >= [ActivationDate]) AND " +
+                "(([EncryptedKey] IS NULL AND [KeyFingerprint] IS NULL) OR " +
+                "([EncryptedKey] IS NOT NULL AND [KeyFingerprint] IS NOT NULL))"));
         });
 
         builder.Entity<Category>(entity =>

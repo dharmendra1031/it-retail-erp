@@ -138,6 +138,14 @@ const english = {
   productsPage: "Page", unableLoadProducts: "Unable to load products.",
   unableSaveProduct: "Unable to save product.", unableDeleteProduct: "Unable to delete product.",
   confirmDeleteProduct: "Delete product", duplicateProduct: "SKU or barcode already exists.",
+  productLicenses: "Digital Licenses", licenseNumber: "License Number",
+  licenseKey: "License Key", activationDate: "Activation Date", expiryDate: "Expiry Date",
+  addLicense: "Add License", revokeLicense: "Revoke", licenseStored: "Stored securely",
+  licenseNoKey: "No key", licenseStatus: "License Status",
+  unableLoadLicenses: "Unable to load licenses.", unableSaveLicense: "Unable to save license.",
+  unableRevokeLicense: "Unable to revoke license.",
+  confirmRevokeLicense: "Revoke this license?",
+  duplicateLicense: "Active license key already exists.",
 } as const;
 
 const arabic: Record<keyof typeof english, string> = {
@@ -279,6 +287,14 @@ const arabic: Record<keyof typeof english, string> = {
   productsPage: "صفحة", unableLoadProducts: "تعذر تحميل المنتجات.",
   unableSaveProduct: "تعذر حفظ المنتج.", unableDeleteProduct: "تعذر حذف المنتج.",
   confirmDeleteProduct: "حذف المنتج", duplicateProduct: "رمز المنتج أو الباركود موجود مسبقاً.",
+  productLicenses: "التراخيص الرقمية", licenseNumber: "رقم الترخيص",
+  licenseKey: "مفتاح الترخيص", activationDate: "تاريخ التفعيل", expiryDate: "تاريخ الانتهاء",
+  addLicense: "إضافة ترخيص", revokeLicense: "إلغاء الترخيص", licenseStored: "محفوظ بأمان",
+  licenseNoKey: "بدون مفتاح", licenseStatus: "حالة الترخيص",
+  unableLoadLicenses: "تعذر تحميل التراخيص.", unableSaveLicense: "تعذر حفظ الترخيص.",
+  unableRevokeLicense: "تعذر إلغاء الترخيص.",
+  confirmRevokeLicense: "هل تريد إلغاء هذا الترخيص؟",
+  duplicateLicense: "مفتاح الترخيص النشط موجود مسبقًا.",
 };
 
 type Language = "en" | "ar";
@@ -334,6 +350,7 @@ const errorKeys: Record<string, TranslationKey> = {
   "Protected documents exist.": "protectedDocuments",
   "Invalid document.": "invalidDocument",
   "SKU or barcode already exists.": "duplicateProduct",
+  "Active license key already exists.": "duplicateLicense",
 };
 
 export function languageError(message: string, t: (key: TranslationKey) => string) {

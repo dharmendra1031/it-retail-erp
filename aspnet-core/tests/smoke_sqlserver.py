@@ -342,6 +342,46 @@ def check_api():
         "productType": "nonstock",
     }, csrf)
     assert status == 400, "Non-stock with serial quantity accepted"
+    status, digital = request(client, "/api/products", "POST", {
+        **product, "sku": "DIGITAL-01", "barcode": "", "productType": "digital",
+        "serialTracked": False, "reorderLevel": "0.000000",
+    }, csrf)
+    assert status == 201 and digital["productType"] == "digital", "Digital Product rejected"
+    license_payload = {
+        "productId": digital["id"], "licenseKey": "AbC-SQL-Secret-01",
+        "licenseNumber": "SQL-LIC-01", "activationDate": "2026-10-01",
+        "expiryDate": "2027-10-01",
+    }
+    status, _ = request(client, "/api/product-licenses", "POST", license_payload)
+    assert status == 403, "License creation without CSRF was accepted"
+    status, issued = request(client, "/api/product-licenses", "POST", license_payload, csrf)
+    assert status == 201 and issued["hasKey"] and "licenseKey" not in issued, (
+        f"License provisioning failed or leaked key: {status} {issued}"
+    )
+    with sql_connection() as db:
+        encrypted = db.execute(
+            "SELECT EncryptedKey FROM ProductLicenses WHERE Id = ?", issued["id"]
+        ).fetchone()[0]
+        assert b"AbC-SQL-Secret-01" not in bytes(encrypted), "License key saved in plaintext"
+    status, duplicate_license = request(client, "/api/product-licenses", "POST", {
+        **license_payload, "licenseKey": " ABC-SQL-SECRET-01 ",
+        "licenseNumber": "SQL-LIC-02",
+    }, csrf)
+    assert status == 400 and duplicate_license == {
+        "detail": "Active license key already exists."
+    }, "Duplicate active license key accepted"
+    status, licenses = request(client, f"/api/product-licenses?productId={digital['id']}")
+    assert status == 200 and len(licenses) == 1 and "licenseKey" not in licenses[0], (
+        "License listing leaked a key or lost a row"
+    )
+    status, revealed = request(client, f"/api/product-licenses/{issued['id']}/reveal")
+    assert status == 200 and revealed == {"licenseKey": "AbC-SQL-Secret-01"}, (
+        "Authorized license reveal failed"
+    )
+    status, revoked = request(client, f"/api/product-licenses/{issued['id']}", "DELETE", csrf=csrf)
+    assert status == 200 and not revoked["isActive"], "License revoke failed"
+    status, reissued = request(client, "/api/product-licenses", "POST", license_payload, csrf)
+    assert status == 201 and reissued["id"] != issued["id"], "Revoked key could not be reissued"
     status, _ = request(client, f"/api/categories/{category['id']}", "DELETE", csrf=csrf)
     assert status == 409, "Referenced category should be protected"
     status, _ = request(client, f"/api/categories/{subcategory['id']}", "DELETE", csrf=csrf)
@@ -589,6 +629,25 @@ def check_api():
     assert status == 403, "Product reader deleted Product"
     status, original_product = request(client, f"/api/products/{created_product['id']}")
     assert status == 200 and original_product["nameEn"] == "Laptop", "Rejected Product edit mutated row"
+
+    status, _ = request(employee, f"/api/product-licenses?productId={digital['id']}")
+    assert status == 403, "Employee without license grant listed licenses"
+    status, _ = request(client, f"/api/roles/{role['id']}/permissions", "PUT", {
+        "permissions": ["companies.add", "sales.view", "customers.view", "products.view",
+                        "product-licenses.view"],
+    }, csrf)
+    assert status == 200, "License read-only grant was not assigned"
+    status, license_rows = request(employee, f"/api/product-licenses?productId={digital['id']}")
+    assert status == 200 and len(license_rows) == 2, "License reader cannot list metadata"
+    assert all("licenseKey" not in row for row in license_rows), "License list leaked key"
+    status, _ = request(employee, f"/api/product-licenses/{issued['id']}/reveal")
+    assert status == 403, "License metadata reader revealed a key"
+    status, _ = request(employee, "/api/product-licenses", "POST", license_payload,
+                        employee_csrf["csrfToken"])
+    assert status == 403, "License metadata reader created a key"
+    status, _ = request(employee, f"/api/product-licenses/{issued['id']}", "DELETE",
+                        csrf=employee_csrf["csrfToken"])
+    assert status == 403, "License metadata reader revoked a key"
 
     for path in ("/api/categories", "/api/brands", "/api/units"):
         status, _ = request(employee, path)

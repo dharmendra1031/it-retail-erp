@@ -136,8 +136,76 @@ def verify(database, table, expected_columns, expected_fks):
         print(f"PASS {database}.{table}: BIGINT IDENTITY, Unicode, DECIMAL, nullable barcode, unique indexes, FKs")
 
 
+def verify_license_schema(database, table, product_table, product_fk, type_check):
+    connection_string = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER=127.0.0.1,1433;DATABASE={database};UID=sa;"
+        f"PWD={os.environ['DB_PASSWORD']};Encrypt=yes;TrustServerCertificate=yes;"
+    )
+    with pyodbc.connect(connection_string) as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT c.name, t.name, c.max_length, c.is_nullable, c.is_identity "
+            "FROM sys.columns c JOIN sys.types t ON c.user_type_id=t.user_type_id "
+            "WHERE c.object_id=OBJECT_ID(?)", table,
+        )
+        columns = {row[0].lower(): row[1:] for row in cursor.fetchall()}
+        expected = {
+            "id": ("bigint", 8, False),
+            product_fk.lower(): ("bigint", 8, False),
+            ("LicenseNumber" if table == "ProductLicenses" else "license_number").lower():
+                ("nvarchar", 200, False),
+            ("EncryptedKey" if table == "ProductLicenses" else "encrypted_key").lower():
+                ("varbinary", -1, True),
+            ("KeyFingerprint" if table == "ProductLicenses" else "key_fingerprint").lower():
+                ("varbinary", 32, True),
+        }
+        for name, expected_column in expected.items():
+            actual = columns.get(name)
+            assert actual is not None, f"{database}.{table}.{name} is missing"
+            assert (actual[0].lower(), actual[1], bool(actual[2])) == expected_column, (
+                f"{database}.{table}.{name}: unexpected type, length or nullability: {actual}"
+            )
+        assert columns["id"][3] == 1, f"{database}.{table}.id is not IDENTITY"
+
+        cursor.execute(
+            "SELECT COUNT(*) FROM sys.foreign_keys "
+            "WHERE parent_object_id=OBJECT_ID(?) AND referenced_object_id=OBJECT_ID(?) "
+            "AND delete_referential_action_desc='NO_ACTION'", table, product_table,
+        )
+        assert cursor.fetchone()[0] == 1, f"{database}.{table}: missing protected Product FK"
+        cursor.execute(
+            "SELECT i.is_unique, i.filter_definition, c.name "
+            "FROM sys.indexes i JOIN sys.index_columns ic "
+            "ON ic.object_id=i.object_id AND ic.index_id=i.index_id "
+            "JOIN sys.columns c ON c.object_id=ic.object_id AND c.column_id=ic.column_id "
+            "WHERE i.object_id=OBJECT_ID(?) AND ic.key_ordinal=1", table,
+        )
+        fingerprint_indexes = [row for row in cursor.fetchall()
+                               if row[2].lower() == ("keyfingerprint" if table == "ProductLicenses"
+                                                     else "key_fingerprint")]
+        assert any(unique and condition and "isactive" in condition.replace("_", "").lower()
+                   for unique, condition, _ in fingerprint_indexes), (
+            f"{database}.{table}: missing filtered active-key unique index"
+        )
+        cursor.execute(
+            "SELECT COUNT(*) FROM sys.check_constraints WHERE parent_object_id=OBJECT_ID(?)", table,
+        )
+        assert cursor.fetchone()[0] >= 1, f"{database}.{table}: license check constraint missing"
+        cursor.execute(
+            "SELECT COUNT(*) FROM sys.check_constraints "
+            "WHERE parent_object_id=OBJECT_ID(?) AND name=?", product_table, type_check,
+        )
+        assert cursor.fetchone()[0] == 1, f"{database}.{product_table}: type check missing"
+        print(f"PASS {database}.{table}: encrypted key column, active-key index and protected Product FK")
+
+
 if __name__ == "__main__":
     if os.getenv("GITHUB_ACTIONS") != "true" or os.getenv("DB_NAME") != "erp_integration":
         raise SystemExit("Product schema verification runs only against disposable CI SQL Server.")
     for schema in SCHEMAS:
         verify(*schema)
+    verify_license_schema("erp_integration", "catalog_productlicense", "catalog_product",
+                          "product_id", "ck_product_type_stock_settings")
+    verify_license_schema("erp_net_ci", "ProductLicenses", "Products",
+                          "ProductId", "CK_Products_TypeStockSettings")

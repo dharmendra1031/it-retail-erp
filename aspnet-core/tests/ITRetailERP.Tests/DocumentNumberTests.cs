@@ -22,21 +22,25 @@ public sealed class DocumentNumberTests
     {
         await using var db = OpenDatabase();
         var numbering = new DocumentNumberService(db);
+        var suffix = Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
+        var purchaseSeries = $"TP_{suffix}";
+        var invoiceSeries = $"TI_{suffix}";
 
-        Assert.Equal(1, await numbering.NextAsync("TEST_PO", 2026, 1));
-        Assert.Equal(2, await numbering.NextAsync("TEST_PO", 2026, 1));
-        Assert.Equal(1, await numbering.NextAsync("TEST_PO", 2026, 2));
-        Assert.Equal(1, await numbering.NextAsync("TEST_PO", 2027, 1));
-        Assert.Equal(1, await numbering.NextAsync("TEST_INV", 2026, 1));
+        Assert.Equal(1, await numbering.NextAsync(purchaseSeries, 2026, 1));
+        Assert.Equal(2, await numbering.NextAsync(purchaseSeries, 2026, 1));
+        Assert.Equal(1, await numbering.NextAsync(purchaseSeries, 2026, 2));
+        Assert.Equal(1, await numbering.NextAsync(purchaseSeries, 2027, 1));
+        Assert.Equal(1, await numbering.NextAsync(invoiceSeries, 2026, 1));
     }
 
     [Fact]
     public async Task ConcurrentRequestsGetDifferentNumbers()
     {
+        var series = $"TC_{Guid.NewGuid().ToString("N")[..8].ToUpperInvariant()}";
         var tasks = Enumerable.Range(0, 6).Select(async _ =>
         {
             await using var db = OpenDatabase();
-            return await new DocumentNumberService(db).NextAsync("TEST_CONCURRENT", 2026, 1);
+            return await new DocumentNumberService(db).NextAsync(series, 2026, 1);
         });
 
         var actual = (await Task.WhenAll(tasks)).OrderBy(x => x).ToArray();

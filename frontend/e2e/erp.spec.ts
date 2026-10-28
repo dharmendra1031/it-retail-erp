@@ -599,6 +599,71 @@ test("admin creates a bilingual Product from Product Master", async ({ page }) =
   await expect(row).toContainText("حاسوب تجريبي");
   await page.getByLabel("Search products...").fill("E2EPROD01");
   await expect(row).toBeVisible();
+
+  await page.getByLabel("SKU").fill("E2EPROD01");
+  await page.getByLabel("Barcode").fill("123456770013");
+  await page.getByLabel("Product Name (English)").fill("Duplicate Notebook");
+  await page.getByLabel("Category", { exact: true }).selectOption({ label: "E2E Product Category" });
+  await page.getByLabel("Unit", { exact: true }).selectOption({ label: "E2E Product Unit" });
+  await page.getByRole("button", { name: "Save Product" }).click();
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByRole("row").filter({ hasText: "E2EPROD01" })).toHaveCount(1);
+});
+
+test("admin provisions a masked digital license and sees its expiry", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email").fill(process.env.E2E_ADMIN_EMAIL ?? "");
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("button", { name: "Category Master" }).click();
+  await page.getByLabel("Code").fill("E2ELICCAT");
+  await page.getByLabel("Category Name (English)").fill("Digital Licenses Category");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("row").filter({ hasText: "E2ELICCAT" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Unit Master" }).click();
+  await page.getByLabel("Code").fill("E2ELICUNIT");
+  await page.getByLabel("Unit Name (English)").fill("Digital License Unit");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("row").filter({ hasText: "E2ELICUNIT" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Product Master" }).click();
+  await page.getByLabel("SKU").fill("E2EDIGITAL01");
+  await page.getByLabel("Product Name (English)").fill("Digital Software");
+  await page.getByLabel("Category", { exact: true }).selectOption({ label: "Digital Licenses Category" });
+  await page.getByLabel("Unit", { exact: true }).selectOption({ label: "Digital License Unit" });
+  await page.getByLabel("Product Type").selectOption("digital");
+  await page.getByLabel("Selling Price").fill("10.000");
+  await page.getByRole("button", { name: "Save Product" }).click();
+
+  const product = page.getByRole("row").filter({ hasText: "E2EDIGITAL01" });
+  await expect(product).toBeVisible();
+  await product.getByRole("button", { name: "Digital Licenses" }).click();
+  await page.getByLabel("License Number").fill("LIC-E2E-01");
+  await page.getByLabel("License Key").fill("E2E-SECRET-KEY-01");
+  await page.getByLabel("Activation Date").fill("2026-10-01");
+  await page.getByLabel("Expiry Date").fill("2027-10-01");
+  await page.getByRole("button", { name: "Add License" }).click();
+
+  const license = page.getByRole("row").filter({ hasText: "LIC-E2E-01" });
+  await expect(license).toBeVisible();
+  await expect(license).toContainText("Stored securely");
+  await expect(license).toContainText("2027-10-01");
+  await expect(page.getByLabel("License Key")).toHaveValue("");
+  await expect(page.getByText("E2E-SECRET-KEY-01")).toHaveCount(0);
+
+  await page.getByLabel("License Key").fill(" e2e-secret-key-01 ");
+  await page.getByRole("button", { name: "Add License" }).click();
+  await expect(page.getByRole("alert")).toContainText("Active license key already exists.");
+  await expect(page.getByRole("row").filter({ hasText: "LIC-E2E-01" })).toHaveCount(1);
+
+  page.once("dialog", dialog => dialog.accept());
+  await license.getByRole("button", { name: "Revoke" }).click();
+  await expect(license).toContainText("Inactive");
+  await page.getByLabel("License Key").fill("E2E-SECRET-KEY-01");
+  await page.getByRole("button", { name: "Add License" }).click();
+  await expect(page.getByRole("row").filter({ hasText: "Stored securely" })).toHaveCount(2);
 });
 
 

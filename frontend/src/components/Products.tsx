@@ -3,6 +3,7 @@ import { CatalogItem, getCatalog } from "../api/catalog";
 import { Product, ProductValues, deleteProduct, getProducts, saveProduct } from "../api/products";
 import { advanceOnEnter } from "../forms/keyboard";
 import { languageError, useLanguage } from "../i18n";
+import { ProductLicenses } from "./ProductLicenses";
 
 const blank: ProductValues = {
   sku: "", barcode: "", nameEn: "", nameAr: "",
@@ -24,6 +25,7 @@ export function Products() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [licenseProduct, setLicenseProduct] = useState<Product | null>(null);
   const [error, setError] = useState("");
   const skuInput = useRef<HTMLInputElement>(null);
 
@@ -238,6 +240,9 @@ export function Products() {
                   <td>{t(product.isActive ? "active" : "inactive")}</td>
                   <td className="actions">
                     <button type="button" className="secondary" onClick={() => edit(product)}>{t("edit")}</button>
+                    {product.productType === "digital" &&
+                      <button type="button" className="secondary"
+                        onClick={() => setLicenseProduct(product)}>{t("productLicenses")}</button>}
                     <button type="button" className="danger" onClick={() => void remove(product)}>{t("delete")}</button>
                   </td>
                 </tr>
@@ -254,6 +259,8 @@ export function Products() {
             onClick={() => setPage(value => value + 1)}>{t("nextProductsPage")}</button>
         </div>
       </section>
+      {licenseProduct && <ProductLicenses key={licenseProduct.id} product={licenseProduct}
+        onClose={() => setLicenseProduct(null)} />}
     </main>
   );
 }

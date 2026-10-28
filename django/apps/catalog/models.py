@@ -66,3 +66,41 @@ class Product(TimeStampedModel):
     min_price = models.DecimalField(max_digits=18, decimal_places=3, default=0)
     reorder_level = models.DecimalField(max_digits=18, decimal_places=6, default=0)
     is_active = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [models.CheckConstraint(
+            condition=(models.Q(product_type="stock") |
+                       models.Q(product_type__in=("nonstock", "digital"),
+                                serial_tracked=False, reorder_level=0)),
+            name="ck_product_type_stock_settings",
+        )]
+
+
+class ProductLicense(TimeStampedModel):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="licenses")
+    license_number = models.CharField(max_length=100, blank=True)
+    encrypted_key = models.BinaryField(null=True, blank=True)
+    key_fingerprint = models.BinaryField(max_length=32, null=True, blank=True)
+    activation_date = models.DateField(null=True, blank=True)
+    expiry_date = models.DateField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=("key_fingerprint",),
+                condition=models.Q(is_active=True, key_fingerprint__isnull=False),
+                name="uq_active_product_license_key",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    (models.Q(encrypted_key__isnull=False) | ~models.Q(license_number="")) &
+                    (models.Q(activation_date__isnull=True) |
+                     models.Q(expiry_date__isnull=True) |
+                     models.Q(expiry_date__gte=models.F("activation_date"))) &
+                    ((models.Q(encrypted_key__isnull=True) & models.Q(key_fingerprint__isnull=True)) |
+                     (models.Q(encrypted_key__isnull=False) & models.Q(key_fingerprint__isnull=False)))
+                ),
+                name="ck_product_license_dates_identity",
+            ),
+        ]

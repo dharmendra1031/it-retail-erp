@@ -97,6 +97,11 @@ jobs:
       DB_NAME: erp_integration
     steps:
       - uses: actions/checkout@v4
+      - name: Generate disposable license encryption key
+        run: |
+          key="$(openssl rand -base64 32)"
+          echo "::add-mask::$key"
+          echo "PRODUCT_LICENSE_SECRET=$key" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -222,6 +227,11 @@ jobs:
       CI: "true"
     steps:
       - uses: actions/checkout@v4
+      - name: Generate disposable license encryption key
+        run: |
+          key="$(openssl rand -base64 32)"
+          echo "::add-mask::$key"
+          echo "PRODUCT_LICENSE_SECRET=$key" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

@@ -1,8 +1,16 @@
-from django.test import TestCase
+from concurrent.futures import ThreadPoolExecutor
+import base64
+import os
+from threading import Barrier
+from unittest import skipUnless
+from unittest.mock import patch
+
+from django.db import close_old_connections, connection
+from django.test import TestCase, TransactionTestCase
 from rest_framework.test import APIClient
 
 from apps.accounts.models import AccessPermission, Role, User
-from .models import Brand, Category, Unit, Product
+from .models import Brand, Category, Unit, Product, ProductLicense
 
 
 class CatalogApiTests(TestCase):
@@ -471,8 +479,201 @@ class ProductApiTests(TestCase):
         self.assertEqual(reloaded.data["reorderLevel"], "4.123456")
 
     def test_nonstock_no_quantity_settings(self):
-        response = self.client.post("/api/products", {
-            **self.data, "sku": "SERVICE-01", "barcode": "", "productType": "nonstock",
-            "serialTracked": False, "reorderLevel": "0.000000",
+        for product_type, sku in (("nonstock", "SERVICE-01"), ("digital", "LICENSE-01")):
+            with self.subTest(product_type=product_type):
+                response = self.client.post("/api/products", {
+                    **self.data, "sku": sku, "barcode": "", "productType": product_type,
+                    "serialTracked": False, "reorderLevel": "0.000000",
+                }, format="json")
+                self.assertEqual(response.status_code, 201, response.data)
+                self.assertFalse(response.data["serialTracked"])
+                self.assertEqual(response.data["reorderLevel"], "0.000000")
+                saved = Product.objects.get(pk=response.data["id"])
+                self.assertEqual(saved.product_type, product_type)
+                self.assertFalse(saved.serial_tracked)
+                self.assertEqual(saved.reorder_level, 0)
+
+    def test_database_rejects_nonstock_reorder_setting(self):
+        from decimal import Decimal
+        from django.db import IntegrityError, transaction
+
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                Product.objects.create(
+                    sku="INVALID-SERVICE", name_en="Invalid Service",
+                    category=self.category, unit=self.unit, product_type="nonstock",
+                    cost_price=Decimal("0.000"), base_price=Decimal("0.000"),
+                    reorder_level=Decimal("1.000000"),
+                )
+        self.assertFalse(Product.objects.filter(sku="INVALID-SERVICE").exists())
+
+
+@skipUnless(connection.vendor == "microsoft", "SQL Server concurrency test")
+class ProductConcurrentApiTests(TransactionTestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            username="product-race-admin", email="product-race@example.test", password="StrongPass123!"
+        )
+        self.category = Category.objects.create(code="RACECAT", name_en="Race Category")
+        self.unit = Unit.objects.create(code="RACEUNIT", name_en="Piece")
+
+    def test_simultaneous_duplicate_sku_and_barcode(self):
+        for duplicate_sku in (True, False):
+            with self.subTest(duplicate_sku=duplicate_sku):
+                barrier = Barrier(2)
+
+                def create(attempt):
+                    close_old_connections()
+                    try:
+                        client = APIClient()
+                        client.force_authenticate(user=self.admin)
+                        payload = {
+                            "sku": "RACE-SKU" if duplicate_sku else f"RACE-SKU-{attempt}",
+                            "barcode": f"RACE-BAR-{attempt}" if duplicate_sku else "RACE-BAR",
+                            "nameEn": "Concurrent Product",
+                            "categoryId": self.category.pk, "unitId": self.unit.pk,
+                            "productType": "stock", "costPrice": "1.000", "basePrice": "2.000",
+                        }
+                        barrier.wait(timeout=10)
+                        response = client.post("/api/products", payload, format="json")
+                        return response.status_code, response.data
+                    finally:
+                        close_old_connections()
+
+                with ThreadPoolExecutor(max_workers=2) as pool:
+                    results = list(pool.map(create, (1, 2)))
+
+                self.assertEqual(sorted(status for status, _ in results), [201, 400], results)
+                self.assertEqual(
+                    next(data for status, data in results if status == 400),
+                    {"detail": "SKU or barcode already exists."},
+                )
+                matching = (Product.objects.filter(sku="RACE-SKU") if duplicate_sku
+                            else Product.objects.filter(barcode="RACE-BAR"))
+                self.assertEqual(matching.count(), 1)
+                Product.objects.all().delete()
+
+
+class ProductLicenseApiTests(TestCase):
+    def setUp(self):
+        secret = base64.b64encode(os.urandom(32)).decode("ascii")
+        environment = patch.dict(os.environ, {"PRODUCT_LICENSE_SECRET": secret})
+        environment.start()
+        self.addCleanup(environment.stop)
+        self.admin = User.objects.create_superuser(
+            username="license-admin", email="license-admin@example.test", password="StrongPass123!"
+        )
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.admin)
+        category = Category.objects.create(code="SOFTWARE", name_en="Software")
+        unit = Unit.objects.create(code="LICENSE", name_en="License")
+        self.product = Product.objects.create(
+            sku="DIGITAL-01", name_en="Software License", category=category, unit=unit,
+            product_type="digital", cost_price=0, base_price=1,
+        )
+        self.payload = {
+            "productId": self.product.pk, "licenseKey": "AbC-123-key",
+            "licenseNumber": "LIC-001", "activationDate": "2026-10-01",
+            "expiryDate": "2027-10-01",
+        }
+
+    def test_key_is_encrypted_masked_unique_and_revocable(self):
+        created = self.client.post("/api/product-licenses", self.payload, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        license_id = created.data["id"]
+        self.assertTrue(created.data["hasKey"])
+        self.assertNotIn("licenseKey", created.data)
+        self.assertEqual(created.data["expiryDate"], "2027-10-01")
+
+        saved = ProductLicense.objects.get(pk=license_id)
+        self.assertNotIn(self.payload["licenseKey"].encode(), bytes(saved.encrypted_key))
+        self.assertEqual(len(bytes(saved.key_fingerprint)), 32)
+        listed = self.client.get("/api/product-licenses", {"productId": self.product.pk})
+        self.assertEqual(listed.status_code, 200, listed.data)
+        self.assertEqual(len(listed.data), 1)
+        self.assertNotIn("licenseKey", listed.data[0])
+
+        type_change = self.client.put(f"/api/products/{self.product.pk}", {
+            "sku": self.product.sku, "nameEn": self.product.name_en,
+            "categoryId": self.product.category_id, "unitId": self.product.unit_id,
+            "productType": "nonstock", "costPrice": "0.000", "basePrice": "1.000",
         }, format="json")
-        self.assertEqual(response.status_code, 201, response.data)
+        self.assertEqual(type_change.status_code, 400, type_change.data)
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.product_type, "digital")
+        self.assertEqual(self.client.delete(
+            f"/api/products/{self.product.pk}").status_code, 409)
+
+        duplicate = self.client.post("/api/product-licenses", {
+            **self.payload, "licenseKey": " ABC-123-KEY ", "licenseNumber": "LIC-002",
+        }, format="json")
+        self.assertEqual(duplicate.status_code, 400, duplicate.data)
+        self.assertEqual(duplicate.data, {"detail": "Active license key already exists."})
+        self.assertEqual(ProductLicense.objects.count(), 1)
+
+        revealed = self.client.get(f"/api/product-licenses/{license_id}/reveal")
+        self.assertEqual(revealed.status_code, 200, revealed.data)
+        self.assertEqual(revealed.data, {"licenseKey": self.payload["licenseKey"]})
+        self.assertEqual(revealed["Cache-Control"], "no-store")
+
+        revoked = self.client.delete(f"/api/product-licenses/{license_id}")
+        self.assertEqual(revoked.status_code, 200, revoked.data)
+        self.assertFalse(revoked.data["isActive"])
+        reissued = self.client.post("/api/product-licenses", self.payload, format="json")
+        self.assertEqual(reissued.status_code, 201, reissued.data)
+        number_only = self.client.post("/api/product-licenses", {
+            "productId": self.product.pk, "licenseNumber": "NUMBER-ONLY",
+        }, format="json")
+        self.assertEqual(number_only.status_code, 201, number_only.data)
+        self.assertFalse(number_only.data["hasKey"])
+        self.assertEqual(ProductLicense.objects.count(), 3)
+
+    def test_invalid_product_dates_and_missing_identity_are_rejected(self):
+        stock = Product.objects.create(
+            sku="STOCK-01", name_en="Hardware", category=self.product.category,
+            unit=self.product.unit, product_type="stock", cost_price=0, base_price=1,
+        )
+        for change in (
+            {"productId": stock.pk},
+            {"activationDate": "2027-10-01", "expiryDate": "2026-10-01"},
+            {"licenseKey": "", "licenseNumber": ""},
+        ):
+            with self.subTest(change=change):
+                rejected = self.client.post("/api/product-licenses", {
+                    **self.payload, **change,
+                }, format="json")
+                self.assertEqual(rejected.status_code, 400, rejected.data)
+                self.assertEqual(ProductLicense.objects.count(), 0)
+
+    def test_read_only_grant_cannot_reveal_or_write_key(self):
+        created = self.client.post("/api/product-licenses", self.payload, format="json")
+        self.assertEqual(created.status_code, 201, created.data)
+        license_id = created.data["id"]
+        reader = User.objects.create_user(
+            username="license-reader", email="license-reader@example.test", password="StrongPass123!"
+        )
+        role = Role.objects.create(name="License Reader")
+        permission, _ = AccessPermission.objects.get_or_create(
+            code="product-licenses.view", defaults={"name": "Licenses View"}
+        )
+        role.permissions.add(permission)
+        reader.roles.add(role)
+        self.client.force_authenticate(user=reader)
+
+        listed = self.client.get("/api/product-licenses", {"productId": self.product.pk})
+        self.assertEqual(listed.status_code, 200, listed.data)
+        self.assertNotIn("licenseKey", listed.data[0])
+        self.assertEqual(self.client.get(
+            f"/api/product-licenses/{license_id}/reveal").status_code, 403)
+        self.assertEqual(self.client.post(
+            "/api/product-licenses", self.payload, format="json").status_code, 403)
+        self.assertEqual(self.client.delete(
+            f"/api/product-licenses/{license_id}").status_code, 403)
+        self.assertEqual(ProductLicense.objects.count(), 1)
+
+    def test_session_create_requires_csrf(self):
+        session_client = APIClient(enforce_csrf_checks=True)
+        session_client.force_login(self.admin)
+        response = session_client.post("/api/product-licenses", self.payload, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(ProductLicense.objects.exists())

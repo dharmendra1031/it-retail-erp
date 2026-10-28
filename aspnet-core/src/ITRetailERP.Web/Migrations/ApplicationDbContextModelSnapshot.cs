@@ -327,6 +327,13 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 .HasForeignKey("UnitId").OnDelete(DeleteBehavior.Restrict).IsRequired();
         });
 
+        modelBuilder.Entity("ITRetailERP.Web.Models.ProductLicense", b =>
+        {
+            b.HasOne("ITRetailERP.Web.Models.Product", "Product").WithMany()
+                .HasForeignKey("ProductId").OnDelete(DeleteBehavior.Restrict).IsRequired();
+            b.Navigation("Product");
+        });
+
         modelBuilder.Entity("ITRetailERP.Web.Models.PartnerDocument", b =>
         {
             b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("bigint");
@@ -444,7 +451,33 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
             b.HasIndex("CategoryId");
             b.HasIndex("BrandId");
             b.HasIndex("UnitId");
-            b.ToTable("Products");
+            b.ToTable("Products", t => t.HasCheckConstraint(
+                "CK_Products_TypeStockSettings",
+                "[ProductType] = N'stock' OR ([ProductType] IN (N'nonstock', N'digital') AND [SerialTracked] = 0 AND [ReorderLevel] = 0)"));
+        });
+
+        modelBuilder.Entity("ITRetailERP.Web.Models.ProductLicense", b =>
+        {
+            b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("bigint");
+            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+            b.Property<long>("ProductId").HasColumnType("bigint");
+            b.Property<string>("LicenseNumber").IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
+            b.Property<byte[]>("EncryptedKey").HasColumnType("varbinary(max)");
+            b.Property<byte[]>("KeyFingerprint").HasMaxLength(32).HasColumnType("varbinary(32)");
+            b.Property<DateOnly?>("ActivationDate").HasColumnType("date");
+            b.Property<DateOnly?>("ExpiryDate").HasColumnType("date");
+            b.Property<bool>("IsActive").HasColumnType("bit");
+            b.Property<DateTime>("CreatedAtUtc").HasColumnType("datetime2");
+            b.Property<DateTime>("UpdatedAtUtc").HasColumnType("datetime2");
+            b.HasKey("Id");
+            b.HasIndex("ProductId");
+            b.HasIndex("KeyFingerprint").IsUnique()
+                .HasFilter("[IsActive] = 1 AND [KeyFingerprint] IS NOT NULL");
+            b.ToTable("ProductLicenses", t => t.HasCheckConstraint(
+                "CK_ProductLicenses_DatesAndIdentity",
+                "([EncryptedKey] IS NOT NULL OR LEN([LicenseNumber]) > 0) AND " +
+                "([ActivationDate] IS NULL OR [ExpiryDate] IS NULL OR [ExpiryDate] >= [ActivationDate]) AND " +
+                "(([EncryptedKey] IS NULL AND [KeyFingerprint] IS NULL) OR ([EncryptedKey] IS NOT NULL AND [KeyFingerprint] IS NOT NULL))"));
         });
 
         modelBuilder.Entity("ITRetailERP.Web.Models.Company", b =>

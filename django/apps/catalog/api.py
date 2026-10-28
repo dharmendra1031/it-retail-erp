@@ -1,15 +1,20 @@
 import re
+import unicodedata
 from decimal import Decimal
 
 from django.db import IntegrityError, transaction
 from django.db.models import ProtectedError, Q
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.decorators import action
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from apps.accounts.permissions import has_permission
-from .models import Brand, Category, Unit, Product
+from .license_crypto import decrypt as decrypt_license_key
+from .license_crypto import encrypt as encrypt_license_key
+from .license_crypto import fingerprint as license_fingerprint
+from .models import Brand, Category, Unit, Product, ProductLicense
 
 
 class CatalogPermission(BasePermission):
@@ -243,6 +248,8 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Non-stock or digital products cannot hold stock settings.")
         if base is not None and minimum > base:
             raise serializers.ValidationError("Minimum price exceeds selling price.")
+        if product and product.product_type == "digital" and kind != "digital" and product.licenses.exists():
+            raise serializers.ValidationError("Product with licenses must remain digital.")
         return values
 
 
@@ -277,3 +284,100 @@ class ProductViewSet(CatalogViewSet):
                 Q(name_en__icontains=search) | Q(name_ar__icontains=search)
             )
         return queryset
+
+
+class ProductLicensePermission(BasePermission):
+    ACTIONS = {"create": "add", "destroy": "revoke", "reveal": "reveal"}
+
+    def has_permission(self, request, view):
+        return has_permission(request.user, f"product-licenses.{self.ACTIONS.get(view.action, 'view')}")
+
+
+class ProductLicenseSerializer(serializers.ModelSerializer):
+    productId = serializers.PrimaryKeyRelatedField(
+        source="product", queryset=Product.objects.filter(product_type="digital", is_active=True)
+    )
+    licenseNumber = serializers.CharField(source="license_number", max_length=100,
+                                          required=False, allow_blank=True)
+    licenseKey = serializers.CharField(write_only=True, max_length=512,
+                                       required=False, allow_blank=True)
+    hasKey = serializers.SerializerMethodField()
+    activationDate = serializers.DateField(source="activation_date", required=False, allow_null=True)
+    expiryDate = serializers.DateField(source="expiry_date", required=False, allow_null=True)
+    isActive = serializers.BooleanField(source="is_active", read_only=True)
+
+    class Meta:
+        model = ProductLicense
+        fields = ("id", "productId", "licenseNumber", "licenseKey", "hasKey",
+                  "activationDate", "expiryDate", "isActive")
+        read_only_fields = ("id", "hasKey", "isActive")
+
+    def get_hasKey(self, obj):
+        return obj.encrypted_key is not None
+
+    def validate_licenseKey(self, value):
+        value = value.strip()
+        if any(unicodedata.category(char) == "Cc" for char in value):
+            raise serializers.ValidationError("Invalid license key.")
+        return value
+
+    def validate(self, values):
+        key = values.get("licenseKey", "")
+        number = values.get("license_number", "").strip()
+        if not key and not number:
+            raise serializers.ValidationError("License key or number is required.")
+        activation = values.get("activation_date")
+        expiry = values.get("expiry_date")
+        if activation and expiry and expiry < activation:
+            raise serializers.ValidationError("Expiry date cannot precede activation date.")
+        values["license_number"] = number
+        return values
+
+    def create(self, validated_data):
+        key = validated_data.pop("licenseKey", "")
+        if key:
+            validated_data["encrypted_key"] = encrypt_license_key(key)
+            validated_data["key_fingerprint"] = license_fingerprint(key)
+        return ProductLicense.objects.create(**validated_data)
+
+
+class ProductLicenseViewSet(ModelViewSet):
+    serializer_class = ProductLicenseSerializer
+    queryset = ProductLicense.objects.order_by("-id")
+    permission_classes = [IsAuthenticated, ProductLicensePermission]
+    http_method_names = ["get", "post", "delete", "head", "options"]
+
+    def list(self, request, *args, **kwargs):
+        try:
+            product_id = int(request.query_params.get("productId", ""))
+        except ValueError:
+            return Response({"detail": "Invalid request."}, status=400)
+        if product_id <= 0:
+            return Response({"detail": "Invalid request."}, status=400)
+        rows = self.get_queryset().filter(product_id=product_id)
+        return Response(self.get_serializer(rows, many=True).data)
+
+    def create(self, request, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                return super().create(request, *args, **kwargs)
+        except IntegrityError as error:
+            message = str(error)
+            if "UNIQUE constraint failed" in message or re.search(r"\((?:2601|2627)\)", message):
+                return Response({"detail": "Active license key already exists."}, status=400)
+            return Response({"detail": "Invalid request."}, status=400)
+
+    def destroy(self, request, *args, **kwargs):
+        license = self.get_object()
+        if license.is_active:
+            license.is_active = False
+            license.save(update_fields=["is_active", "updated_at"])
+        return Response(self.get_serializer(license).data)
+
+    @action(detail=True, methods=["get"])
+    def reveal(self, request, pk=None):
+        license = self.get_object()
+        response = Response({"licenseKey": decrypt_license_key(license.encrypted_key)
+                             if license.encrypted_key is not None else None})
+        response["Cache-Control"] = "no-store"
+        return response

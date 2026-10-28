@@ -11,6 +11,73 @@ namespace ITRetailERP.Tests;
 public sealed class ProductCreationTests
 {
     [Fact]
+    public async Task DatabaseRejectsInventorySettingsOnNonstockProduct()
+    {
+        var connection = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+        Assert.False(string.IsNullOrWhiteSpace(connection), "Disposable SQL Server connection is required.");
+
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlServer(connection).Options;
+        await using var db = new ApplicationDbContext(options);
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        var suffix = Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
+        var category = new Category { Code = $"C-{suffix}", NameEn = "Type category" };
+        var unit = new Unit { Code = $"U-{suffix}", NameEn = "Piece" };
+        db.Categories.Add(category);
+        db.Units.Add(unit);
+        await db.SaveChangesAsync();
+
+        db.Products.Add(new Product
+        {
+            Sku = $"P-{suffix}", NameEn = "Service", CategoryId = category.Id,
+            UnitId = unit.Id, ProductType = "nonstock", ReorderLevel = 1m,
+        });
+        await Assert.ThrowsAsync<DbUpdateException>(() => db.SaveChangesAsync());
+        db.ChangeTracker.Clear();
+        Assert.False(await db.Products.AsNoTracking().AnyAsync(x => x.Sku == $"P-{suffix}"));
+        await transaction.RollbackAsync();
+    }
+
+    [Theory]
+    [InlineData("nonstock")]
+    [InlineData("digital")]
+    public async Task NonstockAndDigitalProductsHaveNoInventorySettings(string productType)
+    {
+        var connection = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+        Assert.False(string.IsNullOrWhiteSpace(connection), "Disposable SQL Server connection is required.");
+
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlServer(connection).Options;
+        await using var db = new ApplicationDbContext(options);
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        var suffix = Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
+        var category = new Category { Code = $"C-{suffix}", NameEn = "Type category" };
+        var unit = new Unit { Code = $"U-{suffix}", NameEn = "Piece" };
+        db.Categories.Add(category);
+        db.Units.Add(unit);
+        await db.SaveChangesAsync();
+
+        var response = Assert.IsType<CreatedAtActionResult>(await new ProductsApiController(db)
+            .Create(new ProductRequest
+            {
+                Sku = $"P-{suffix}", NameEn = "Service or license",
+                CategoryId = category.Id, UnitId = unit.Id, ProductType = productType,
+                CostPrice = 1.000m, BasePrice = 2.000m,
+            }));
+        var created = Assert.IsType<ProductResponse>(response.Value);
+        Assert.Equal(productType, created.ProductType);
+        Assert.False(created.SerialTracked);
+        Assert.Equal("0.000000", created.ReorderLevel);
+
+        db.ChangeTracker.Clear();
+        var saved = await db.Products.AsNoTracking().SingleAsync(x => x.Id == created.Id);
+        Assert.Equal(productType, saved.ProductType);
+        Assert.False(saved.SerialTracked);
+        Assert.Equal(0m, saved.ReorderLevel);
+        await transaction.RollbackAsync();
+    }
+
+    [Fact]
     public async Task StockProductPreservesBilingualFieldsAndExactMoneyOnCreateAndUpdate()
     {
         var connection = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
