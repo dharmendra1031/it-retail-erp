@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0320",
+  "nextStepId": "ERP-0321",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -327,7 +327,8 @@
     "ERP-0316",
     "ERP-0317",
     "ERP-0318",
-    "ERP-0319"
+    "ERP-0319",
+    "ERP-0320"
   ],
   "blockedStep": null,
   "lastVerifiedCommit": "21b46ee15e76c691ae628b4166def5773c3ed424",
@@ -7119,6 +7120,31 @@
         "productionDatabase": "not accessed"
       },
       "notes": "No new migration; stock/service sale posting belongs downstream."
+    },
+    {
+      "stepId": "ERP-0320",
+      "status": "complete",
+      "scope": "WP16 Product Master duplication, security, performance and API documentation closeout",
+      "completionMode": "static source quality review and documentation correction; no application code change",
+      "reviewedRepoCommit": "d73e2503319345597be4daa79ed4ab4d8a4522e9",
+      "evidence": [
+        "docs/ERP_0320_PRODUCT_QUALITY_REVIEW.md",
+        "docs/api-contract.md",
+        "docs/ERP_DATABASE_REVIEW.md",
+        "frontend/src/components/Products.tsx",
+        "frontend/src/App.tsx",
+        "aspnet-core/src/ITRetailERP.Web/Controllers/Api/ProductsApiController.cs",
+        "django/apps/catalog/api.py",
+        "docs/ERP_0319_0340_PRODUCT_LICENSE.md"
+      ],
+      "verification": {
+        "baselineCi": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40685879289",
+        "baselineResult": "5/5 SUCCESS at 21b46ee1",
+        "runtimeBuild": "not run for documentation-only review",
+        "databaseMigration": "not run; no schema edits",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "Corrected outdated unpaged Product API description; recorded non-admin role-grant UI visibility, WP17 license keyboard flow, WP48 generic pagination and secret/key-rotation boundaries. Do not call deferred flows fully accepted."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",

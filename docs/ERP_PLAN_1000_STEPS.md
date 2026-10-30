@@ -452,7 +452,7 @@ Read this plan and `docs/ERP_EXECUTION_PROTOCOL.md`, load `docs/ERP_PROGRESS.jso
 - [x] **ERP-0317** (17/20) Run/add ASP.NET unit and validation tests for Create stock item with bilingual description and barcode; fix every failure. Execute tests for functionality owned/currently implementable here; if the scenario depends on a later owner package, specify the test and defer execution without claiming a pass.
 - [x] **ERP-0318** (18/20) Run/add Django unit and parity tests for Reject duplicate SKU, bad price and missing required category; fix every failure. Execute tests for functionality owned/currently implementable here; if the scenario depends on a later owner package, specify the test and defer execution without claiming a pass.
 - [x] **ERP-0319** (19/20) Run SQL Server integration, concurrency and React E2E checks; reconcile Unique identifiers and correct type-specific validation. Run integration/E2E only for capabilities due by this package; downstream-owned scenarios are deferred with explicit ownership and must not be reported as passed.
-- [ ] **ERP-0320** (20/20) Review duplication/security/performance, fix regressions, update API docs and record test + commit evidence before next step.
+- [x] **ERP-0320** (20/20) Review duplication/security/performance, fix regressions, update API docs and record test + commit evidence before next step.
 
 ### Package 17: Stock, non-stock and digital license products — ERP-0321 to ERP-0340
 **SRS sections:** 12, 13, 15, 16, 57. **Deliverable:** Type-specific inventory behavior and secure optional license lifecycle.
