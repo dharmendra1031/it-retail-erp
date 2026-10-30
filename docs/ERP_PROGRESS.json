@@ -7,7 +7,7 @@
   "baselineCommit": "9e799d915008840d377d7c948d13da78486a9073",
   "workPackages": 50,
   "totalSteps": 1000,
-  "nextStepId": "ERP-0319",
+  "nextStepId": "ERP-0320",
   "completedStepIds": [
     "ERP-0001",
     "ERP-0002",
@@ -326,10 +326,11 @@
     "ERP-0315",
     "ERP-0316",
     "ERP-0317",
-    "ERP-0318"
+    "ERP-0318",
+    "ERP-0319"
   ],
   "blockedStep": null,
-  "lastVerifiedCommit": "e7c8247d37efd2656c1da990b2c423ab0a8f5105",
+  "lastVerifiedCommit": "21b46ee15e76c691ae628b4166def5773c3ed424",
   "baselineNotes": [
     "Company Master and auth files exist; no new acceptance or E2E test sign-off performed.",
     "Role/permission/user modules are partly modeled but CRUD/API/UI parity is pending.",
@@ -7096,6 +7097,28 @@
         "productionDatabase": "not accessed"
       },
       "notes": "Normalized duplicate SKU/barcode, omitted/null/zero/inactive Category, three negative prices, excessive precision and rejected update preserve row and return documented 400 detail. Independent SQL concurrency remains ERP-0319."
+    },
+    {
+      "stepId": "ERP-0319",
+      "status": "complete",
+      "scope": "Product SQL Server integration, duplicate concurrency and React browser verification",
+      "completionMode": "verify existing executable Product regressions and latest successful 5-job CI",
+      "reviewedRepoCommit": "21b46ee15e76c691ae628b4166def5773c3ed424",
+      "evidence": [
+        "docs/ERP_0319_0340_PRODUCT_LICENSE.md",
+        "docs/ERP_0319_PRODUCT_INTEGRATION_VERIFICATION.md",
+        "aspnet-core/tests/ITRetailERP.Tests/ProductSearchTests.cs",
+        "django/apps/catalog/tests.py",
+        "frontend/e2e/erp.spec.ts"
+      ],
+      "verification": {
+        "ciRun": "https://github.com/dharmendra1031/it-retail-erp/actions/runs/40685879289",
+        "ci": "5/5 SUCCESS",
+        "localSqlServer": "ASP.NET 22/22; Django 97/97 (documented earlier)",
+        "browser": "Local Django SQLite Product flows 3/3; CI browser jobs successful",
+        "productionDatabase": "not accessed"
+      },
+      "notes": "No new migration; stock/service sale posting belongs downstream."
     }
   ],
   "databaseReviewFile": "docs/ERP_DATABASE_REVIEW.md",
